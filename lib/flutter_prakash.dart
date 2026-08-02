@@ -24,3 +24,7 @@ export 'src/core/widgets/loading_overlay.dart';
 export 'src/core/widgets/toast_overlay.dart';
 
 export 'src/core/typedefs/typedefs.dart';
+
+// Features (File Preview, InApp WebView)
+export 'src/features/file_preview/file_preview_page.dart';
+export 'src/features/inapp_webview/inapp_webview.dart';
