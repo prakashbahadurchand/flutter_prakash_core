@@ -1,0 +1,45 @@
+lib/
+  src/
+    core/
+      base/
+      devtools/
+      firebase/
+        push_notification/
+        inapp_messaging/
+        analytics/
+        crashlytics/
+        performance/
+        remote_config/
+      admob/
+        app_open_ad/
+        banner_ad/
+        interstitial_ad/
+        rewarded_ad/
+        native_ad/
+      fake_data/
+        texts
+        images
+          fake_image.dart
+      widgets/
+      network/
+        result.dart
+        exceptions.dart
+        failures.dart
+        network_info.dart
+      extensions/
+      storage/
+        prefs_storage/
+        secure_storage/
+        file_storage/
+        hive_storage/
+      permissions/
+      loggers/
+        flutter_logger.dart
+        admob_logger.dart
+        firebase_logger.dart
+        supabase_logger.dart
+        restapi_logger.dart
+        graphql_logger.dart
+    features/
+      file_preview/          <-- For image, PDF viewer
+      inapp_webview/         <-- For privacy policy, terms and conditions, etc.

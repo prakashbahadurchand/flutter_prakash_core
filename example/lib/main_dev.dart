@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_prakash_example/bootstrap.dart';
+import 'package:flutter_prakash_example/src/config/env/app_config.dart';
 import 'package:flutter_prakash_example/src/config/routes/app_router.dart';
 
 void main() {
+  AppConfig.init(
+    appName: const String.fromEnvironment('APP_NAME', defaultValue: 'Flutter Prakash DEV'),
+    environment: AppEnvironment.dev,
+    baseUrl: const String.fromEnvironment('BASE_URL', defaultValue: 'https://dev-api.prakash.dev'),
+  );
+
   bootstrap(() => const ExampleApp());
 }
 
@@ -19,7 +26,7 @@ class _ExampleAppState extends State<ExampleApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Flutter Prakash Example',
+      title: AppConfig.instance.appName,
       debugShowCheckedModeBanner: false,
       routerConfig: _appRouter.config(),
     );
