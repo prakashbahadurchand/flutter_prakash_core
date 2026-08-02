@@ -22,3 +22,5 @@ export 'src/core/devtools/devtools_floating_dock.dart';
 export 'src/core/utilities/utilities.dart';
 export 'src/core/widgets/loading_overlay.dart';
 export 'src/core/widgets/toast_overlay.dart';
+
+export 'src/core/typedefs/typedefs.dart';
