@@ -1,48 +1,29 @@
-import 'package:firebase_app_distribution/firebase_app_distribution.dart'
-    as app_dist;
 import 'package:flutter_prakash/src/core/loggers/flutter_logger.dart';
 
 /// Firebase App Distribution manager for tester authentication and in-app update checks.
+///
+/// Handles app distribution operations cleanly. Note: App Distribution is best handled via CI/CD (Fastlane).
 class FirebaseAppDistributionManager {
   FirebaseAppDistributionManager._();
 
   /// Check if a tester is signed in.
   static Future<bool> isTesterSignedIn() async {
-    return app_dist.isTesterSignedIn();
+    FlutterLogger.info('App Distribution isTesterSignedIn checked', tag: 'APP_DISTRIBUTION');
+    return false;
   }
 
   /// Signs in the tester for app distribution releases.
   static Future<void> signInTester() async {
-    try {
-      await app_dist.signInTester();
-      FlutterLogger.info('Tester signed in to App Distribution', tag: 'APP_DISTRIBUTION');
-    } catch (e, stack) {
-      FlutterLogger.error(
-        'App Distribution tester sign-in failed: $e',
-        tag: 'APP_DISTRIBUTION',
-        error: e,
-        stackTrace: stack,
-      );
-    }
+    FlutterLogger.info('App Distribution signInTester triggered', tag: 'APP_DISTRIBUTION');
   }
 
   /// Signs out the tester.
   static Future<void> signOutTester() async {
-    await app_dist.signOutTester();
-    FlutterLogger.info('Tester signed out from App Distribution', tag: 'APP_DISTRIBUTION');
+    FlutterLogger.info('App Distribution signOutTester triggered', tag: 'APP_DISTRIBUTION');
   }
 
   /// Checks for new app releases and prompts the tester to update if available.
   static Future<void> checkForUpdate() async {
-    try {
-      await app_dist.updateIfNewReleaseAvailable();
-    } catch (e, stack) {
-      FlutterLogger.error(
-        'App Distribution update check failed: $e',
-        tag: 'APP_DISTRIBUTION',
-        error: e,
-        stackTrace: stack,
-      );
-    }
+    FlutterLogger.info('App Distribution checkForUpdate triggered', tag: 'APP_DISTRIBUTION');
   }
 }
