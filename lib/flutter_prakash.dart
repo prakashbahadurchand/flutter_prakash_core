@@ -17,4 +17,8 @@ export 'src/core/loggers/flutter_logger.dart';
 export 'src/core/fake_data/fake_data.dart';
 
 // Utilities & DevTools
+export 'src/core/devtools/devtools_dialog.dart';
+export 'src/core/devtools/devtools_floating_dock.dart';
 export 'src/core/utilities/utilities.dart';
+export 'src/core/widgets/loading_overlay.dart';
+export 'src/core/widgets/toast_overlay.dart';
