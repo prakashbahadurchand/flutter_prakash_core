@@ -1,6 +1,6 @@
 name: flutter_prakash
 description: "Ultimate Enterprise Multi-App Core Engine & Hybrid Plugin Framework: REST (Dio), GraphQL, Firebase, Supabase, AdMob, Media, Maps, Storage, Theme, and UI."
-version: 0.0.1
+version: 1.0.10
 homepage: https://github.com/prakashbahadurchand/flutter_prakash
 
 environment:
