@@ -1,0 +1,56 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
+import '../loggers/flutter_logger.dart';
+
+/// Base abstract route guard for `AutoRoute`.
+///
+/// Simplifies implementing authentication guards, role guards, or feature-flag route guards.
+abstract class PrakashRouteGuard extends AutoRouteGuard {
+  const PrakashRouteGuard();
+
+  /// Abstract method to perform authorization logic synchronously or asynchronously.
+  Future<bool> canNavigate(NavigationResolver resolver);
+
+  /// Callback executed when access is denied. Override to redirect to login/unauthorized screen.
+  void onUnauthorized(NavigationResolver resolver) {
+    resolver.next(false);
+  }
+
+  @override
+  void onNavigation(NavigationResolver resolver, StackRouter router) async {
+    final allowed = await canNavigate(resolver);
+    if (allowed) {
+      resolver.next(true);
+    } else {
+      FlutterLogger.w('Navigation denied for route: ${resolver.route.name}');
+      onUnauthorized(resolver);
+    }
+  }
+}
+
+/// Global route navigation observer for tracking active screens and logging navigation events.
+class PrakashRouteObserver extends AutoRouteObserver {
+  @override
+  void didPush(Route route, Route? previousRoute) {
+    super.didPush(route, previousRoute);
+    FlutterLogger.i(
+      '[Route Pushed] ${route.settings.name} (from ${previousRoute?.settings.name})',
+    );
+  }
+
+  @override
+  void didPop(Route route, Route? previousRoute) {
+    super.didPop(route, previousRoute);
+    FlutterLogger.i(
+      '[Route Popped] ${route.settings.name} (to ${previousRoute?.settings.name})',
+    );
+  }
+
+  @override
+  void didReplace({Route? newRoute, Route? oldRoute}) {
+    super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
+    FlutterLogger.i(
+      '[Route Replaced] ${oldRoute?.settings.name} -> ${newRoute?.settings.name}',
+    );
+  }
+}

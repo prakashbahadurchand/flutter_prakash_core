@@ -1,84 +1,89 @@
-// import 'package:dio/dio.dart';
-// import 'package:flutter/material.dart';
-// import 'package:get_it/get_it.dart';
+import 'package:flutter/material.dart';
 
-// class AppRestartWrapper extends StatefulWidget {
-//   const AppRestartWrapper({super.key, required this.child});
-//   final Widget child;
+/// Generic application restart wrapper widget that enables hot app resetting/rebuilding.
+///
+/// Wraps the root application widget and provides [forceRebuild] to trigger a complete
+/// rebuild with a fresh key state and optional [onRestart] async callback.
+class AppRestartWrapper extends StatefulWidget {
+  const AppRestartWrapper({
+    super.key,
+    required this.child,
+    this.onRestart,
+    this.loadingMessage = 'Refreshing Environment...',
+  });
 
-//   static Future<void> forceRebuild(BuildContext context) async {
-//     final state = context.findAncestorStateOfType<_AppRestartWrapperState>();
-//     if (state != null) {
-//       await state.restart();
-//     }
-//   }
+  final Widget child;
+  final Future<void> Function()? onRestart;
+  final String loadingMessage;
 
-//   @override
-//   State<AppRestartWrapper> createState() => _AppRestartWrapperState();
-// }
+  /// Static helper to trigger a full application restart from any [BuildContext].
+  static Future<void> forceRebuild(BuildContext context) async {
+    final state = context.findAncestorStateOfType<_AppRestartWrapperState>();
+    if (state != null) {
+      await state.restart();
+    }
+  }
 
-// class _AppRestartWrapperState extends State<AppRestartWrapper> {
-//   Key _key = UniqueKey();
-//   bool _isRestarting = false;
+  @override
+  State<AppRestartWrapper> createState() => _AppRestartWrapperState();
+}
 
-//   Future<void> restart() async {
-//     setState(() => _isRestarting = true);
+class _AppRestartWrapperState extends State<AppRestartWrapper> {
+  Key _key = UniqueKey();
+  bool _isRestarting = false;
 
-//     // 1. Reset GetIt (Clears all singletons including BLoCs and Router)
-//     await getIt.unregister<Dio>();
-//     await getIt.unregister<AuthClient>();
-//     await getIt.unregister<DashboardClient>();
-//     await GetIt.I.reset();
+  Future<void> restart() async {
+    setState(() => _isRestarting = true);
 
-//     // 2. Re-configure Dependencies
-//     configureDependencies();
+    try {
+      if (widget.onRestart != null) {
+        await widget.onRestart!();
+      }
+      await Future.delayed(const Duration(milliseconds: 300));
+    } catch (_) {
+      // Ignore restart callback errors gracefully
+    } finally {
+      if (mounted) {
+        setState(() {
+          _key = UniqueKey();
+          _isRestarting = false;
+        });
+      }
+    }
+  }
 
-//     // 3. Re-init Prefs (to catch new changes from storage)
-//     await AppPrefs().init();
-
-//     // 4. Brief delay for a smooth visual transition
-//     await Future.delayed(const Duration(milliseconds: 300));
-
-//     if (mounted) {
-//       setState(() {
-//         _key = UniqueKey();
-//         _isRestarting = false;
-//       });
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return KeyedSubtree(
-//       key: _key,
-//       child: Directionality(
-//         textDirection: TextDirection.ltr,
-//         child: Stack(
-//           children: [
-//             widget.child,
-//             if (_isRestarting)
-//               Material(
-//                 color: Colors.black.withValues(alpha: 0.7),
-//                 child: const Center(
-//                   child: Column(
-//                     mainAxisSize: MainAxisSize.min,
-//                     children: [
-//                       CircularProgressIndicator(color: Colors.blue),
-//                       SizedBox(height: 20),
-//                       Text(
-//                         'Refreshing Environment...',
-//                         style: TextStyle(
-//                           color: Colors.white,
-//                           fontWeight: FontWeight.bold,
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return KeyedSubtree(
+      key: _key,
+      child: Directionality(
+        textDirection: TextDirection.ltr,
+        child: Stack(
+          children: [
+            widget.child,
+            if (_isRestarting)
+              Material(
+                color: Colors.black.withValues(alpha: 0.7),
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const CircularProgressIndicator(color: Colors.blue),
+                      const SizedBox(height: 20),
+                      Text(
+                        widget.loadingMessage,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}

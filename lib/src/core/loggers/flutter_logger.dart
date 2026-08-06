@@ -19,21 +19,6 @@ enum LogLevel {
 
 /// A comprehensive logger for Flutter applications with ANSI color highlights,
 /// JSON/object pretty-printing, configurable tags, error handling, and stack traces.
-///
-/// Example usage with top-level helper functions:
-/// ```dart
-/// logInfo('User logged in successfully');
-/// logDebug({'userId': 123, 'token': 'abc-123'}, tag: 'AUTH');
-/// logWarn('Network latency high', tag: 'NETWORK');
-///
-/// try {
-///   // Perform risky task
-/// } catch (e, stack) {
-///   logError('Failed to fetch user profile', error: e, stackTrace: stack);
-/// }
-///
-/// log('Critical system alert!', level: LogLevel.severe, tag: 'SYSTEM');
-/// ```
 class FlutterLogger {
   FlutterLogger._();
 
@@ -64,6 +49,15 @@ class FlutterLogger {
     );
   }
 
+  /// Shorthand alias for debug.
+  static void d(
+    dynamic message, {
+    String tag = 'DEBUG',
+    Object? error,
+    StackTrace? stackTrace,
+  }) =>
+      FlutterLogger.debug(message, tag: tag, error: error, stackTrace: stackTrace);
+
   /// Print an info log message.
   static void info(
     dynamic message, {
@@ -79,6 +73,15 @@ class FlutterLogger {
       stackTrace: stackTrace,
     );
   }
+
+  /// Shorthand alias for info.
+  static void i(
+    dynamic message, {
+    String tag = 'INFO',
+    Object? error,
+    StackTrace? stackTrace,
+  }) =>
+      FlutterLogger.info(message, tag: tag, error: error, stackTrace: stackTrace);
 
   /// Print a warning log message.
   static void warning(
@@ -96,6 +99,15 @@ class FlutterLogger {
     );
   }
 
+  /// Shorthand alias for warning.
+  static void w(
+    dynamic message, {
+    String tag = 'WARN',
+    Object? error,
+    StackTrace? stackTrace,
+  }) =>
+      FlutterLogger.warning(message, tag: tag, error: error, stackTrace: stackTrace);
+
   /// Print an error log message.
   static void error(
     dynamic message, {
@@ -111,6 +123,15 @@ class FlutterLogger {
       stackTrace: stackTrace,
     );
   }
+
+  /// Shorthand alias for error.
+  static void e(
+    dynamic message, {
+    String tag = 'ERROR',
+    Object? error,
+    StackTrace? stackTrace,
+  }) =>
+      FlutterLogger.error(message, tag: tag, error: error, stackTrace: stackTrace);
 
   /// Generic log method supporting custom log levels, formatted objects/JSON, errors, and stack traces.
   static void log(

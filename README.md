@@ -120,47 +120,95 @@ import 'package:flutter_prakash/ui.dart';
 
 ---
 
-## 🛡️ Core: Result & AsyncValue
+## ⚡ BLoC State Management Engine
 
-Eliminate try/catch boilerplate with a sealed `Result`:
+
+`flutter_prakash` includes a boilerplate-free state management framework built on `flutter_bloc`, `rxdart`, `formz`, `dartz`, and `equatable`.
+
+### 1. `BaseUiCubit<T>` for Standard Data Fetching
+Eliminates state boilerplate with automatic loading, success, and error handling.
 
 ```dart
-Future<Result<List<Post>>> fetchPosts(DioClient client) async {
-  try {
-    final resp = await client.dio.get('/posts');
-    final posts = (resp.data as List).map(Post.fromJson).toList();
-    return Result.success(posts);
-  } on DioException catch (e) {
-    return Result.failure(ServerFailure(e.message ?? 'Server error'));
-  } catch (e) {
-    return Result.failure(UnknownFailure('$e'));
+class UserCubit extends BaseUiCubit<User> {
+  UserCubit() : super(const UiState.initial());
+
+  Future<void> loadUser(String userId) async {
+    await executeResult(
+      call: () => userRepository.getUser(userId),
+      onSuccess: (user) => emitEffect(ShowToastEffect('Welcome back ${user.name}')),
+    );
   }
 }
 
-// Consume:
-final result = await fetchPosts(client);
-result.fold(
-  onSuccess: (posts) => debugPrint('Got ${posts.length} posts'),
-  onFailure: (failure) => debugPrint('Failed: ${failure.message}'),
+// In UI:
+UiStateBuilder<UserCubit, User>(
+  onSuccess: (context, user) => Text(user.name),
+  onLoading: (context, progress, msg) => const CircularProgressIndicator(),
+  onError: (context, failure) => Text(failure.message),
 );
 ```
 
-Bridge `Result` to reactive UI state with `AsyncValue`:
+### 2. Single-Shot Side-Effects Channel (`PrakashEffectListener`)
+Decouples persistent state from transient actions (Toasts, Navigation, Dialogs).
 
 ```dart
-AsyncValue<Post> _state = const AsyncValue.idle();
-
-return _state.fold(
-  onIdle: () => const Text('Press fetch'),
-  onLoading: () => const CircularProgressIndicator(),
-  onData: (post) => Text(post.title),
-  onError: (failure) => Text(failure.message),
+PrakashEffectListener.fromCubit(
+  cubit: userCubit,
+  child: MyScreen(),
 );
 
-// result.toAsyncValue() // Result<T> → AsyncValue<T>
+// Inside BLoC/Cubit:
+emitEffect(const ShowToastEffect('Operation successful!'));
+emitEffect(const ShowDialogEffect(title: 'Confirm', message: 'Proceed with changes?'));
+emitEffect(const NavigateToEffect('/dashboard'));
+```
+
+### 3. `BaseFormCubit` + `Formz` Pre-built Validators
+Form validation with auto-validation and failure handling.
+
+```dart
+class LoginFormCubit extends BaseFormCubit<LoginFormState, AuthToken> {
+  LoginFormCubit() : super(const LoginFormState());
+
+  void emailChanged(String v) => safeEmit(state.copyWith(email: PrakashEmailInput.dirty(v)));
+  void phoneChanged(String v) => safeEmit(state.copyWith(phone: PrakashPhoneInput.dirty(v)));
+
+  Future<void> login() async {
+    await submitForm(call: () => authRepo.login(state.email.value, state.password.value));
+  }
+}
+```
+
+### 4. `BasePagingCubit` + `PagingListView`
+Infinite scroll pagination engine with zero boilerplate.
+
+```dart
+class UserPagingCubit extends BasePagingCubit<User> {
+  UserPagingCubit() : super(pageSize: 20);
+
+  @override
+  Future<Result<List<User>>> fetchPage(int page, int pageSize) async {
+    return userRepository.getUsersPage(page: page, limit: pageSize);
+  }
+}
+
+// In UI:
+PagingListView<UserPagingCubit, User>(
+  cubit: getIt<UserPagingCubit>(),
+  itemBuilder: (context, user, index) => ListTile(title: Text(user.name)),
+);
+```
+
+### 5. `PrakashEventTransformers` for Reactive RxDart Streams
+```dart
+on<SearchQueryChanged>(
+  _onSearch,
+  transformer: PrakashEventTransformers.debounce(const Duration(milliseconds: 300)),
+);
 ```
 
 ---
+
 
 ## 🌐 REST Engine
 

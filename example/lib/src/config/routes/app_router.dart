@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter_prakash_example/src/features/auth/presentation/guards/auth_guard.dart';
 import 'package:flutter_prakash_example/src/features/auth/presentation/pages/login_page.dart';
 import 'package:flutter_prakash_example/src/features/auth/presentation/pages/register_page.dart';
 import 'package:flutter_prakash_example/src/features/dashboard/presentation/pages/dashboard_page.dart';
@@ -15,6 +16,9 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: OnboardingRoute.page),
         AutoRoute(page: LoginRoute.page),
         AutoRoute(page: RegisterRoute.page),
-        AutoRoute(page: DashboardRoute.page),
+        AutoRoute(
+          page: DashboardRoute.page,
+          guards: [const ExampleAuthGuard(isAuthenticated: true)],
+        ),
       ];
 }
