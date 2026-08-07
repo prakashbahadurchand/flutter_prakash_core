@@ -1,7 +1,15 @@
-.PHONY: analyze format clean tag tag-% push-tags
+.PHONY: analyze format clean tag tag-% push-tags run-dev run-prod
 
 # Default rule
 all: analyze format
+
+# Run the example app in DEV flavor from the example/ directory
+run-dev:
+	$(MAKE) -C example run-dev
+
+# Run the example app in PROD flavor from the example/ directory
+run-prod:
+	$(MAKE) -C example run-prod
 
 # Run Dart analyzer across the project
 analyze:
