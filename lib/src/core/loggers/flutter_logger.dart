@@ -181,9 +181,15 @@ class FlutterLogger {
           final remaining = jsonObject.length - maxBodyLength;
           return '$truncated\n... [TRUNCATED - $remaining more characters]';
         }
-        try {
-          objectToConvert = jsonDecode(jsonObject);
-        } catch (_) {
+        final trimmed = jsonObject.trim();
+        if ((trimmed.startsWith('{') && trimmed.endsWith('}')) ||
+            (trimmed.startsWith('[') && trimmed.endsWith(']'))) {
+          try {
+            objectToConvert = jsonDecode(trimmed);
+          } catch (_) {
+            return jsonObject;
+          }
+        } else {
           return jsonObject;
         }
       }

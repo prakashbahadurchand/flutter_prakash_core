@@ -121,5 +121,6 @@
   "emmet.includeLanguages": {
     "dart": "html"
   },
-  "telemetry.telemetryLevel": "off"
+  "telemetry.telemetryLevel": "off",
+  "java.compile.nullAnalysis.mode": "automatic"
 }
