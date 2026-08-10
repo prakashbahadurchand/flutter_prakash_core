@@ -1,4 +1,5 @@
 import 'package:flutter_prakash/flutter_prakash.dart';
+import 'package:flutter_prakash_example/src/features/auth/data/repositories/auth_repository.dart';
 
 /// Form State holding email and password Formz inputs.
 class LoginState extends FormCubitState<String> {
@@ -38,8 +39,11 @@ class LoginState extends FormCubitState<String> {
 }
 
 /// Login Form Cubit managing authentication input validation & submission via BaseFormCubit.
+@injectable
 class LoginCubit extends BaseFormCubit<LoginState, String> {
-  LoginCubit() : super(const LoginState());
+  final AuthRepository _authRepository;
+
+  LoginCubit(this._authRepository) : super(const LoginState());
 
   void emailChanged(String value) {
     final email = PrakashEmailInput.dirty(value);
@@ -56,11 +60,14 @@ class LoginCubit extends BaseFormCubit<LoginState, String> {
   Future<void> submit() async {
     await submitForm(
       call: () async {
-        await Future.delayed(const Duration(milliseconds: 500));
-        if (state.email.value.contains('fail')) {
-          return const Result.error(AuthFailure('Invalid login credentials.'));
-        }
-        return Result.success('User ${state.email.value} authenticated successfully!');
+        final result = await _authRepository.login(
+          email: state.email.value,
+          password: state.password.value,
+        );
+        return result.when(
+          success: (user) => Result.success('Welcome back, ${user.name}!'),
+          error: (failure) => Result.error(failure),
+        );
       },
       onSuccess: (message) {
         emitEffect(ShowToastEffect(message));

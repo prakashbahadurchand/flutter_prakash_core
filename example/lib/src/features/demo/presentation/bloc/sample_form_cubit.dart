@@ -1,4 +1,5 @@
 import 'package:flutter_prakash/flutter_prakash.dart';
+import 'package:flutter_prakash_example/src/features/demo/data/repositories/demo_repository.dart';
 
 /// Form State holding Formz inputs.
 class SampleFormState extends FormCubitState<String> {
@@ -46,9 +47,12 @@ class SampleFormState extends FormCubitState<String> {
       ];
 }
 
-/// Sample Form Cubit demonstrating zero-boilerplate form management.
+/// Sample Form Cubit managing form submissions via DemoRepository.
+@injectable
 class SampleFormCubit extends BaseFormCubit<SampleFormState, String> {
-  SampleFormCubit() : super(const SampleFormState());
+  final DemoRepository _demoRepository;
+
+  SampleFormCubit(this._demoRepository) : super(const SampleFormState());
 
   void emailChanged(String value) {
     final email = PrakashEmailInput.dirty(value);
@@ -71,11 +75,14 @@ class SampleFormCubit extends BaseFormCubit<SampleFormState, String> {
   Future<void> submit() async {
     await submitForm(
       call: () async {
-        await Future.delayed(const Duration(seconds: 1));
-        if (state.email.value.contains('error')) {
-          return const Result.error(ServerFailure('Invalid email address domain'));
-        }
-        return Result.success('User ${state.fullName.value} registered successfully!');
+        final result = await _demoRepository.submitForm(
+          title: state.fullName.value,
+          description: 'Registration for email: ${state.email.value}',
+        );
+        return result.when(
+          success: (item) => Result.success('Submitted item ${item.id}: ${item.title}'),
+          error: (failure) => Result.error(failure),
+        );
       },
       onSuccess: (message) {
         emitEffect(ShowToastEffect(message));
