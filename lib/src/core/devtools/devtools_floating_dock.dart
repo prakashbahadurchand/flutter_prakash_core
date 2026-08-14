@@ -42,24 +42,24 @@ class _DevtoolsFloatingDockState extends State<DevtoolsFloatingDock> {
   Widget build(BuildContext context) {
     if (!widget.enabled) return widget.child;
 
-    return Stack(
-      children: [
-        widget.child,
-        LayoutBuilder(
-          builder: (context, constraints) {
-            final maxH = constraints.maxHeight;
-            final maxW = constraints.maxWidth;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final maxH = constraints.maxHeight;
+        final maxW = constraints.maxWidth;
 
-            final yPos = (_yNorm * maxH).clamp(
-              widget.margin,
-              maxH - widget.buttonSize - widget.margin,
-            );
+        final yPos = (_yNorm * maxH).clamp(
+          widget.margin,
+          maxH - widget.buttonSize - widget.margin,
+        );
 
-            final double xPos = (_side == DockSide.left)
-                ? widget.margin
-                : maxW - widget.buttonSize - widget.margin;
+        final double xPos = (_side == DockSide.left)
+            ? widget.margin
+            : maxW - widget.buttonSize - widget.margin;
 
-            return Positioned(
+        return Stack(
+          children: [
+            widget.child,
+            Positioned(
               left: xPos,
               top: yPos,
               child: GestureDetector(
@@ -93,10 +93,10 @@ class _DevtoolsFloatingDockState extends State<DevtoolsFloatingDock> {
                   ),
                 ),
               ),
-            );
-          },
-        ),
-      ],
+            ),
+          ],
+        );
+      },
     );
   }
 }

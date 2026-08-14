@@ -15,13 +15,17 @@ import 'package:injectable/injectable.dart' as _i526;
 
 import '../../features/auth/data/datasources/auth_data_source.dart' as _i970;
 import '../../features/auth/data/repositories/auth_repository.dart' as _i573;
-import '../../features/auth/presentation/bloc/login_cubit.dart' as _i281;
+import '../../features/auth/presentation/blocs/login_cubit.dart' as _i396;
+import '../../features/dashboard/presentation/blocs/dashboard_cubit.dart'
+    as _i726;
 import '../../features/demo/data/datasources/demo_data_source.dart' as _i864;
 import '../../features/demo/data/repositories/demo_repository.dart' as _i911;
-import '../../features/demo/presentation/bloc/sample_fetch_cubit.dart' as _i360;
-import '../../features/demo/presentation/bloc/sample_form_cubit.dart' as _i707;
-import '../../features/demo/presentation/bloc/sample_paging_cubit.dart'
-    as _i903;
+import '../../features/demo/presentation/blocs/sample_fetch_cubit.dart' as _i43;
+import '../../features/demo/presentation/blocs/sample_form_cubit.dart' as _i90;
+import '../../features/demo/presentation/blocs/sample_paging_cubit.dart'
+    as _i668;
+import '../localization/locale_cubit.dart' as _i960;
+import '../theme/theme_cubit.dart' as _i611;
 import 'register_module.dart' as _i291;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -32,6 +36,9 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final registerModule = _$RegisterModule();
+    gh.factory<_i611.ThemeCubit>(() => _i611.ThemeCubit());
+    gh.factory<_i960.LocaleCubit>(() => _i960.LocaleCubit());
+    gh.factory<_i726.DashboardCubit>(() => _i726.DashboardCubit());
     gh.lazySingleton<_i361.Dio>(() => registerModule.dio);
     gh.lazySingleton<_i864.DemoDataSource>(() => _i864.DemoDataSource());
     gh.lazySingleton<_i970.AuthDataSource>(() => _i970.AuthDataSource());
@@ -41,17 +48,17 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i573.AuthRepository>(
       () => _i573.AuthRepository(gh<_i970.AuthDataSource>()),
     );
-    gh.factory<_i707.SampleFormCubit>(
-      () => _i707.SampleFormCubit(gh<_i911.DemoRepository>()),
+    gh.factory<_i90.SampleFormCubit>(
+      () => _i90.SampleFormCubit(gh<_i911.DemoRepository>()),
     );
-    gh.factory<_i360.SampleFetchCubit>(
-      () => _i360.SampleFetchCubit(gh<_i911.DemoRepository>()),
+    gh.factory<_i43.SampleFetchCubit>(
+      () => _i43.SampleFetchCubit(gh<_i911.DemoRepository>()),
     );
-    gh.factory<_i903.SamplePagingCubit>(
-      () => _i903.SamplePagingCubit(gh<_i911.DemoRepository>()),
+    gh.factory<_i668.SamplePagingCubit>(
+      () => _i668.SamplePagingCubit(gh<_i911.DemoRepository>()),
     );
-    gh.factory<_i281.LoginCubit>(
-      () => _i281.LoginCubit(gh<_i573.AuthRepository>()),
+    gh.factory<_i396.LoginCubit>(
+      () => _i396.LoginCubit(gh<_i573.AuthRepository>()),
     );
     return this;
   }

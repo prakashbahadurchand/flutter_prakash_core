@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_prakash/flutter_prakash.dart';
 import 'package:flutter_prakash_example/src/config/routes/app_router.dart';
 import 'package:flutter_prakash_example/src/core/di/injection.dart';
-import 'package:flutter_prakash_example/src/features/auth/presentation/bloc/login_cubit.dart';
+import 'package:flutter_prakash_example/src/features/auth/presentation/blocs/login_cubit.dart';
+import 'package:flutter_prakash_example/src/core/theme/app_colors.dart';
 
 @RoutePage()
 class LoginPage extends StatefulWidget {
@@ -74,11 +75,11 @@ class _LoginPageState extends State<LoginPage> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             gradient: const LinearGradient(
-                              colors: [Color(0xFF6366F1), Color(0xFF4F46E5)],
+                              colors: [AppPalette.primary, AppPalette.primaryDark],
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: const Color(0xFF6366F1).withValues(alpha: 0.3),
+                                color: AppPalette.primary.withValues(alpha: 0.3),
                                 blurRadius: 20,
                                 spreadRadius: 4,
                               ),
@@ -135,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16),
                             borderSide: const BorderSide(
-                              color: Color(0xFF6366F1),
+                              color: AppPalette.primary,
                               width: 2,
                             ),
                           ),
@@ -182,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16),
                             borderSide: const BorderSide(
-                              color: Color(0xFF6366F1),
+                              color: AppPalette.primary,
                               width: 2,
                             ),
                           ),
@@ -202,7 +203,7 @@ class _LoginPageState extends State<LoginPage> {
                           icon: const Icon(Icons.auto_fix_high, size: 16),
                           label: const Text('Fill Demo Credentials'),
                           style: TextButton.styleFrom(
-                            foregroundColor: const Color(0xFF6366F1),
+                            foregroundColor: AppPalette.primary,
                           ),
                         ),
                       ),
@@ -211,7 +212,7 @@ class _LoginPageState extends State<LoginPage> {
                       // Submit Button
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF6366F1),
+                          backgroundColor: AppPalette.primary,
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 18),
                           shape: RoundedRectangleBorder(
@@ -266,7 +267,7 @@ class _LoginPageState extends State<LoginPage> {
                             child: const Text(
                               'Register',
                               style: TextStyle(
-                                color: Color(0xFF6366F1),
+                                color: AppPalette.primary,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),

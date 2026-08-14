@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_prakash_example/src/config/routes/app_router.dart';
+import 'package:flutter_prakash_example/src/core/theme/app_colors.dart';
 
 @RoutePage()
 class OnboardingPage extends StatefulWidget {
@@ -20,7 +21,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
       'subtitle':
           'Built-in REST (Dio), GraphQL, Firebase & Supabase engines ready for enterprise scaling out-of-the-box.',
       'icon': Icons.cloud_sync_rounded,
-      'gradient': [const Color(0xFF3B82F6), const Color(0xFF1D4ED8)],
+      'gradient': [AppPalette.blue, AppPalette.blueDark],
       'badge': 'ARCHITECTURE',
     },
     {
@@ -28,7 +29,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
       'subtitle':
           'Seamless Google AdMob banner, interstitial, rewarded & native ads paired with Audio & PDF viewing utilities.',
       'icon': Icons.monetization_on_rounded,
-      'gradient': [const Color(0xFF10B981), const Color(0xFF047857)],
+      'gradient': [AppPalette.success, AppPalette.successDark],
       'badge': 'MONETIZATION',
     },
     {
@@ -36,7 +37,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
       'subtitle':
           'ANSI color loggers, mock data generators, BLoC state observers, and clean modular feature scaffolding.',
       'icon': Icons.build_circle_rounded,
-      'gradient': [const Color(0xFF8B5CF6), const Color(0xFF6D28D9)],
+      'gradient': [AppPalette.secondary, AppPalette.secondaryDark],
       'badge': 'UTILITIES',
     },
   ];
@@ -77,7 +78,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         width: 8,
                         height: 8,
                         decoration: const BoxDecoration(
-                          color: Color(0xFF6366F1),
+                          color: AppPalette.primary,
                           shape: BoxShape.circle,
                         ),
                       ),
@@ -203,7 +204,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         height: 10,
                         decoration: BoxDecoration(
                           color: _currentIndex == i
-                              ? const Color(0xFF6366F1)
+                              ? AppPalette.primary
                               : (isDark
                                   ? Colors.grey.shade800
                                   : Colors.grey.shade300),
@@ -215,7 +216,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   ElevatedButton(
                     onPressed: _onNext,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF6366F1),
+                      backgroundColor: AppPalette.primary,
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 28,

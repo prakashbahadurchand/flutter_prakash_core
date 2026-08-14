@@ -5,6 +5,9 @@ import 'package:flutter_prakash_example/src/features/auth/presentation/pages/reg
 import 'package:flutter_prakash_example/src/features/dashboard/presentation/pages/dashboard_page.dart';
 import 'package:flutter_prakash_example/src/features/onboarding/presentation/pages/onboarding_page.dart';
 import 'package:flutter_prakash_example/src/features/splash/presentation/pages/splash_page.dart';
+import 'package:flutter_prakash_example/src/features/settings/presentation/pages/privacy_policy_page.dart';
+import 'package:flutter_prakash_example/src/features/settings/presentation/pages/report_feedback_page.dart';
+import 'package:flutter_prakash_example/src/features/settings/presentation/pages/terms_conditions_page.dart';
 
 part 'app_router.gr.dart';
 
@@ -20,5 +23,8 @@ class AppRouter extends RootStackRouter {
           page: DashboardRoute.page,
           guards: [const ExampleAuthGuard(isAuthenticated: true)],
         ),
+        AutoRoute(page: PrivacyPolicyRoute.page),
+        AutoRoute(page: TermsConditionsRoute.page),
+        AutoRoute(page: ReportFeedbackRoute.page),
       ];
 }

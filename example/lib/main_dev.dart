@@ -3,6 +3,9 @@ import 'package:flutter_prakash/flutter_prakash.dart';
 import 'package:flutter_prakash_example/bootstrap.dart';
 import 'package:flutter_prakash_example/src/config/env/app_config.dart';
 import 'package:flutter_prakash_example/src/config/routes/app_router.dart';
+import 'package:flutter_prakash_example/src/core/di/injection.dart';
+import 'package:flutter_prakash_example/src/core/theme/theme_cubit.dart';
+import 'package:flutter_prakash_example/src/core/localization/locale_cubit.dart';
 
 void main() {
   AppConfig.init(
@@ -33,13 +36,31 @@ class _ExampleAppState extends State<ExampleApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: AppConfig.instance.appName,
-      debugShowCheckedModeBanner: false,
-      theme: AppThemeBuilder.buildLightTheme(),
-      darkTheme: AppThemeBuilder.buildDarkTheme(),
-      themeMode: ThemeMode.system,
-      routerConfig: _appRouter.config(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => getIt<ThemeCubit>()),
+        BlocProvider(create: (_) => getIt<LocaleCubit>()),
+      ],
+      child: Builder(
+        builder: (context) {
+          final themeMode = context.watch<ThemeCubit>().state;
+          final locale = context.watch<LocaleCubit>().state;
+
+          return MaterialApp.router(
+            title: AppConfig.instance.appName,
+            debugShowCheckedModeBanner: false,
+            theme: AppThemeBuilder.buildLightTheme(),
+            darkTheme: AppThemeBuilder.buildDarkTheme(),
+            themeMode: themeMode,
+            locale: locale,
+            supportedLocales: const [
+              Locale('en', 'US'),
+              Locale('ne', 'NP'),
+            ],
+            routerConfig: _appRouter.config(),
+          );
+        },
+      ),
     );
   }
 }

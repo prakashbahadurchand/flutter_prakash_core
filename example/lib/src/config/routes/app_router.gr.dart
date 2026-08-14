@@ -59,6 +59,22 @@ class OnboardingRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [PrivacyPolicyPage]
+class PrivacyPolicyRoute extends PageRouteInfo<void> {
+  const PrivacyPolicyRoute({List<PageRouteInfo>? children})
+    : super(PrivacyPolicyRoute.name, initialChildren: children);
+
+  static const String name = 'PrivacyPolicyRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const PrivacyPolicyPage();
+    },
+  );
+}
+
+/// generated route for
 /// [RegisterPage]
 class RegisterRoute extends PageRouteInfo<void> {
   const RegisterRoute({List<PageRouteInfo>? children})
@@ -75,6 +91,22 @@ class RegisterRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [ReportFeedbackPage]
+class ReportFeedbackRoute extends PageRouteInfo<void> {
+  const ReportFeedbackRoute({List<PageRouteInfo>? children})
+    : super(ReportFeedbackRoute.name, initialChildren: children);
+
+  static const String name = 'ReportFeedbackRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ReportFeedbackPage();
+    },
+  );
+}
+
+/// generated route for
 /// [SplashPage]
 class SplashRoute extends PageRouteInfo<void> {
   const SplashRoute({List<PageRouteInfo>? children})
@@ -86,6 +118,22 @@ class SplashRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const SplashPage();
+    },
+  );
+}
+
+/// generated route for
+/// [TermsConditionsPage]
+class TermsConditionsRoute extends PageRouteInfo<void> {
+  const TermsConditionsRoute({List<PageRouteInfo>? children})
+    : super(TermsConditionsRoute.name, initialChildren: children);
+
+  static const String name = 'TermsConditionsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const TermsConditionsPage();
     },
   );
 }

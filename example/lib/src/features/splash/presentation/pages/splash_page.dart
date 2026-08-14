@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_prakash_example/src/config/routes/app_router.dart';
+import 'package:flutter_prakash_example/src/core/theme/app_colors.dart';
 
 @RoutePage()
 class SplashPage extends StatefulWidget {
@@ -64,14 +65,14 @@ class _SplashPageState extends State<SplashPage>
             end: Alignment.bottomRight,
             colors: isDark
                 ? [
-                    const Color(0xFF0F172A),
-                    const Color(0xFF1E293B),
-                    const Color(0xFF0F172A),
+                    AppPalette.slate900,
+                    AppPalette.slate800,
+                    AppPalette.slate900,
                   ]
                 : [
-                    const Color(0xFFEEF2FF),
-                    const Color(0xFFE0E7FF),
-                    const Color(0xFFC7D2FE),
+                    AppPalette.primaryBgLight,
+                    AppPalette.primaryBgHover,
+                    AppPalette.primaryLight,
                   ],
           ),
         ),
@@ -91,13 +92,13 @@ class _SplashPageState extends State<SplashPage>
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           gradient: const LinearGradient(
-                            colors: [Color(0xFF6366F1), Color(0xFF4F46E5)],
+                            colors: [AppPalette.primary, AppPalette.primaryDark],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xFF6366F1).withValues(alpha: 0.4),
+                              color: AppPalette.primary.withValues(alpha: 0.4),
                               blurRadius: 30,
                               spreadRadius: 10,
                             ),
@@ -112,7 +113,7 @@ class _SplashPageState extends State<SplashPage>
                       const SizedBox(height: 32),
                       ShaderMask(
                         shaderCallback: (bounds) => const LinearGradient(
-                          colors: [Color(0xFF4F46E5), Color(0xFF9333EA)],
+                          colors: [AppPalette.primaryDark, AppPalette.purple],
                         ).createShader(bounds),
                         child: Text(
                           'Flutter Prakash',
@@ -127,7 +128,7 @@ class _SplashPageState extends State<SplashPage>
                       Text(
                         'Enterprise Multi-App Core Engine',
                         style: theme.textTheme.titleMedium?.copyWith(
-                          color: isDark ? const Color(0xFFCBD5E1) : const Color(0xFF475569),
+                          color: isDark ? AppPalette.slate300 : AppPalette.slate600,
                           fontWeight: FontWeight.w500,
                           letterSpacing: 0.5,
                         ),
@@ -141,10 +142,10 @@ class _SplashPageState extends State<SplashPage>
                             minHeight: 4,
                             backgroundColor: (isDark
                                     ? Colors.white
-                                    : const Color(0xFF4F46E5))
+                                    : AppPalette.primaryDark)
                                 .withValues(alpha: 0.15),
                             valueColor: const AlwaysStoppedAnimation<Color>(
-                              Color(0xFF6366F1),
+                              AppPalette.primary,
                             ),
                           ),
                         ),
