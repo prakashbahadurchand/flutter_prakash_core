@@ -7,4 +7,4 @@ export 'package:dartz/dartz.dart' hide State, Order, order;
 export 'package:freezed_annotation/freezed_annotation.dart';
 export 'package:auto_route/auto_route.dart';
 export 'package:get_it/get_it.dart';
-export 'package:injectable/injectable.dart';
+export 'package:injectable/injectable.dart' hide test;
