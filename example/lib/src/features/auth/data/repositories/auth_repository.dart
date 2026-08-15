@@ -23,7 +23,8 @@ class AuthRepository {
     required String password,
   }) {
     return Result.fromAsync(
-      call: () => _dataSource.register(name: name, email: email, password: password),
+      call: () =>
+          _dataSource.register(name: name, email: email, password: password),
     );
   }
 }

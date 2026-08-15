@@ -34,25 +34,22 @@ class _ReportFeedbackPageState extends State<ReportFeedbackPage> {
     await Future.delayed(const Duration(seconds: 1));
 
     if (!mounted) return;
-    
+
     setState(() => _isSubmitting = false);
-    
+
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Thank you for your feedback!')),
     );
-    
+
     context.router.maybePop();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Report Feedback'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('Report Feedback'), centerTitle: true),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
         child: Column(
@@ -68,7 +65,9 @@ class _ReportFeedbackPageState extends State<ReportFeedbackPage> {
             Text(
               'Please let us know how we can improve your experience or report any issues you\'ve encountered.',
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+                color: theme.textTheme.bodyMedium?.color?.withValues(
+                  alpha: 0.7,
+                ),
               ),
             ),
             const SizedBox(height: 32),
@@ -82,9 +81,7 @@ class _ReportFeedbackPageState extends State<ReportFeedbackPage> {
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide(
-                    color: theme.dividerColor,
-                  ),
+                  borderSide: BorderSide(color: theme.dividerColor),
                 ),
               ),
             ),
@@ -107,7 +104,10 @@ class _ReportFeedbackPageState extends State<ReportFeedbackPage> {
                       )
                     : const Text(
                         'Submit Feedback',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
               ),
             ),

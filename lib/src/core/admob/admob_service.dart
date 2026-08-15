@@ -36,12 +36,13 @@ class AdMobService {
   }) async {
     final status = await MobileAds.instance.initialize();
     if (testDeviceIds != null && testDeviceIds.isNotEmpty) {
-      final configuration = RequestConfiguration(
-        testDeviceIds: testDeviceIds,
-      );
+      final configuration = RequestConfiguration(testDeviceIds: testDeviceIds);
       await MobileAds.instance.updateRequestConfiguration(configuration);
     }
-    FlutterLogger.info('Google Mobile Ads SDK initialized successfully', tag: 'ADMOB');
+    FlutterLogger.info(
+      'Google Mobile Ads SDK initialized successfully',
+      tag: 'ADMOB',
+    );
     return status;
   }
 
@@ -61,11 +62,17 @@ class AdMobService {
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
           _interstitialAd = ad;
-          FlutterLogger.info('Interstitial Ad loaded successfully', tag: 'ADMOB');
+          FlutterLogger.info(
+            'Interstitial Ad loaded successfully',
+            tag: 'ADMOB',
+          );
           onAdLoaded?.call();
         },
         onAdFailedToLoad: (error) {
-          FlutterLogger.error('Failed to load Interstitial Ad: $error', tag: 'ADMOB');
+          FlutterLogger.error(
+            'Failed to load Interstitial Ad: $error',
+            tag: 'ADMOB',
+          );
           _interstitialAd = null;
           onAdFailedToLoad?.call(error);
         },
@@ -79,7 +86,10 @@ class AdMobService {
     void Function(AdError error)? onAdFailedToShow,
   }) {
     if (_interstitialAd == null) {
-      FlutterLogger.warning('Attempted to show Interstitial Ad before it was loaded', tag: 'ADMOB');
+      FlutterLogger.warning(
+        'Attempted to show Interstitial Ad before it was loaded',
+        tag: 'ADMOB',
+      );
       return;
     }
 
@@ -119,7 +129,10 @@ class AdMobService {
           onAdLoaded?.call();
         },
         onAdFailedToLoad: (error) {
-          FlutterLogger.error('Failed to load Rewarded Ad: $error', tag: 'ADMOB');
+          FlutterLogger.error(
+            'Failed to load Rewarded Ad: $error',
+            tag: 'ADMOB',
+          );
           _rewardedAd = null;
           onAdFailedToLoad?.call(error);
         },
@@ -134,7 +147,10 @@ class AdMobService {
     void Function(AdError error)? onAdFailedToShow,
   }) {
     if (_rewardedAd == null) {
-      FlutterLogger.warning('Attempted to show Rewarded Ad before it was loaded', tag: 'ADMOB');
+      FlutterLogger.warning(
+        'Attempted to show Rewarded Ad before it was loaded',
+        tag: 'ADMOB',
+      );
       return;
     }
 
@@ -178,7 +194,10 @@ class AdMobService {
           onAdLoaded?.call();
         },
         onAdFailedToLoad: (error) {
-          FlutterLogger.error('Failed to load Rewarded Interstitial: $error', tag: 'ADMOB');
+          FlutterLogger.error(
+            'Failed to load Rewarded Interstitial: $error',
+            tag: 'ADMOB',
+          );
           _rewardedInterstitialAd = null;
           onAdFailedToLoad?.call(error);
         },
@@ -193,22 +212,26 @@ class AdMobService {
     void Function(AdError error)? onAdFailedToShow,
   }) {
     if (_rewardedInterstitialAd == null) {
-      FlutterLogger.warning('Attempted to show Rewarded Interstitial before load', tag: 'ADMOB');
+      FlutterLogger.warning(
+        'Attempted to show Rewarded Interstitial before load',
+        tag: 'ADMOB',
+      );
       return;
     }
 
-    _rewardedInterstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
-      onAdDismissedFullScreenContent: (ad) {
-        ad.dispose();
-        _rewardedInterstitialAd = null;
-        onAdDismissed?.call();
-      },
-      onAdFailedToShowFullScreenContent: (ad, error) {
-        ad.dispose();
-        _rewardedInterstitialAd = null;
-        onAdFailedToShow?.call(error);
-      },
-    );
+    _rewardedInterstitialAd!.fullScreenContentCallback =
+        FullScreenContentCallback(
+          onAdDismissedFullScreenContent: (ad) {
+            ad.dispose();
+            _rewardedInterstitialAd = null;
+            onAdDismissed?.call();
+          },
+          onAdFailedToShowFullScreenContent: (ad, error) {
+            ad.dispose();
+            _rewardedInterstitialAd = null;
+            onAdFailedToShow?.call(error);
+          },
+        );
 
     _rewardedInterstitialAd!.show(
       onUserEarnedReward: (ad, reward) {
@@ -237,7 +260,10 @@ class AdMobService {
           onAdLoaded?.call();
         },
         onAdFailedToLoad: (error) {
-          FlutterLogger.error('Failed to load App Open Ad: $error', tag: 'ADMOB');
+          FlutterLogger.error(
+            'Failed to load App Open Ad: $error',
+            tag: 'ADMOB',
+          );
           _appOpenAd = null;
           onAdFailedToLoad?.call(error);
         },
@@ -251,7 +277,10 @@ class AdMobService {
     void Function(AdError error)? onAdFailedToShow,
   }) {
     if (_appOpenAd == null) {
-      FlutterLogger.warning('Attempted to show App Open Ad before load', tag: 'ADMOB');
+      FlutterLogger.warning(
+        'Attempted to show App Open Ad before load',
+        tag: 'ADMOB',
+      );
       return;
     }
 

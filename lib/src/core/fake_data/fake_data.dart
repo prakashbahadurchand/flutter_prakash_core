@@ -61,7 +61,8 @@ class Fake {
   /// Generates an avatar image URL.
   static String avatarUrl({int size = 200, String? gender}) {
     final id = _faker.randomGenerator.integer(99);
-    final selectedGender = gender?.toLowerCase() ??
+    final selectedGender =
+        gender?.toLowerCase() ??
         (_faker.randomGenerator.boolean() ? 'men' : 'women');
     return 'https://randomuser.me/api/portraits/$selectedGender/$id.jpg';
   }
@@ -150,8 +151,14 @@ class Fake {
   /// Generates a fake social media link (Twitter, GitHub, LinkedIn, Instagram, etc.).
   static String socialLink([String? platform]) {
     final user = _faker.internet.userName();
-    final p = platform?.toLowerCase() ??
-        _faker.randomGenerator.element(['github', 'twitter', 'linkedin', 'instagram']);
+    final p =
+        platform?.toLowerCase() ??
+        _faker.randomGenerator.element([
+          'github',
+          'twitter',
+          'linkedin',
+          'instagram',
+        ]);
     switch (p) {
       case 'github':
         return 'https://github.com/$user';
@@ -207,11 +214,9 @@ class Fake {
 
   /// Generates fake geographical coordinates [latitude, longitude].
   static Map<String, double> get latLng => {
-        'latitude':
-            (_faker.randomGenerator.decimal() * 180) - 90, // -90 to +90
-        'longitude':
-            (_faker.randomGenerator.decimal() * 360) - 180, // -180 to +180
-      };
+    'latitude': (_faker.randomGenerator.decimal() * 180) - 90, // -90 to +90
+    'longitude': (_faker.randomGenerator.decimal() * 360) - 180, // -180 to +180
+  };
 
   // ===========================================================================
   // 6. NUMBERS, DATES & FINANCIAL

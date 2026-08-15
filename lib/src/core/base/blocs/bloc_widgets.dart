@@ -16,8 +16,12 @@ class UiStateBuilder<B extends StateStreamable<UiState<T>>, T>
     extends StatelessWidget {
   final B? bloc;
   final Widget Function(BuildContext context, T data) onSuccess;
-  final Widget Function(BuildContext context, double? progress, String? message)?
-      onLoading;
+  final Widget Function(
+    BuildContext context,
+    double? progress,
+    String? message,
+  )?
+  onLoading;
   final Widget Function(BuildContext context, Failure failure)? onError;
   final Widget Function(BuildContext context)? onInitial;
   final Widget Function(BuildContext context, String? message)? onEmpty;
@@ -39,58 +43,53 @@ class UiStateBuilder<B extends StateStreamable<UiState<T>>, T>
       builder: (context, state) {
         return state.when(
           initial: () =>
-              onInitial != null
-                  ? onInitial!(context)
-                  : const SizedBox.shrink(),
-          loading: (progress, message) =>
-              onLoading != null
-                  ? onLoading!(context, progress, message)
-                  : Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const CircularProgressIndicator(),
-                          if (message != null) ...[
-                            const SizedBox(height: 12),
-                            Text(message, style: const TextStyle(fontSize: 14)),
-                          ],
-                        ],
-                      ),
-                    ),
+              onInitial != null ? onInitial!(context) : const SizedBox.shrink(),
+          loading: (progress, message) => onLoading != null
+              ? onLoading!(context, progress, message)
+              : Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const CircularProgressIndicator(),
+                      if (message != null) ...[
+                        const SizedBox(height: 12),
+                        Text(message, style: const TextStyle(fontSize: 14)),
+                      ],
+                    ],
+                  ),
+                ),
           success: (data) => onSuccess(context, data),
-          failure: (failure, previousData) =>
-              onError != null
-                  ? onError!(context, failure)
-                  : Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              Icons.error_outline,
-                              color: Colors.red,
-                              size: 48,
-                            ),
-                            const SizedBox(height: 12),
-                            Text(
-                              failure.message,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(fontSize: 14),
-                            ),
-                          ],
+          failure: (failure, previousData) => onError != null
+              ? onError!(context, failure)
+              : Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.error_outline,
+                          color: Colors.red,
+                          size: 48,
                         ),
-                      ),
+                        const SizedBox(height: 12),
+                        Text(
+                          failure.message,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                      ],
                     ),
-          empty: (message) =>
-              onEmpty != null
-                  ? onEmpty!(context, message)
-                  : Center(
-                      child: Text(
-                        message ?? 'No data found',
-                        style: const TextStyle(fontSize: 14, color: Colors.grey),
-                      ),
-                    ),
+                  ),
+                ),
+          empty: (message) => onEmpty != null
+              ? onEmpty!(context, message)
+              : Center(
+                  child: Text(
+                    message ?? 'No data found',
+                    style: const TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
+                ),
         );
       },
     );
@@ -113,8 +112,7 @@ class PrakashEffectListener<B extends StateStreamable<S>, S>
   });
 
   /// Factory constructor when B extends [BaseBloc].
-  static PrakashEffectListener fromBloc<
-      B extends BaseBloc<dynamic, S>, S>({
+  static PrakashEffectListener fromBloc<B extends BaseBloc<dynamic, S>, S>({
     Key? key,
     required B bloc,
     required Widget child,
@@ -129,8 +127,7 @@ class PrakashEffectListener<B extends StateStreamable<S>, S>
   }
 
   /// Factory constructor when B extends [BaseCubit].
-  static PrakashEffectListener fromCubit<
-      B extends BaseCubit<S>, S>({
+  static PrakashEffectListener fromCubit<B extends BaseCubit<S>, S>({
     Key? key,
     required B cubit,
     required Widget child,
@@ -200,15 +197,13 @@ class _PrakashEffectListenerState<B extends StateStreamable<S>, S>
         );
       } else if (effect is NavigateToEffect) {
         if (effect.isReplacement) {
-          Navigator.of(context).pushReplacementNamed(
-            effect.path,
-            arguments: effect.arguments,
-          );
+          Navigator.of(
+            context,
+          ).pushReplacementNamed(effect.path, arguments: effect.arguments);
         } else {
-          Navigator.of(context).pushNamed(
-            effect.path,
-            arguments: effect.arguments,
-          );
+          Navigator.of(
+            context,
+          ).pushNamed(effect.path, arguments: effect.arguments);
         }
       } else if (effect is PopRouteEffect) {
         Navigator.of(context).pop(effect.result);
@@ -259,8 +254,7 @@ class _PrakashEffectListenerState<B extends StateStreamable<S>, S>
 }
 
 /// Ready-to-use Paginated ListView builder for [BasePagingCubit].
-class PagingListView<B extends BasePagingCubit<T>, T>
-    extends StatefulWidget {
+class PagingListView<B extends BasePagingCubit<T>, T> extends StatefulWidget {
   final B cubit;
   final Widget Function(BuildContext context, T item, int index) itemBuilder;
   final Widget? emptyWidget;

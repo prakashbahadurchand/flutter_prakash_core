@@ -27,10 +27,7 @@ class SearchState extends Equatable {
     this.resultState = const UiState.initial(),
   });
 
-  SearchState copyWith({
-    String? query,
-    UiState<List<String>>? resultState,
-  }) {
+  SearchState copyWith({String? query, UiState<List<String>>? resultState}) {
     return SearchState(
       query: query ?? this.query,
       resultState: resultState ?? this.resultState,

@@ -33,10 +33,7 @@ class FirebaseAnalyticsManager {
     required String? value,
   }) async {
     await _analytics.setUserProperty(name: name, value: value);
-    FlutterLogger.info(
-      'Set User Property: $name = $value',
-      tag: 'ANALYTICS',
-    );
+    FlutterLogger.info('Set User Property: $name = $value', tag: 'ANALYTICS');
   }
 
   /// Log a custom analytics event.

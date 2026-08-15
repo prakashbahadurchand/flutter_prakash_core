@@ -64,7 +64,7 @@ class DebugBanner extends StatelessWidget {
     super.key,
     required this.child,
     required this.flavor,
-    this.position = DebugBannerPosition.topRight,
+    this.position = DebugBannerPosition.bottomRight,
     this.color,
     this.textStyle,
     this.isDebugOverride,

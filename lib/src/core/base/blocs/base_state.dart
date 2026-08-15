@@ -49,8 +49,9 @@ extension BaseStateToUiState<T> on BaseState<T> {
       StateInitial<T>() => UiState<T>.initial(),
       StateLoading<T>() => UiState<T>.loading(),
       StateSuccess<T>(:final data) => UiState<T>.success(data),
-      StateFailure<T>(:final message, :final failure) =>
-        UiState<T>.failure(failure ?? UnexpectedFailure(message)),
+      StateFailure<T>(:final message, :final failure) => UiState<T>.failure(
+        failure ?? UnexpectedFailure(message),
+      ),
     };
   }
 }

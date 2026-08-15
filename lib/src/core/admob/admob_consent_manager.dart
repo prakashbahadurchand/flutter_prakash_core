@@ -28,7 +28,10 @@ class AdMobConsentManager {
         }
       },
       (FormError error) {
-        FlutterLogger.error('Consent info update failed: ${error.message}', tag: 'ADMOB');
+        FlutterLogger.error(
+          'Consent info update failed: ${error.message}',
+          tag: 'ADMOB',
+        );
         onConsentComplete?.call(error);
       },
     );
@@ -43,7 +46,10 @@ class AdMobConsentManager {
         if (status == ConsentStatus.required) {
           consentForm.show((FormError? error) {
             if (error != null) {
-              FlutterLogger.error('Consent form error: ${error.message}', tag: 'ADMOB');
+              FlutterLogger.error(
+                'Consent form error: ${error.message}',
+                tag: 'ADMOB',
+              );
             }
             onConsentComplete?.call(error);
           });
@@ -52,7 +58,10 @@ class AdMobConsentManager {
         }
       },
       (FormError error) {
-        FlutterLogger.error('Failed to load consent form: ${error.message}', tag: 'ADMOB');
+        FlutterLogger.error(
+          'Failed to load consent form: ${error.message}',
+          tag: 'ADMOB',
+        );
         onConsentComplete?.call(error);
       },
     );

@@ -18,11 +18,7 @@ class ShowToastEffect extends UiEffect {
   final bool isError;
   final Duration? duration;
 
-  const ShowToastEffect(
-    this.message, {
-    this.isError = false,
-    this.duration,
-  });
+  const ShowToastEffect(this.message, {this.isError = false, this.duration});
 
   @override
   List<Object?> get props => [message, isError, duration];
@@ -120,4 +116,3 @@ class ShowBottomSheetEffect extends UiEffect {
   @override
   List<Object?> get props => [title, message, contentKey];
 }
-

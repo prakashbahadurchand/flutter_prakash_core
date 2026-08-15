@@ -16,12 +16,16 @@ class SampleFetchCubit extends BaseUiCubit<List<String>> {
       call: () async {
         final result = await _demoRepository.fetchItems(page: 1, pageSize: 12);
         return result.when(
-          success: (items) => Result.success(items.map((e) => '${e.title}: ${e.description}').toList()),
+          success: (items) => Result.success(
+            items.map((e) => '${e.title}: ${e.description}').toList(),
+          ),
           error: (failure) => Result.error(failure),
         );
       },
       onSuccess: (data) {
-        emitEffect(ShowToastEffect('Loaded ${data.length} enterprise data items'));
+        emitEffect(
+          ShowToastEffect('Loaded ${data.length} enterprise data items'),
+        );
       },
     );
   }

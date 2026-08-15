@@ -39,12 +39,7 @@ class SampleFormState extends FormCubitState<String> {
   }
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        email,
-        password,
-        fullName,
-      ];
+  List<Object?> get props => [...super.props, email, password, fullName];
 }
 
 /// Sample Form Cubit managing form submissions via DemoRepository.
@@ -80,7 +75,8 @@ class SampleFormCubit extends BaseFormCubit<SampleFormState, String> {
           description: 'Registration for email: ${state.email.value}',
         );
         return result.when(
-          success: (item) => Result.success('Submitted item ${item.id}: ${item.title}'),
+          success: (item) =>
+              Result.success('Submitted item ${item.id}: ${item.title}'),
           error: (failure) => Result.error(failure),
         );
       },

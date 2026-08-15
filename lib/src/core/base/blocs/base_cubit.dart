@@ -22,7 +22,9 @@ abstract class BaseCubit<State> extends Cubit<State> {
   /// Emit a single-shot UI effect to subscribers.
   void emitEffect(UiEffect effect) {
     if (!_effectSubject.isClosed) {
-      FlutterLogger.d('[${runtimeType.toString()}] Emitting UI Effect: $effect');
+      FlutterLogger.d(
+        '[${runtimeType.toString()}] Emitting UI Effect: $effect',
+      );
       _effectSubject.add(effect);
     }
   }
@@ -81,7 +83,11 @@ abstract class BaseUiCubit<T> extends BaseCubit<UiState<T>> {
         },
       );
     } catch (e, st) {
-      FlutterLogger.e('Unhandled exception in Cubit $runtimeType: $e', error: e, stackTrace: st);
+      FlutterLogger.e(
+        'Unhandled exception in Cubit $runtimeType: $e',
+        error: e,
+        stackTrace: st,
+      );
       final failure = UnexpectedFailure(e.toString());
       onError?.call(failure);
       emitFailure(failure);
@@ -110,7 +116,11 @@ abstract class BaseUiCubit<T> extends BaseCubit<UiState<T>> {
         },
       );
     } catch (e, st) {
-      FlutterLogger.e('Unhandled exception in Cubit $runtimeType: $e', error: e, stackTrace: st);
+      FlutterLogger.e(
+        'Unhandled exception in Cubit $runtimeType: $e',
+        error: e,
+        stackTrace: st,
+      );
       final failure = UnexpectedFailure(e.toString());
       onError?.call(failure);
       emitFailure(failure);

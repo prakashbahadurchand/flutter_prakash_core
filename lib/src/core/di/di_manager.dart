@@ -9,11 +9,7 @@ T inject<T extends Object>({
   dynamic param1,
   dynamic param2,
 }) {
-  return sl.get<T>(
-    instanceName: instanceName,
-    param1: param1,
-    param2: param2,
-  );
+  return sl.get<T>(instanceName: instanceName, param1: param1, param2: param2);
 }
 
 /// Unified Dependency Injection Manager for Flutter Prakash.

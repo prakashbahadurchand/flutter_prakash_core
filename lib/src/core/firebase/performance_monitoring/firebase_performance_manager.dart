@@ -6,8 +6,7 @@ import 'package:flutter_prakash/src/core/loggers/flutter_logger.dart';
 class FirebasePerformanceManager {
   FirebasePerformanceManager._();
 
-  static final FirebasePerformance _performance =
-      FirebasePerformance.instance;
+  static final FirebasePerformance _performance = FirebasePerformance.instance;
 
   /// Enables or disables performance collection.
   static Future<void> setPerformanceCollectionEnabled(bool enabled) async {
@@ -37,7 +36,10 @@ class FirebasePerformanceManager {
       return result;
     } finally {
       await trace.stop();
-      FlutterLogger.info('Stopped custom Trace: $traceName', tag: 'PERFORMANCE');
+      FlutterLogger.info(
+        'Stopped custom Trace: $traceName',
+        tag: 'PERFORMANCE',
+      );
     }
   }
 

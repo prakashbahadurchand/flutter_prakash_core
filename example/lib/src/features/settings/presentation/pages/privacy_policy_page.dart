@@ -8,12 +8,9 @@ class PrivacyPolicyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Privacy Policy'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('Privacy Policy'), centerTitle: true),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
         child: Column(
@@ -40,7 +37,9 @@ class PrivacyPolicyPage extends StatelessWidget {
               'If you have any questions about this Privacy Policy, please contact our support team.',
               style: theme.textTheme.bodyLarge?.copyWith(
                 height: 1.6,
-                color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.8),
+                color: theme.textTheme.bodyMedium?.color?.withValues(
+                  alpha: 0.8,
+                ),
               ),
             ),
           ],

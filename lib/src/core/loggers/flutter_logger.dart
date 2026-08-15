@@ -55,8 +55,12 @@ class FlutterLogger {
     String tag = 'DEBUG',
     Object? error,
     StackTrace? stackTrace,
-  }) =>
-      FlutterLogger.debug(message, tag: tag, error: error, stackTrace: stackTrace);
+  }) => FlutterLogger.debug(
+    message,
+    tag: tag,
+    error: error,
+    stackTrace: stackTrace,
+  );
 
   /// Print an info log message.
   static void info(
@@ -80,8 +84,12 @@ class FlutterLogger {
     String tag = 'INFO',
     Object? error,
     StackTrace? stackTrace,
-  }) =>
-      FlutterLogger.info(message, tag: tag, error: error, stackTrace: stackTrace);
+  }) => FlutterLogger.info(
+    message,
+    tag: tag,
+    error: error,
+    stackTrace: stackTrace,
+  );
 
   /// Print a warning log message.
   static void warning(
@@ -105,8 +113,12 @@ class FlutterLogger {
     String tag = 'WARN',
     Object? error,
     StackTrace? stackTrace,
-  }) =>
-      FlutterLogger.warning(message, tag: tag, error: error, stackTrace: stackTrace);
+  }) => FlutterLogger.warning(
+    message,
+    tag: tag,
+    error: error,
+    stackTrace: stackTrace,
+  );
 
   /// Print an error log message.
   static void error(
@@ -130,8 +142,12 @@ class FlutterLogger {
     String tag = 'ERROR',
     Object? error,
     StackTrace? stackTrace,
-  }) =>
-      FlutterLogger.error(message, tag: tag, error: error, stackTrace: stackTrace);
+  }) => FlutterLogger.error(
+    message,
+    tag: tag,
+    error: error,
+    stackTrace: stackTrace,
+  );
 
   /// Generic log method supporting custom log levels, formatted objects/JSON, errors, and stack traces.
   static void log(

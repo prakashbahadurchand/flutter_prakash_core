@@ -7,34 +7,28 @@ import 'ui_state.dart';
 extension DartzEitherX<L, R> on Either<L, R> {
   /// Converts a `dartz` [Either] into a clean architecture [Result].
   Result<R> toResult({Failure Function(L left)? failureMapper}) {
-    return fold(
-      (left) {
-        if (left is Failure) {
-          return Result<R>.error(left);
-        }
-        if (failureMapper != null) {
-          return Result<R>.error(failureMapper(left));
-        }
-        return Result<R>.error(UnexpectedFailure(left.toString()));
-      },
-      (right) => Result<R>.success(right),
-    );
+    return fold((left) {
+      if (left is Failure) {
+        return Result<R>.error(left);
+      }
+      if (failureMapper != null) {
+        return Result<R>.error(failureMapper(left));
+      }
+      return Result<R>.error(UnexpectedFailure(left.toString()));
+    }, (right) => Result<R>.success(right));
   }
 
   /// Converts a `dartz` [Either] directly into a [UiState].
   UiState<R> toUiState({Failure Function(L left)? failureMapper}) {
-    return fold(
-      (left) {
-        if (left is Failure) {
-          return UiState<R>.failure(left);
-        }
-        if (failureMapper != null) {
-          return UiState<R>.failure(failureMapper(left));
-        }
-        return UiState<R>.failure(UnexpectedFailure(left.toString()));
-      },
-      (right) => UiState<R>.success(right),
-    );
+    return fold((left) {
+      if (left is Failure) {
+        return UiState<R>.failure(left);
+      }
+      if (failureMapper != null) {
+        return UiState<R>.failure(failureMapper(left));
+      }
+      return UiState<R>.failure(UnexpectedFailure(left.toString()));
+    }, (right) => UiState<R>.success(right));
   }
 
   /// Extract value or return null.

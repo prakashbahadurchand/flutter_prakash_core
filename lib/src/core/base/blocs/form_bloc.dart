@@ -69,7 +69,9 @@ abstract class BaseFormCubit<State extends FormCubitState<T>, T>
       return;
     }
 
-    safeEmit(state.copyWith(status: FormStatus.inProgress, failure: null) as State);
+    safeEmit(
+      state.copyWith(status: FormStatus.inProgress, failure: null) as State,
+    );
 
     try {
       final result = await call();
@@ -163,9 +165,9 @@ class PrakashPasswordInput extends FormzInput<String, PasswordValidationError> {
   final int minLength;
 
   const PrakashPasswordInput.pure([super.value = '', this.minLength = 6])
-      : super.pure();
+    : super.pure();
   const PrakashPasswordInput.dirty([super.value = '', this.minLength = 6])
-      : super.dirty();
+    : super.dirty();
 
   @override
   PasswordValidationError? validator(String value) {
@@ -188,7 +190,9 @@ class PrakashPhoneInput extends FormzInput<String, PhoneValidationError> {
   PhoneValidationError? validator(String value) {
     if (value.trim().isEmpty) return PhoneValidationError.empty;
     final sanitized = value.replaceAll(RegExp(r'[\s\-\(\)]'), '');
-    return _phoneRegExp.hasMatch(sanitized) ? null : PhoneValidationError.invalid;
+    return _phoneRegExp.hasMatch(sanitized)
+        ? null
+        : PhoneValidationError.invalid;
   }
 }
 
@@ -203,7 +207,9 @@ class PrakashUrlInput extends FormzInput<String, UrlValidationError> {
   UrlValidationError? validator(String value) {
     if (value.trim().isEmpty) return UrlValidationError.empty;
     final uri = Uri.tryParse(value.trim());
-    if (uri != null && uri.hasAbsolutePath && (uri.isScheme('http') || uri.isScheme('https'))) {
+    if (uri != null &&
+        uri.hasAbsolutePath &&
+        (uri.isScheme('http') || uri.isScheme('https'))) {
       return null;
     }
     return UrlValidationError.invalid;
@@ -230,20 +236,21 @@ class PrakashConfirmPasswordInput
   @override
   ConfirmPasswordValidationError? validator(String value) {
     if (value.isEmpty) return ConfirmPasswordValidationError.empty;
-    return value == originalPassword ? null : ConfirmPasswordValidationError.mismatch;
+    return value == originalPassword
+        ? null
+        : ConfirmPasswordValidationError.mismatch;
   }
 }
 
 enum MinLengthValidationError { empty, tooShort }
 
 /// Pre-built reusable Minimum Length Formz Input.
-class PrakashMinLengthInput extends FormzInput<String, MinLengthValidationError> {
+class PrakashMinLengthInput
+    extends FormzInput<String, MinLengthValidationError> {
   final int minLength;
 
-  const PrakashMinLengthInput.pure({
-    String value = '',
-    this.minLength = 3,
-  }) : super.pure(value);
+  const PrakashMinLengthInput.pure({String value = '', this.minLength = 3})
+    : super.pure(value);
 
   const PrakashMinLengthInput.dirty({
     required String value,
@@ -253,7 +260,8 @@ class PrakashMinLengthInput extends FormzInput<String, MinLengthValidationError>
   @override
   MinLengthValidationError? validator(String value) {
     if (value.trim().isEmpty) return MinLengthValidationError.empty;
-    return value.trim().length >= minLength ? null : MinLengthValidationError.tooShort;
+    return value.trim().length >= minLength
+        ? null
+        : MinLengthValidationError.tooShort;
   }
 }
-

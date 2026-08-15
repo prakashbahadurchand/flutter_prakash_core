@@ -67,7 +67,9 @@ class DashboardThirdTabView extends StatelessWidget {
           child: ListTile(
             leading: const Icon(Icons.bug_report, color: Colors.red),
             title: const Text('Record Non-Fatal Crashlytics Error'),
-            subtitle: const Text('Captures error report via FirebaseCrashlyticsManager'),
+            subtitle: const Text(
+              'Captures error report via FirebaseCrashlyticsManager',
+            ),
             onTap: () {
               FirebaseCrashlyticsManager.recordError(
                 Exception('Test non-fatal exception'),

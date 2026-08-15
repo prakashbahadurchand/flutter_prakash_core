@@ -49,10 +49,10 @@ class DashboardState extends Equatable {
 
   @override
   List<Object?> get props => [
-        tabIndex,
-        notificationsEnabled,
-        crashlyticsEnabled,
-        analyticsEnabled,
-        biometricsEnabled,
-      ];
+    tabIndex,
+    notificationsEnabled,
+    crashlyticsEnabled,
+    analyticsEnabled,
+    biometricsEnabled,
+  ];
 }

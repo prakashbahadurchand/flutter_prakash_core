@@ -37,7 +37,10 @@ class SupabaseEngine {
     );
 
     _isInitialized = true;
-    FlutterLogger.i('Supabase Engine initialized successfully', tag: 'SUPABASE');
+    FlutterLogger.i(
+      'Supabase Engine initialized successfully',
+      tag: 'SUPABASE',
+    );
     return instance;
   }
 
@@ -79,15 +82,14 @@ class SupabaseEngine {
   // ===========================================================================
 
   /// Select rows from a table.
-  static PostgrestFilterBuilder<List<Map<String, dynamic>>> select(String table) {
+  static PostgrestFilterBuilder<List<Map<String, dynamic>>> select(
+    String table,
+  ) {
     return client.from(table).select();
   }
 
   /// Insert rows into a table.
-  static dynamic insert({
-    required String table,
-    required dynamic values,
-  }) {
+  static dynamic insert({required String table, required dynamic values}) {
     return client.from(table).insert(values).select();
   }
 
@@ -100,9 +102,7 @@ class SupabaseEngine {
   }
 
   /// Delete rows matching query filters.
-  static dynamic delete({
-    required String table,
-  }) {
+  static dynamic delete({required String table}) {
     return client.from(table).delete().select();
   }
 
@@ -119,10 +119,7 @@ class SupabaseEngine {
   // ===========================================================================
 
   /// Get public URL for a file in a storage bucket.
-  static String getPublicUrl({
-    required String bucket,
-    required String path,
-  }) {
+  static String getPublicUrl({required String bucket, required String path}) {
     return client.storage.from(bucket).getPublicUrl(path);
   }
 }

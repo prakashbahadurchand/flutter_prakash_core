@@ -19,8 +19,7 @@ class AdMobAdaptiveBannerWidget extends StatefulWidget {
       _AdMobAdaptiveBannerWidgetState();
 }
 
-class _AdMobAdaptiveBannerWidgetState
-    extends State<AdMobAdaptiveBannerWidget> {
+class _AdMobAdaptiveBannerWidgetState extends State<AdMobAdaptiveBannerWidget> {
   BannerAd? _bannerAd;
   bool _isLoaded = false;
   AdSize? _adSize;
@@ -33,8 +32,7 @@ class _AdMobAdaptiveBannerWidgetState
 
   Future<void> _loadAdaptiveAd() async {
     final width = MediaQuery.of(context).size.width.truncate();
-    final size =
-        await AdSize.getLargeAnchoredAdaptiveBannerAdSize(width);
+    final size = await AdSize.getLargeAnchoredAdaptiveBannerAdSize(width);
 
     if (size == null) return;
 

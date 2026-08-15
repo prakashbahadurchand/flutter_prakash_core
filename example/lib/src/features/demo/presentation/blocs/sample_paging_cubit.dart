@@ -7,11 +7,7 @@ class SampleUser {
   final String name;
   final String email;
 
-  const SampleUser({
-    required this.id,
-    required this.name,
-    required this.email,
-  });
+  const SampleUser({required this.id, required this.name, required this.email});
 }
 
 /// Sample Paging Cubit demonstrating clean architecture pagination via DemoRepository.
@@ -27,7 +23,10 @@ class SamplePagingCubit extends BasePagingCubit<SampleUser> {
       return const Result.success([]);
     }
 
-    final result = await _demoRepository.fetchItems(page: page, pageSize: pageSize);
+    final result = await _demoRepository.fetchItems(
+      page: page,
+      pageSize: pageSize,
+    );
     return result.when(
       success: (items) {
         final users = items

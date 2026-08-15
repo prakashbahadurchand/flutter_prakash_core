@@ -88,7 +88,10 @@ class _DashboardSecondTabViewState extends State<DashboardSecondTabView>
                     style: const TextStyle(color: Colors.white, fontSize: 12),
                   ),
                 ),
-                title: Text(features[index], style: const TextStyle(fontSize: 14)),
+                title: Text(
+                  features[index],
+                  style: const TextStyle(fontSize: 14),
+                ),
               ),
             );
           },
@@ -123,7 +126,8 @@ class _DashboardSecondTabViewState extends State<DashboardSecondTabView>
                   decoration: InputDecoration(
                     labelText: 'Full Name',
                     border: const OutlineInputBorder(),
-                    errorText: state.fullName.isNotValid && !state.fullName.isPure
+                    errorText:
+                        state.fullName.isNotValid && !state.fullName.isPure
                         ? 'Full name is required'
                         : null,
                   ),
@@ -134,7 +138,8 @@ class _DashboardSecondTabViewState extends State<DashboardSecondTabView>
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     labelText: 'Email Address',
-                    helperText: 'Type "error" in email to trigger domain failure',
+                    helperText:
+                        'Type "error" in email to trigger domain failure',
                     border: const OutlineInputBorder(),
                     errorText: state.email.isNotValid && !state.email.isPure
                         ? 'Please enter a valid email address'
@@ -148,14 +153,17 @@ class _DashboardSecondTabViewState extends State<DashboardSecondTabView>
                   decoration: InputDecoration(
                     labelText: 'Password',
                     border: const OutlineInputBorder(),
-                    errorText: state.password.isNotValid && !state.password.isPure
+                    errorText:
+                        state.password.isNotValid && !state.password.isPure
                         ? 'Password must be at least 6 characters'
                         : null,
                   ),
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: state.isInProgress ? null : () => _formCubit.submit(),
+                  onPressed: state.isInProgress
+                      ? null
+                      : () => _formCubit.submit(),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
@@ -218,8 +226,10 @@ class _DashboardSecondTabViewState extends State<DashboardSecondTabView>
             child: BlocBuilder<SampleSearchBloc, SearchState>(
               bloc: _searchBloc,
               builder: (context, state) {
-                return UiStateBuilder<StateStreamable<UiState<List<String>>>,
-                    List<String>>(
+                return UiStateBuilder<
+                  StateStreamable<UiState<List<String>>>,
+                  List<String>
+                >(
                   bloc: _SearchStateStreamableAdapter(_searchBloc),
                   onSuccess: (context, items) {
                     return ListView.builder(
@@ -232,9 +242,8 @@ class _DashboardSecondTabViewState extends State<DashboardSecondTabView>
                       },
                     );
                   },
-                  onEmpty: (context, message) => Center(
-                    child: Text(message ?? 'No results found'),
-                  ),
+                  onEmpty: (context, message) =>
+                      Center(child: Text(message ?? 'No results found')),
                 );
               },
             ),

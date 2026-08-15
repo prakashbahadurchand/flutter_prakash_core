@@ -15,10 +15,7 @@ class DevtoolsCustomOptionsTabView extends StatelessWidget {
           children: [
             const Icon(Icons.tune, size: 48, color: Colors.grey),
             const SizedBox(height: 12),
-            Text(
-              title,
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
+            Text(title, style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 8),
             const Text(
               'Custom configuration options and feature toggles.',

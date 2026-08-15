@@ -27,7 +27,8 @@ class PagingState<T> extends Equatable {
   });
 
   bool get isEmpty => !isLoadingInitial && items.isEmpty;
-  bool get isSuccess => !isLoadingInitial && items.isNotEmpty && failure == null;
+  bool get isSuccess =>
+      !isLoadingInitial && items.isNotEmpty && failure == null;
   bool get hasError => failure != null;
 
   PagingState<T> copyWith({
@@ -54,21 +55,21 @@ class PagingState<T> extends Equatable {
 
   @override
   List<Object?> get props => [
-        items,
-        page,
-        pageSize,
-        hasNextPage,
-        isLoadingInitial,
-        isLoadingMore,
-        isRefreshing,
-        failure,
-      ];
+    items,
+    page,
+    pageSize,
+    hasNextPage,
+    isLoadingInitial,
+    isLoadingMore,
+    isRefreshing,
+    failure,
+  ];
 }
 
 /// Abstract Base Paging Cubit for paginated list operations.
 abstract class BasePagingCubit<T> extends BaseCubit<PagingState<T>> {
   BasePagingCubit({int initialPage = 1, int pageSize = 20})
-      : super(PagingState<T>(page: initialPage, pageSize: pageSize));
+    : super(PagingState<T>(page: initialPage, pageSize: pageSize));
 
   /// User-implemented query method to fetch items for a specific [page] and [pageSize].
   Future<Result<List<T>>> fetchPage(int page, int pageSize);
@@ -90,12 +91,7 @@ abstract class BasePagingCubit<T> extends BaseCubit<PagingState<T>> {
         );
       },
       error: (failure) {
-        safeEmit(
-          state.copyWith(
-            isLoadingInitial: false,
-            failure: failure,
-          ),
-        );
+        safeEmit(state.copyWith(isLoadingInitial: false, failure: failure));
       },
     );
   }
@@ -118,12 +114,7 @@ abstract class BasePagingCubit<T> extends BaseCubit<PagingState<T>> {
         );
       },
       error: (failure) {
-        safeEmit(
-          state.copyWith(
-            isRefreshing: false,
-            failure: failure,
-          ),
-        );
+        safeEmit(state.copyWith(isRefreshing: false, failure: failure));
       },
     );
   }
@@ -150,12 +141,7 @@ abstract class BasePagingCubit<T> extends BaseCubit<PagingState<T>> {
         );
       },
       error: (failure) {
-        safeEmit(
-          state.copyWith(
-            isLoadingMore: false,
-            failure: failure,
-          ),
-        );
+        safeEmit(state.copyWith(isLoadingMore: false, failure: failure));
       },
     );
   }
@@ -167,7 +153,10 @@ abstract class BasePagingCubit<T> extends BaseCubit<PagingState<T>> {
   }
 
   /// In-memory item update matching [predicate].
-  void updateItem(bool Function(T item) predicate, T Function(T current) update) {
+  void updateItem(
+    bool Function(T item) predicate,
+    T Function(T current) update,
+  ) {
     final updatedList = state.items.map((item) {
       return predicate(item) ? update(item) : item;
     }).toList();
@@ -182,16 +171,17 @@ abstract class BasePagingCubit<T> extends BaseCubit<PagingState<T>> {
 
   /// Clears any active failure error state.
   void clearError() {
-    safeEmit(PagingState<T>(
-      items: state.items,
-      page: state.page,
-      pageSize: state.pageSize,
-      hasNextPage: state.hasNextPage,
-      isLoadingInitial: state.isLoadingInitial,
-      isLoadingMore: state.isLoadingMore,
-      isRefreshing: state.isRefreshing,
-      failure: null,
-    ));
+    safeEmit(
+      PagingState<T>(
+        items: state.items,
+        page: state.page,
+        pageSize: state.pageSize,
+        hasNextPage: state.hasNextPage,
+        isLoadingInitial: state.isLoadingInitial,
+        isLoadingMore: state.isLoadingMore,
+        isRefreshing: state.isRefreshing,
+        failure: null,
+      ),
+    );
   }
 }
-

@@ -119,9 +119,7 @@ class _InAppWebViewState extends State<InAppWebView> {
             value: _loadingProgress / 100.0,
             backgroundColor: Colors.transparent,
           ),
-        Expanded(
-          child: WebViewWidget(controller: _controller),
-        ),
+        Expanded(child: WebViewWidget(controller: _controller)),
       ],
     );
 
@@ -171,8 +169,9 @@ class _InAppWebViewState extends State<InAppWebView> {
                   ),
                   IconButton(
                     icon: const Icon(Icons.arrow_forward_ios),
-                    onPressed:
-                        canGoForward ? () => _controller.goForward() : null,
+                    onPressed: canGoForward
+                        ? () => _controller.goForward()
+                        : null,
                   ),
                   IconButton(
                     icon: const Icon(Icons.refresh),

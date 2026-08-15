@@ -37,8 +37,7 @@ class AdMobTestIds {
   static const String nativeIos = 'ca-app-pub-3940256099942544/3986624511';
 
   /// Platform-aware test banner ID.
-  static String get banner =>
-      Platform.isAndroid ? bannerAndroid : bannerIos;
+  static String get banner => Platform.isAndroid ? bannerAndroid : bannerIos;
 
   /// Platform-aware test interstitial ID.
   static String get interstitial =>
@@ -54,8 +53,7 @@ class AdMobTestIds {
       : rewardedInterstitialIos;
 
   /// Platform-aware test app open ID.
-  static String get appOpen =>
-      Platform.isAndroid ? appOpenAndroid : appOpenIos;
+  static String get appOpen => Platform.isAndroid ? appOpenAndroid : appOpenIos;
 
   /// Platform-aware test native ID.
   static String get native => Platform.isAndroid ? nativeAndroid : nativeIos;

@@ -7,8 +7,7 @@ import 'package:flutter_prakash/src/core/loggers/flutter_logger.dart';
 class FirebaseCrashlyticsManager {
   FirebaseCrashlyticsManager._();
 
-  static final FirebaseCrashlytics _crashlytics =
-      FirebaseCrashlytics.instance;
+  static final FirebaseCrashlytics _crashlytics = FirebaseCrashlytics.instance;
 
   /// Initializes Crashlytics exception handlers for Flutter errors and platform errors.
   static Future<void> initialize({bool enableInDev = false}) async {
@@ -25,7 +24,10 @@ class FirebaseCrashlyticsManager {
         return true;
       };
 
-      FlutterLogger.info('Firebase Crashlytics collection enabled', tag: 'CRASHLYTICS');
+      FlutterLogger.info(
+        'Firebase Crashlytics collection enabled',
+        tag: 'CRASHLYTICS',
+      );
     } else {
       FlutterLogger.info(
         'Firebase Crashlytics collection disabled (Non-release mode)',

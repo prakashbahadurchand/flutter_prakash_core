@@ -48,16 +48,16 @@ sealed class UiState<T> extends Equatable {
 
   /// Returns data if state is [UiStateSuccess], or optional previous data on failure, else `null`.
   T? get dataOrNull => switch (this) {
-        UiStateSuccess<T>(:final data) => data,
-        UiStateFailure<T>(:final previousData) => previousData,
-        _ => null,
-      };
+    UiStateSuccess<T>(:final data) => data,
+    UiStateFailure<T>(:final previousData) => previousData,
+    _ => null,
+  };
 
   /// Returns failure if state is [UiStateFailure], else `null`.
   Failure? get failureOrNull => switch (this) {
-        UiStateFailure<T>(:final failure) => failure,
-        _ => null,
-      };
+    UiStateFailure<T>(:final failure) => failure,
+    _ => null,
+  };
 
   /// Returns data if available, or returns [fallback].
   T getOrElse(T fallback) => dataOrNull ?? fallback;
@@ -144,8 +144,9 @@ sealed class UiState<T> extends Equatable {
     } else if (self is UiStateFailure<T>) {
       return UiState<R>.failure(
         self.failure,
-        previousData:
-            self.previousData != null ? transform(self.previousData as T) : null,
+        previousData: self.previousData != null
+            ? transform(self.previousData as T)
+            : null,
       );
     } else if (self is UiStateEmpty<T>) {
       return UiState<R>.empty(message: self.message);

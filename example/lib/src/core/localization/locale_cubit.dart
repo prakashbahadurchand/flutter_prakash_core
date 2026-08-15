@@ -7,6 +7,10 @@ class LocaleCubit extends BaseCubit<Locale> {
 
   void updateLocale(Locale locale) {
     safeEmit(locale);
-    emitEffect(ShowToastEffect('Language changed to ${locale.languageCode.toUpperCase()}'));
+    emitEffect(
+      ShowToastEffect(
+        'Language changed to ${locale.languageCode.toUpperCase()}',
+      ),
+    );
   }
 }

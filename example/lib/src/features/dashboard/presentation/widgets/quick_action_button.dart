@@ -6,7 +6,8 @@ class QuickActionButton extends StatelessWidget {
   final Color color;
   final VoidCallback onTap;
 
-  const QuickActionButton({super.key, 
+  const QuickActionButton({
+    super.key,
     required this.icon,
     required this.label,
     required this.color,

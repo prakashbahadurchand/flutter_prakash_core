@@ -28,7 +28,9 @@ abstract class BaseBloc<Event, State> extends Bloc<Event, State> {
   /// Emit a single-shot UI effect to subscribers.
   void emitEffect(UiEffect effect) {
     if (!_effectSubject.isClosed) {
-      FlutterLogger.d('[${runtimeType.toString()}] Emitting UI Effect: $effect');
+      FlutterLogger.d(
+        '[${runtimeType.toString()}] Emitting UI Effect: $effect',
+      );
       _effectSubject.add(effect);
     }
   }
@@ -62,7 +64,11 @@ abstract class BaseBloc<Event, State> extends Bloc<Event, State> {
         },
       );
     } catch (e, st) {
-      FlutterLogger.e('Unhandled exception in BLoC $runtimeType: $e', error: e, stackTrace: st);
+      FlutterLogger.e(
+        'Unhandled exception in BLoC $runtimeType: $e',
+        error: e,
+        stackTrace: st,
+      );
       final failure = UnexpectedFailure(e.toString());
       onError?.call(failure);
       safeEmit(builder(UiState.failure(failure)), emit);
@@ -93,7 +99,11 @@ abstract class BaseBloc<Event, State> extends Bloc<Event, State> {
         },
       );
     } catch (e, st) {
-      FlutterLogger.e('Unhandled exception in BLoC $runtimeType: $e', error: e, stackTrace: st);
+      FlutterLogger.e(
+        'Unhandled exception in BLoC $runtimeType: $e',
+        error: e,
+        stackTrace: st,
+      );
       final failure = UnexpectedFailure(e.toString());
       onError?.call(failure);
       safeEmit(builder(UiState.failure(failure)), emit);

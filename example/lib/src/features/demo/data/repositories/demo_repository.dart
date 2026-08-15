@@ -22,7 +22,8 @@ class DemoRepository {
     required String description,
   }) {
     return Result.fromAsync(
-      call: () => _dataSource.submitForm(title: title, description: description),
+      call: () =>
+          _dataSource.submitForm(title: title, description: description),
     );
   }
 }

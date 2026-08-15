@@ -86,14 +86,9 @@ typedef EntityPredicate<T> = bool Function(T item);
 typedef ItemWidgetBuilder<T> = Widget Function(BuildContext context, T item);
 
 /// Dynamic widget builder signature taking a context, typed item, and item index.
-typedef IndexedItemWidgetBuilder<T> = Widget Function(
-  BuildContext context,
-  T item,
-  int index,
-);
+typedef IndexedItemWidgetBuilder<T> =
+    Widget Function(BuildContext context, T item, int index);
 
 /// Custom error widget builder signature taking BuildContext and domain Failure.
-typedef FailureWidgetBuilder = Widget Function(
-  BuildContext context,
-  Failure failure,
-);
+typedef FailureWidgetBuilder =
+    Widget Function(BuildContext context, Failure failure);

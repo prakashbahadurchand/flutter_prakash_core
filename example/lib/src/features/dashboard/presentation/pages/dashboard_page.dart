@@ -67,7 +67,10 @@ class DashboardView extends StatelessWidget {
                     const SizedBox(width: 10),
                     Text(
                       state.currentTab.title,
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
                     ),
                   ],
                 ),
@@ -79,10 +82,7 @@ class DashboardView extends StatelessWidget {
                   ),
                 ],
               ),
-              body: IndexedStack(
-                index: tabIndex,
-                children: views,
-              ),
+              body: IndexedStack(index: tabIndex, children: views),
               bottomNavigationBar: DashboardBottomNavBar(
                 currentIndex: tabIndex,
                 onSelect: cubit.selectTab,
@@ -130,9 +130,9 @@ class DashboardView extends StatelessWidget {
               const SizedBox(height: 16),
               Text(
                 'Quick Engine Actions',
-                style: Theme.of(ctx).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(
+                  ctx,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 20),
               Row(
@@ -180,4 +180,3 @@ class DashboardView extends StatelessWidget {
     );
   }
 }
-

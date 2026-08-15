@@ -85,10 +85,7 @@ class InAppUpdateManager {
       FlutterLogger.info('Starting Flexible In-App Update...', tag: _logTag);
       final result = await InAppUpdate.startFlexibleUpdate();
       final success = result == AppUpdateResult.success;
-      FlutterLogger.info(
-        'Flexible Update start result: $result',
-        tag: _logTag,
-      );
+      FlutterLogger.info('Flexible Update start result: $result', tag: _logTag);
       return success;
     } catch (e, stack) {
       FlutterLogger.error(
@@ -133,10 +130,7 @@ class InAppUpdateManager {
       FlutterLogger.info('Starting Immediate In-App Update...', tag: _logTag);
       final result = await InAppUpdate.performImmediateUpdate();
       final success = result == AppUpdateResult.success;
-      FlutterLogger.info(
-        'Immediate Update result: $result',
-        tag: _logTag,
-      );
+      FlutterLogger.info('Immediate Update result: $result', tag: _logTag);
       return success;
     } catch (e, stack) {
       FlutterLogger.error(
@@ -153,9 +147,7 @@ class InAppUpdateManager {
   ///
   /// Checks for available updates and automatically performs either [performImmediateUpdate]
   /// or [startFlexibleUpdate] based on Google Play Store recommendation or developer preference.
-  static Future<void> autoCheckAndUpdate({
-    bool preferImmediate = false,
-  }) async {
+  static Future<void> autoCheckAndUpdate({bool preferImmediate = false}) async {
     if (!isSupported) return;
 
     final info = await checkForUpdate();

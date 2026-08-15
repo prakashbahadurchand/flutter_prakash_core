@@ -129,7 +129,10 @@ class _FilePreviewPageState extends State<FilePreviewPage> {
                 children: [
                   Icon(Icons.broken_image, size: 64, color: Colors.grey),
                   SizedBox(height: 12),
-                  Text('Failed to load image', style: TextStyle(color: Colors.white)),
+                  Text(
+                    'Failed to load image',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ],
               ),
             );
@@ -147,7 +150,10 @@ class _FilePreviewPageState extends State<FilePreviewPage> {
                 children: [
                   Icon(Icons.broken_image, size: 64, color: Colors.grey),
                   SizedBox(height: 12),
-                  Text('Local image file not found', style: TextStyle(color: Colors.white)),
+                  Text(
+                    'Local image file not found',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ],
               ),
             );
@@ -155,10 +161,7 @@ class _FilePreviewPageState extends State<FilePreviewPage> {
         );
         break;
       case FileSourceType.asset:
-        imageWidget = Image.asset(
-          widget.filePath,
-          fit: BoxFit.contain,
-        );
+        imageWidget = Image.asset(widget.filePath, fit: BoxFit.contain);
         break;
     }
 

@@ -10,10 +10,7 @@ import 'package:flutter_prakash_example/src/core/theme/app_colors.dart';
 class DashboardFourthTabView extends StatelessWidget {
   final DashboardState state;
 
-  const DashboardFourthTabView({
-    super.key,
-    required this.state,
-  });
+  const DashboardFourthTabView({super.key, required this.state});
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +28,7 @@ class DashboardFourthTabView extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
             gradient: LinearGradient(
-              colors: [
-                scheme.primary,
-                scheme.secondary,
-              ],
+              colors: [scheme.primary, scheme.secondary],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -310,9 +304,7 @@ class DashboardFourthTabView extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 16),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
-              side: BorderSide(
-                color: AppPalette.error.withValues(alpha: 0.3),
-              ),
+              side: BorderSide(color: AppPalette.error.withValues(alpha: 0.3)),
             ),
           ),
           onPressed: () {
@@ -323,7 +315,9 @@ class DashboardFourthTabView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 title: const Text('Confirm Logout'),
-                content: const Text('Are you sure you want to sign out of this account?'),
+                content: const Text(
+                  'Are you sure you want to sign out of this account?',
+                ),
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.pop(ctx),
@@ -454,7 +448,9 @@ class _SettingsTile extends StatelessWidget {
                     subtitle,
                     style: TextStyle(
                       fontSize: 12,
-                      color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
+                      color: isDark
+                          ? Colors.grey.shade400
+                          : Colors.grey.shade600,
                     ),
                   ),
                 ],

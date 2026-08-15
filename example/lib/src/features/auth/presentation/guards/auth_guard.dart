@@ -1,7 +1,6 @@
 import 'package:flutter_prakash/flutter_prakash.dart';
 import 'package:flutter_prakash_example/src/config/routes/app_router.dart';
 
-
 /// Example authentication route guard demonstrating [PrakashRouteGuard].
 class ExampleAuthGuard extends PrakashRouteGuard {
   final bool isAuthenticated;

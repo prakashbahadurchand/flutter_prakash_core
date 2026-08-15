@@ -30,10 +30,7 @@ class _SplashPageState extends State<SplashPage>
       curve: Curves.easeOutBack,
     );
 
-    _fadeAnimation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeIn,
-    );
+    _fadeAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
 
     _controller.forward();
     _navigateToNext();
@@ -92,7 +89,10 @@ class _SplashPageState extends State<SplashPage>
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           gradient: const LinearGradient(
-                            colors: [AppPalette.primary, AppPalette.primaryDark],
+                            colors: [
+                              AppPalette.primary,
+                              AppPalette.primaryDark,
+                            ],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                           ),
@@ -128,7 +128,9 @@ class _SplashPageState extends State<SplashPage>
                       Text(
                         'Enterprise Multi-App Core Engine',
                         style: theme.textTheme.titleMedium?.copyWith(
-                          color: isDark ? AppPalette.slate300 : AppPalette.slate600,
+                          color: isDark
+                              ? AppPalette.slate300
+                              : AppPalette.slate600,
                           fontWeight: FontWeight.w500,
                           letterSpacing: 0.5,
                         ),
@@ -140,10 +142,9 @@ class _SplashPageState extends State<SplashPage>
                           borderRadius: BorderRadius.circular(8),
                           child: LinearProgressIndicator(
                             minHeight: 4,
-                            backgroundColor: (isDark
-                                    ? Colors.white
-                                    : AppPalette.primaryDark)
-                                .withValues(alpha: 0.15),
+                            backgroundColor:
+                                (isDark ? Colors.white : AppPalette.primaryDark)
+                                    .withValues(alpha: 0.15),
                             valueColor: const AlwaysStoppedAnimation<Color>(
                               AppPalette.primary,
                             ),

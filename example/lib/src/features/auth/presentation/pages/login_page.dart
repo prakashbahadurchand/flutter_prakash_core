@@ -75,11 +75,16 @@ class _LoginPageState extends State<LoginPage> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             gradient: const LinearGradient(
-                              colors: [AppPalette.primary, AppPalette.primaryDark],
+                              colors: [
+                                AppPalette.primary,
+                                AppPalette.primaryDark,
+                              ],
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: AppPalette.primary.withValues(alpha: 0.3),
+                                color: AppPalette.primary.withValues(
+                                  alpha: 0.3,
+                                ),
                                 blurRadius: 20,
                                 spreadRadius: 4,
                               ),
@@ -142,7 +147,8 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           helperText:
                               'Tip: Enter "fail" to test error response handling',
-                          errorText: state.email.isNotValid && !state.email.isPure
+                          errorText:
+                              state.email.isNotValid && !state.email.isPure
                               ? 'Please enter a valid email address'
                               : null,
                         ),
@@ -188,9 +194,10 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           errorText:
-                              state.password.isNotValid && !state.password.isPure
-                                  ? 'Password must be at least 6 characters'
-                                  : null,
+                              state.password.isNotValid &&
+                                  !state.password.isPure
+                              ? 'Password must be at least 6 characters'
+                              : null,
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -226,7 +233,9 @@ class _LoginPageState extends State<LoginPage> {
                                 await _loginCubit.submit();
                                 if (_loginCubit.state.isSuccess &&
                                     context.mounted) {
-                                  context.router.replace(const DashboardRoute());
+                                  context.router.replace(
+                                    const DashboardRoute(),
+                                  );
                                 }
                               },
                         child: state.isInProgress

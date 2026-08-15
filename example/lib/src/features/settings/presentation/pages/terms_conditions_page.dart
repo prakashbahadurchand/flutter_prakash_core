@@ -8,12 +8,9 @@ class TermsConditionsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Terms of Service'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('Terms of Service'), centerTitle: true),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
         child: Column(
@@ -42,7 +39,9 @@ class TermsConditionsPage extends StatelessWidget {
               'In no event shall Flutter Prakash or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on the application.',
               style: theme.textTheme.bodyLarge?.copyWith(
                 height: 1.6,
-                color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.8),
+                color: theme.textTheme.bodyMedium?.color?.withValues(
+                  alpha: 0.8,
+                ),
               ),
             ),
           ],

@@ -33,7 +33,10 @@ class FirebaseRemoteConfigManager {
         tag: 'REMOTE_CONFIG',
       );
     } catch (e) {
-      FlutterLogger.error('Failed to fetch Remote Config: $e', tag: 'REMOTE_CONFIG');
+      FlutterLogger.error(
+        'Failed to fetch Remote Config: $e',
+        tag: 'REMOTE_CONFIG',
+      );
     }
   }
 

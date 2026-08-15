@@ -9,9 +9,15 @@ import 'package:flutter_prakash_example/src/core/localization/locale_cubit.dart'
 
 void main() {
   AppConfig.init(
-    appName: const String.fromEnvironment('APP_NAME', defaultValue: 'Flutter Prakash DEV'),
+    appName: const String.fromEnvironment(
+      'APP_NAME',
+      defaultValue: 'Flutter Prakash DEV',
+    ),
     environment: AppEnvironment.dev,
-    baseUrl: const String.fromEnvironment('BASE_URL', defaultValue: 'https://dev-api.prakash.dev'),
+    baseUrl: const String.fromEnvironment(
+      'BASE_URL',
+      defaultValue: 'https://dev-api.prakash.dev',
+    ),
   );
 
   bootstrap(
@@ -53,10 +59,7 @@ class _ExampleAppState extends State<ExampleApp> {
             darkTheme: AppThemeBuilder.buildDarkTheme(),
             themeMode: themeMode,
             locale: locale,
-            supportedLocales: const [
-              Locale('en', 'US'),
-              Locale('ne', 'NP'),
-            ],
+            supportedLocales: const [Locale('en', 'US'), Locale('ne', 'NP')],
             routerConfig: _appRouter.config(),
           );
         },

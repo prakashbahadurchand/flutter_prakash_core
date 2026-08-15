@@ -173,7 +173,8 @@ class DashboardFirstTabView extends StatelessWidget {
           icon: Icons.swap_horiz_rounded,
           iconColor: AppPalette.success,
           title: 'Result & Error Handling',
-          subtitle: 'Type-safe Result<T> sealed pattern with NetworkException mapping',
+          subtitle:
+              'Type-safe Result<T> sealed pattern with NetworkException mapping',
         ),
       ],
     );

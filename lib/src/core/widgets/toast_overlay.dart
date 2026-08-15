@@ -145,9 +145,7 @@ class Toast {
       backgroundColor: backgroundColor,
       dismissDirection: dismissDirection,
       clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       margin: behavior == SnackBarBehavior.floating
           ? const EdgeInsets.symmetric(horizontal: 16, vertical: 14)
           : null,

@@ -67,8 +67,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
         child: Column(
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 8.0,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -95,8 +97,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   TextButton(
                     onPressed: _onSkip,
                     style: TextButton.styleFrom(
-                      foregroundColor:
-                          isDark ? Colors.grey.shade400 : Colors.grey.shade600,
+                      foregroundColor: isDark
+                          ? Colors.grey.shade400
+                          : Colors.grey.shade600,
                     ),
                     child: const Text(
                       'Skip',
@@ -131,7 +134,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: gradientColors.first.withValues(alpha: 0.35),
+                                color: gradientColors.first.withValues(
+                                  alpha: 0.35,
+                                ),
                                 blurRadius: 32,
                                 spreadRadius: 8,
                                 offset: const Offset(0, 8),
@@ -147,7 +152,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         const SizedBox(height: 40),
                         Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 14, vertical: 6),
+                            horizontal: 14,
+                            vertical: 6,
+                          ),
                           decoration: BoxDecoration(
                             color: gradientColors.first.withValues(alpha: 0.12),
                             borderRadius: BorderRadius.circular(20),
@@ -206,8 +213,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           color: _currentIndex == i
                               ? AppPalette.primary
                               : (isDark
-                                  ? Colors.grey.shade800
-                                  : Colors.grey.shade300),
+                                    ? Colors.grey.shade800
+                                    : Colors.grey.shade300),
                           borderRadius: BorderRadius.circular(5),
                         ),
                       ),
