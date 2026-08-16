@@ -1,56 +1,283 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_prakash/src/core/admob/admob_config.dart';
+import 'package:flutter_prakash/src/core/admob/admob_consent_manager.dart';
+import 'package:flutter_prakash/src/core/admob/app_lifecycle_reactor.dart';
+import 'package:flutter_prakash/src/core/admob/app_open_ad_manager.dart';
+import 'package:flutter_prakash/src/core/admob/custom_ad_model.dart';
+import 'package:flutter_prakash/src/core/admob/custom_ad_pool.dart';
+import 'package:flutter_prakash/src/core/admob/interstitial_ad_manager.dart';
+import 'package:flutter_prakash/src/core/admob/rewarded_ad_manager.dart';
 import 'package:flutter_prakash/src/core/loggers/flutter_logger.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-/// Comprehensive AdMob service manager supporting all AdMob formats:
-/// Interstitial, Rewarded, Rewarded Interstitial, and App Open ads.
+/// Comprehensive Master AdMob & Monetization Service Engine.
 ///
-/// Example usage:
-/// ```dart
-/// await AdMobService.initialize();
-///
-/// // Load and show interstitial ad
-/// AdMobService.loadInterstitial(adUnitId: myInterstitialId, onAdLoaded: () {
-///   AdMobService.showInterstitial();
-/// });
-///
-/// // Load and show rewarded ad
-/// AdMobService.loadRewarded(
-///   adUnitId: myRewardedId,
-///   onUserEarnedReward: (reward) {
-///     print('User earned reward: ${reward.amount} ${reward.type}');
-///   },
-/// );
-/// ```
+/// Features:
+/// - 1-Line initialization for App Open, Banner, Native, Interstitial, & Rewarded ads.
+/// - Automatic app foreground / background lifecycle management for App Open ads.
+/// - Frequency & interval capping for Interstitials.
+/// - Offline custom cross-promotion ads fallback when internet is unavailable.
+/// - Global instant Ad-Free switch for premium / pro subscribers.
 class AdMobService {
   AdMobService._();
 
-  static InterstitialAd? _interstitialAd;
-  static RewardedAd? _rewardedAd;
-  static RewardedInterstitialAd? _rewardedInterstitialAd;
-  static AppOpenAd? _appOpenAd;
+  static AdMobConfig _config = const AdMobConfig();
+  static bool _isAdFree = false;
+  static bool _isInitialized = false;
 
-  /// Initializes Google Mobile Ads SDK with optional request configuration / test devices.
+  static AppOpenAdManager? _appOpenAdManager;
+  static AppLifecycleReactor? _appLifecycleReactor;
+
+  // Direct low-level cached ad instances for backward-compatibility
+  static InterstitialAd? _rawInterstitialAd;
+  static RewardedAd? _rawRewardedAd;
+  static RewardedInterstitialAd? _rawRewardedInterstitialAd;
+  static AppOpenAd? _rawAppOpenAd;
+
+  /// Returns current global AdMob configuration.
+  static AdMobConfig get config => _config;
+
+  /// Whether ads are globally enabled in configuration.
+  static bool get isEnabled => _config.enabled;
+
+  /// Whether the user is in ad-free (premium/pro) mode.
+  static bool get isAdFree => _isAdFree;
+
+  /// Whether Mobile Ads SDK is fully initialized.
+  static bool get isInitialized => _isInitialized;
+
+  /// Master App Open Ad Manager instance.
+  static AppOpenAdManager get appOpenAdManager =>
+      _appOpenAdManager ??= AppOpenAdManager(
+        adUnitId: _config.appOpenAdUnitId,
+        maxCacheDuration: _config.appOpenMaxCacheDuration,
+      );
+
+  /// Master App Lifecycle Reactor instance.
+  static AppLifecycleReactor get appLifecycleReactor =>
+      _appLifecycleReactor ??= AppLifecycleReactor(
+        appOpenAdManager: appOpenAdManager,
+      );
+
+  /// Sets global ad-free state (e.g. when user purchases a premium ad-free plan).
+  ///
+  /// Instantly disables all banners, native ads, app open ads, and interstitials app-wide.
+  static void setAdFree(bool adFree) {
+    _isAdFree = adFree;
+    FlutterLogger.info('AdMobService isAdFree set to: $adFree', tag: 'ADMOB');
+    if (adFree) {
+      dispose();
+    }
+  }
+
+  /// Registers or replaces custom cross-promotion ads in the pool.
+  static void setCustomAds(List<CustomAdModel> ads) {
+    CustomAdPool.registerAds(ads);
+  }
+
+  /// Initializes Google Mobile Ads SDK, configures test devices, GDPR consent, and optional App Open auto-show.
+  ///
+  /// Example:
+  /// ```dart
+  /// await AdMobService.initialize(
+  ///   config: AdMobConfig(
+  ///     bannerAndroidId: '...',
+  ///     interstitialAndroidId: '...',
+  ///     appOpenAndroidId: '...',
+  ///     isTesting: kDebugMode,
+  ///   ),
+  ///   autoShowAppOpen: true,
+  /// );
+  /// ```
   static Future<InitializationStatus> initialize({
+    AdMobConfig? config,
+    bool autoShowAppOpen = false,
+    bool requestConsent = false,
     List<String>? testDeviceIds,
+    void Function(FormError? error)? onConsentComplete,
   }) async {
+    if (config != null) {
+      _config = config;
+      if (config.customAds != null && config.customAds!.isNotEmpty) {
+        CustomAdPool.registerAds(config.customAds!);
+      }
+    }
+
+    _appOpenAdManager = AppOpenAdManager(
+      adUnitId: _config.appOpenAdUnitId,
+      maxCacheDuration: _config.appOpenMaxCacheDuration,
+    );
+    _appLifecycleReactor = AppLifecycleReactor(
+      appOpenAdManager: appOpenAdManager,
+    );
+
     final status = await MobileAds.instance.initialize();
-    if (testDeviceIds != null && testDeviceIds.isNotEmpty) {
-      final configuration = RequestConfiguration(testDeviceIds: testDeviceIds);
+    _isInitialized = true;
+
+    final devices = testDeviceIds ?? _config.testDeviceIds;
+    if (devices != null && devices.isNotEmpty) {
+      final configuration = RequestConfiguration(testDeviceIds: devices);
       await MobileAds.instance.updateRequestConfiguration(configuration);
     }
+
     FlutterLogger.info(
       'Google Mobile Ads SDK initialized successfully',
       tag: 'ADMOB',
     );
+
+    if (requestConsent) {
+      await AdMobConsentManager.requestConsent(
+        testDeviceIds: devices,
+        onConsentComplete: (error) {
+          onConsentComplete?.call(error);
+          if (autoShowAppOpen && _config.enabled && !_isAdFree) {
+            _setupAppOpenAds();
+          }
+        },
+      );
+    } else if (autoShowAppOpen && _config.enabled && !_isAdFree) {
+      _setupAppOpenAds();
+    }
+
     return status;
   }
 
+  static void _setupAppOpenAds() {
+    appOpenAdManager.loadAd();
+    appLifecycleReactor.listenToAppStateChanges();
+  }
+
+  /// Preloads Interstitial, Rewarded, and App Open ads in the background.
+  static void preloadAll() {
+    if (_isAdFree || !_config.enabled) return;
+    preloadInterstitial();
+    preloadRewarded();
+    preloadAppOpen();
+  }
+
+  /// Preloads an Interstitial Ad in the background.
+  static void preloadInterstitial({String? adUnitId}) {
+    InterstitialAdManager.loadAd(adUnitId: adUnitId);
+  }
+
+  /// Preloads a Rewarded Ad in the background.
+  static void preloadRewarded({String? adUnitId}) {
+    RewardedAdManager.loadAd(adUnitId: adUnitId);
+  }
+
+  /// Preloads an App Open Ad in the background.
+  static void preloadAppOpen({String? adUnitId}) {
+    appOpenAdManager.loadAd(adUnitId: adUnitId);
+  }
+
   // ===========================================================================
-  // INTERSTITIAL ADS
+  // ULTRA LOW-BOILERPLATE SMART METHODS
   // ===========================================================================
 
-  /// Loads an Interstitial Ad.
+  /// Shows an Interstitial Ad with auto frequency/interval capping and guaranteed [onCompleted] callback.
+  static void showInterstitial({
+    VoidCallback? onCompleted,
+    VoidCallback? onAdDismissed,
+    void Function(AdError error)? onAdFailedToShow,
+    String? adUnitId,
+    bool force = false,
+  }) {
+    // If user provided onCompleted, use the high-level smart manager
+    if (onCompleted != null || force) {
+      InterstitialAdManager.showAuto(
+        onCompleted: onCompleted,
+        adUnitId: adUnitId,
+        force: force,
+      );
+      return;
+    }
+
+    // Direct / legacy show
+    if (_rawInterstitialAd != null) {
+      _rawInterstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+        onAdDismissedFullScreenContent: (ad) {
+          ad.dispose();
+          _rawInterstitialAd = null;
+          onAdDismissed?.call();
+        },
+        onAdFailedToShowFullScreenContent: (ad, error) {
+          ad.dispose();
+          _rawInterstitialAd = null;
+          onAdFailedToShow?.call(error);
+        },
+      );
+      _rawInterstitialAd!.show();
+    } else {
+      InterstitialAdManager.showAd(
+        onAdDismissed: onAdDismissed,
+        onAdFailedToShow: onAdFailedToShow,
+      );
+    }
+  }
+
+  /// Shows a Rewarded Video Ad.
+  static void showRewarded({
+    required void Function(RewardItem reward) onUserEarnedReward,
+    VoidCallback? onAdDismissed,
+    void Function(AdError error)? onAdFailedToShow,
+  }) {
+    if (_rawRewardedAd != null) {
+      _rawRewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
+        onAdDismissedFullScreenContent: (ad) {
+          ad.dispose();
+          _rawRewardedAd = null;
+          onAdDismissed?.call();
+        },
+        onAdFailedToShowFullScreenContent: (ad, error) {
+          ad.dispose();
+          _rawRewardedAd = null;
+          onAdFailedToShow?.call(error);
+        },
+      );
+      _rawRewardedAd!.show(
+        onUserEarnedReward: (ad, reward) => onUserEarnedReward(reward),
+      );
+    } else {
+      RewardedAdManager.showAd(
+        onUserEarnedReward: onUserEarnedReward,
+        onAdDismissed: onAdDismissed,
+        onAdFailedToShow: onAdFailedToShow,
+      );
+    }
+  }
+
+  /// Shows an App Open Ad if available.
+  static void showAppOpen({
+    VoidCallback? onAdDismissed,
+    void Function(AdError error)? onAdFailedToShow,
+  }) {
+    if (_rawAppOpenAd != null) {
+      _rawAppOpenAd!.fullScreenContentCallback = FullScreenContentCallback(
+        onAdDismissedFullScreenContent: (ad) {
+          ad.dispose();
+          _rawAppOpenAd = null;
+          onAdDismissed?.call();
+        },
+        onAdFailedToShowFullScreenContent: (ad, error) {
+          ad.dispose();
+          _rawAppOpenAd = null;
+          onAdFailedToShow?.call(error);
+        },
+      );
+      _rawAppOpenAd!.show();
+    } else {
+      appOpenAdManager.showAdIfAvailable(
+        onAdDismissed: onAdDismissed,
+        onAdFailedToShow: onAdFailedToShow,
+      );
+    }
+  }
+
+  // ===========================================================================
+  // GRANULAR / BACKWARD-COMPATIBILITY METHODS
+  // ===========================================================================
+
+  /// Loads an Interstitial Ad manually.
   static void loadInterstitial({
     required String adUnitId,
     VoidCallback? onAdLoaded,
@@ -61,59 +288,20 @@ class AdMobService {
       request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
-          _interstitialAd = ad;
-          FlutterLogger.info(
-            'Interstitial Ad loaded successfully',
-            tag: 'ADMOB',
-          );
+          _rawInterstitialAd = ad;
+          FlutterLogger.info('Interstitial Ad loaded successfully', tag: 'ADMOB');
           onAdLoaded?.call();
         },
         onAdFailedToLoad: (error) {
-          FlutterLogger.error(
-            'Failed to load Interstitial Ad: $error',
-            tag: 'ADMOB',
-          );
-          _interstitialAd = null;
+          FlutterLogger.error('Failed to load Interstitial: $error', tag: 'ADMOB');
+          _rawInterstitialAd = null;
           onAdFailedToLoad?.call(error);
         },
       ),
     );
   }
 
-  /// Displays the preloaded Interstitial Ad if available.
-  static void showInterstitial({
-    VoidCallback? onAdDismissed,
-    void Function(AdError error)? onAdFailedToShow,
-  }) {
-    if (_interstitialAd == null) {
-      FlutterLogger.warning(
-        'Attempted to show Interstitial Ad before it was loaded',
-        tag: 'ADMOB',
-      );
-      return;
-    }
-
-    _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
-      onAdDismissedFullScreenContent: (ad) {
-        ad.dispose();
-        _interstitialAd = null;
-        onAdDismissed?.call();
-      },
-      onAdFailedToShowFullScreenContent: (ad, error) {
-        ad.dispose();
-        _interstitialAd = null;
-        onAdFailedToShow?.call(error);
-      },
-    );
-
-    _interstitialAd!.show();
-  }
-
-  // ===========================================================================
-  // REWARDED ADS
-  // ===========================================================================
-
-  /// Loads a Rewarded Video Ad.
+  /// Loads a Rewarded Ad manually.
   static void loadRewarded({
     required String adUnitId,
     VoidCallback? onAdLoaded,
@@ -124,61 +312,20 @@ class AdMobService {
       request: const AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {
-          _rewardedAd = ad;
+          _rawRewardedAd = ad;
           FlutterLogger.info('Rewarded Ad loaded successfully', tag: 'ADMOB');
           onAdLoaded?.call();
         },
         onAdFailedToLoad: (error) {
-          FlutterLogger.error(
-            'Failed to load Rewarded Ad: $error',
-            tag: 'ADMOB',
-          );
-          _rewardedAd = null;
+          FlutterLogger.error('Failed to load Rewarded: $error', tag: 'ADMOB');
+          _rawRewardedAd = null;
           onAdFailedToLoad?.call(error);
         },
       ),
     );
   }
 
-  /// Displays the preloaded Rewarded Ad.
-  static void showRewarded({
-    required void Function(RewardItem reward) onUserEarnedReward,
-    VoidCallback? onAdDismissed,
-    void Function(AdError error)? onAdFailedToShow,
-  }) {
-    if (_rewardedAd == null) {
-      FlutterLogger.warning(
-        'Attempted to show Rewarded Ad before it was loaded',
-        tag: 'ADMOB',
-      );
-      return;
-    }
-
-    _rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
-      onAdDismissedFullScreenContent: (ad) {
-        ad.dispose();
-        _rewardedAd = null;
-        onAdDismissed?.call();
-      },
-      onAdFailedToShowFullScreenContent: (ad, error) {
-        ad.dispose();
-        _rewardedAd = null;
-        onAdFailedToShow?.call(error);
-      },
-    );
-
-    _rewardedAd!.show(
-      onUserEarnedReward: (ad, reward) {
-        onUserEarnedReward(reward);
-      },
-    );
-  }
-
-  // ===========================================================================
-  // REWARDED INTERSTITIAL ADS
-  // ===========================================================================
-
-  /// Loads a Rewarded Interstitial Ad.
+  /// Loads a Rewarded Interstitial Ad manually.
   static void loadRewardedInterstitial({
     required String adUnitId,
     VoidCallback? onAdLoaded,
@@ -189,16 +336,13 @@ class AdMobService {
       request: const AdRequest(),
       rewardedInterstitialAdLoadCallback: RewardedInterstitialAdLoadCallback(
         onAdLoaded: (ad) {
-          _rewardedInterstitialAd = ad;
+          _rawRewardedInterstitialAd = ad;
           FlutterLogger.info('Rewarded Interstitial Ad loaded', tag: 'ADMOB');
           onAdLoaded?.call();
         },
         onAdFailedToLoad: (error) {
-          FlutterLogger.error(
-            'Failed to load Rewarded Interstitial: $error',
-            tag: 'ADMOB',
-          );
-          _rewardedInterstitialAd = null;
+          FlutterLogger.error('Failed to load Rewarded Interstitial: $error', tag: 'ADMOB');
+          _rawRewardedInterstitialAd = null;
           onAdFailedToLoad?.call(error);
         },
       ),
@@ -211,7 +355,7 @@ class AdMobService {
     VoidCallback? onAdDismissed,
     void Function(AdError error)? onAdFailedToShow,
   }) {
-    if (_rewardedInterstitialAd == null) {
+    if (_rawRewardedInterstitialAd == null) {
       FlutterLogger.warning(
         'Attempted to show Rewarded Interstitial before load',
         tag: 'ADMOB',
@@ -219,32 +363,26 @@ class AdMobService {
       return;
     }
 
-    _rewardedInterstitialAd!.fullScreenContentCallback =
+    _rawRewardedInterstitialAd!.fullScreenContentCallback =
         FullScreenContentCallback(
-          onAdDismissedFullScreenContent: (ad) {
-            ad.dispose();
-            _rewardedInterstitialAd = null;
-            onAdDismissed?.call();
-          },
-          onAdFailedToShowFullScreenContent: (ad, error) {
-            ad.dispose();
-            _rewardedInterstitialAd = null;
-            onAdFailedToShow?.call(error);
-          },
-        );
-
-    _rewardedInterstitialAd!.show(
-      onUserEarnedReward: (ad, reward) {
-        onUserEarnedReward(reward);
+      onAdDismissedFullScreenContent: (ad) {
+        ad.dispose();
+        _rawRewardedInterstitialAd = null;
+        onAdDismissed?.call();
       },
+      onAdFailedToShowFullScreenContent: (ad, error) {
+        ad.dispose();
+        _rawRewardedInterstitialAd = null;
+        onAdFailedToShow?.call(error);
+      },
+    );
+
+    _rawRewardedInterstitialAd!.show(
+      onUserEarnedReward: (ad, reward) => onUserEarnedReward(reward),
     );
   }
 
-  // ===========================================================================
-  // APP OPEN ADS
-  // ===========================================================================
-
-  /// Loads an App Open Ad.
+  /// Loads an App Open Ad manually.
   static void loadAppOpen({
     required String adUnitId,
     VoidCallback? onAdLoaded,
@@ -255,60 +393,31 @@ class AdMobService {
       request: const AdRequest(),
       adLoadCallback: AppOpenAdLoadCallback(
         onAdLoaded: (ad) {
-          _appOpenAd = ad;
+          _rawAppOpenAd = ad;
           FlutterLogger.info('App Open Ad loaded successfully', tag: 'ADMOB');
           onAdLoaded?.call();
         },
         onAdFailedToLoad: (error) {
-          FlutterLogger.error(
-            'Failed to load App Open Ad: $error',
-            tag: 'ADMOB',
-          );
-          _appOpenAd = null;
+          FlutterLogger.error('Failed to load App Open Ad: $error', tag: 'ADMOB');
+          _rawAppOpenAd = null;
           onAdFailedToLoad?.call(error);
         },
       ),
     );
   }
 
-  /// Displays the preloaded App Open Ad.
-  static void showAppOpen({
-    VoidCallback? onAdDismissed,
-    void Function(AdError error)? onAdFailedToShow,
-  }) {
-    if (_appOpenAd == null) {
-      FlutterLogger.warning(
-        'Attempted to show App Open Ad before load',
-        tag: 'ADMOB',
-      );
-      return;
-    }
-
-    _appOpenAd!.fullScreenContentCallback = FullScreenContentCallback(
-      onAdDismissedFullScreenContent: (ad) {
-        ad.dispose();
-        _appOpenAd = null;
-        onAdDismissed?.call();
-      },
-      onAdFailedToShowFullScreenContent: (ad, error) {
-        ad.dispose();
-        _appOpenAd = null;
-        onAdFailedToShow?.call(error);
-      },
-    );
-
-    _appOpenAd!.show();
-  }
-
   /// Clean up and dispose all loaded ad instances.
   static void dispose() {
-    _interstitialAd?.dispose();
-    _rewardedAd?.dispose();
-    _rewardedInterstitialAd?.dispose();
-    _appOpenAd?.dispose();
-    _interstitialAd = null;
-    _rewardedAd = null;
-    _rewardedInterstitialAd = null;
-    _appOpenAd = null;
+    _rawInterstitialAd?.dispose();
+    _rawRewardedAd?.dispose();
+    _rawRewardedInterstitialAd?.dispose();
+    _rawAppOpenAd?.dispose();
+    _rawInterstitialAd = null;
+    _rawRewardedAd = null;
+    _rawRewardedInterstitialAd = null;
+    _rawAppOpenAd = null;
+    InterstitialAdManager.dispose();
+    RewardedAdManager.dispose();
+    _appOpenAdManager?.dispose();
   }
 }

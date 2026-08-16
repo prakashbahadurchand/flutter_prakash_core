@@ -15,6 +15,7 @@ class AdMobConsentManager {
       tagForUnderAgeOfConsent: tagForUnderAgeOfConsent,
       consentDebugSettings: ConsentDebugSettings(
         debugGeography: DebugGeography.debugGeographyEea,
+        testIdentifiers: testDeviceIds,
       ),
     );
 

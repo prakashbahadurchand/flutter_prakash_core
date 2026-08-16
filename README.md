@@ -314,46 +314,82 @@ final stream = SupabaseEngine.streamTable('messages', primaryKey: 'id'); // Real
 
 ---
 
-## 💰 AdMob Monetization
+## 💰 AdMob Monetization & Cross-Promotion
 
-Initialize & register the service in `initialize` with `adMobConfig`.
-Use the bundled **test ad unit IDs** during development:
+Zero-to-low boilerplate monetization engine supporting **App Open**, **Adaptive Banner**, **Native Templates**, **Interstitial**, **Rewarded Video**, and **Offline Custom App Cross-Promotion Fallbacks**.
+
+### 1. Initialize Once at App Start (`main.dart`)
 
 ```dart
-final bannerId = AdMobTestAds.bannerAndroid; // swap for production IDs
+await AdMobService.initialize(
+  config: AdMobConfig(
+    bannerAndroidId: 'ca-app-pub-xxx/yyy',
+    interstitialAndroidId: 'ca-app-pub-xxx/yyy',
+    rewardedAndroidId: 'ca-app-pub-xxx/yyy',
+    appOpenAndroidId: 'ca-app-pub-xxx/yyy',
+    nativeAndroidId: 'ca-app-pub-xxx/yyy',
+    isTesting: kDebugMode, // Auto-uses Google test IDs when true
+    customAds: [
+      CustomAdModel(
+        headerInfo: 'Recommended for you',
+        appName: 'Hamro Maya App',
+        appPackageName: 'com.princethakuri.hamromaya',
+        appMessage: 'Best collection of Nepali Shayari & Quotes.',
+        appDetails: 'Hamro Maya brings you the best collection of quotes.',
+        appIconPath: 'assets/icons/app_icon.png',
+      ),
+    ],
+  ),
+  autoShowAppOpen: true, // Auto-shows App Open Ads on cold start & app resume!
+);
 ```
 
-### Banner
+### 2. Drop-in Banner & Adaptive Banner (1 Line)
 
 ```dart
-PrakashBannerAd(adUnitId: AdMobTestAds.bannerAndroid)
+// Standard Banner with automatic AdMob + Offline Custom Ad fallback
+const AdMobBannerWidget()
+
+// Anchored Responsive Adaptive Banner
+const AdMobAdaptiveBannerWidget()
 ```
 
-### Interstitial
+### 3. Native Ad with Flutter Templates (Zero Native Code Required)
 
 ```dart
-final interstitial = InterstitialAdHandler();
-await interstitial.loadAd(AdMobTestAds.interstitialAndroid);
+// Medium Native Card Template (AdMob + Offline Fallback)
+const AdMobNativeWidget(templateType: TemplateType.medium)
 
-void showAd() {
-  interstitial.show(onDismissed: () => debugPrint('ad closed'));
-}
+// Small Native Template
+const AdMobNativeWidget(templateType: TemplateType.small, height: 90)
 ```
 
-### Rewarded
+### 4. 1-Line Interstitial with Auto-Capping & Guaranteed Completion
 
 ```dart
-final rewarded = RewardedAdHandler();
-await rewarded.loadAd(AdMobTestAds.rewardedAndroid);
-
-final reward = await rewarded.show();
-if (reward != null) debugPrint('Got ${reward.amount} ${reward.type}');
+AdMobService.showInterstitial(
+  onCompleted: () => Navigator.pushNamed(context, '/next-screen'),
+);
 ```
 
-### Native
+### 5. 1-Line Rewarded Video Ad
 
 ```dart
-PrakashNativeAd(adUnitId: AdMobTestAds.nativeAndroid)
+AdMobService.showRewarded(
+  onUserEarnedReward: (reward) {
+    unlockPremiumFeature(reward.amount);
+  },
+  onAdFailedToShow: (error) {
+    Toast.error('Ad not ready yet');
+  },
+);
+```
+
+### 6. Instant Global Ad-Free / Premium Bypass
+
+```dart
+// Instantly disables all banners, app open ads, native ads, and interstitials app-wide:
+AdMobService.setAdFree(true);
 ```
 
 ---
