@@ -1,5 +1,5 @@
 {
-  "dart.flutterSdkPath": ".fvm/versions/3.44.8",
+  "dart.flutterSdkPath": ".fvm/versions/3.44.9",
   "dart.lineLength": 80,
   "dart.openDevTools": "never",
   "dart.previewFlutterUiGuides": true,

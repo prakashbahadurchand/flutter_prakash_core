@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_prakash/flutter_prakash.dart';
 import 'package:flutter_prakash_example/core/envs/app_env.dart';
 import 'package:flutter_prakash_example/core/router/app_router.dart';
@@ -35,7 +36,16 @@ class _MyAppState extends State<MyApp> {
             darkTheme: AppThemeBuilder.buildDarkTheme(),
             themeMode: themeMode,
             locale: locale,
-            supportedLocales: const [Locale('en', 'US'), Locale('ne', 'NP')],
+            supportedLocales: const [
+              Locale('en', 'US'),
+              Locale('hi', 'IN'),
+              Locale('ne', 'NP'),
+            ],
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
             routerConfig: _appRouter.config(),
           );
         },

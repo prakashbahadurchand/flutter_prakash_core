@@ -1,5 +1,4 @@
-import 'package:bloc/bloc.dart';
-
+import '../blocs/base/base_cubit.dart';
 import 'bloc_status.dart';
 import 'form_mixin.dart';
 import '../network/result.dart';
@@ -41,7 +40,7 @@ abstract class FormState implements FormMixin {
 ///   );
 /// }
 /// ```
-abstract class FormCubit<S extends FormState> extends Cubit<S> {
+abstract class FormCubit<S extends FormState> extends BaseCubit<S> {
   FormCubit(super.initialState);
 
   /// Override this to execute the actual API call.
@@ -52,25 +51,25 @@ abstract class FormCubit<S extends FormState> extends Cubit<S> {
   Future<void> submit() async {
     // 1. Force all fields dirty to show errors
     final evaluatedState = state.makeAllDirty() as S;
-    emit(evaluatedState);
+    safeEmit(evaluatedState);
 
     // 2. Validate
     if (!evaluatedState.isFormValid) {
       final errorMsg =
           evaluatedState.firstError ?? 'Please fix the errors in the form.';
-      emit(evaluatedState.copyWithStatus(BlocStatus.failure(errorMsg)) as S);
+      safeEmit(evaluatedState.copyWithStatus(BlocStatus.failure(errorMsg)) as S);
       return;
     }
 
     // 3. Loading
-    emit(evaluatedState.copyWithStatus(const BlocStatus.loading()) as S);
+    safeEmit(evaluatedState.copyWithStatus(const BlocStatus.loading()) as S);
 
     // 4. Execute and map result
     final result = await performSubmit();
     result.when(
       success: (_) =>
-          emit(state.copyWithStatus(const BlocStatus.success()) as S),
-      error: (error) => emit(
+          safeEmit(state.copyWithStatus(const BlocStatus.success()) as S),
+      error: (error) => safeEmit(
         state.copyWithStatus(BlocStatus.failure(error.errorMessage)) as S,
       ),
     );

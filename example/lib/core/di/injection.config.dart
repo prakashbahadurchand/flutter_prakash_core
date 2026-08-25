@@ -18,7 +18,9 @@ import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
 import '../../features/auth/data/datasources/auth_data_source.dart' as _i970;
 import '../../features/auth/data/repositories/auth_repository.dart' as _i573;
-import '../../features/auth/presentation/blocs/login_cubit.dart' as _i396;
+import '../../features/auth/presentation/blocs/login/login_cubit.dart' as _i389;
+import '../../features/auth/presentation/blocs/register/register_cubit.dart'
+    as _i459;
 import '../../features/dashboard/presentation/blocs/dashboard_cubit.dart'
     as _i726;
 import '../../features/demo/data/datasources/demo_data_source.dart' as _i864;
@@ -77,8 +79,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i668.SamplePagingCubit>(
       () => _i668.SamplePagingCubit(gh<_i911.DemoRepository>()),
     );
-    gh.factory<_i396.LoginCubit>(
-      () => _i396.LoginCubit(gh<_i573.AuthRepository>()),
+    gh.factory<_i459.RegisterCubit>(
+      () => _i459.RegisterCubit(gh<_i573.AuthRepository>()),
+    );
+    gh.factory<_i389.LoginCubit>(
+      () => _i389.LoginCubit(gh<_i573.AuthRepository>()),
     );
     gh.lazySingleton<_i361.Dio>(() => registerModule.dio(gh<_i217.AppEnv>()));
     return this;

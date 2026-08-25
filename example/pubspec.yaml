@@ -22,7 +22,7 @@ dependencies:
 
   # Dependency Injection
   get_it: ^9.2.1
-  injectable: ^2.5.0
+  injectable: ^2.7.1+4
 
   # Routing
   auto_route: ^9.3.0

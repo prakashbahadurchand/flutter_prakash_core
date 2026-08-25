@@ -148,17 +148,32 @@ class DashboardFourthTabView extends StatelessWidget {
               subtitle: 'Select your preferred language',
               trailing: BlocBuilder<LocaleCubit, Locale>(
                 builder: (context, currentLocale) {
+                  final supportedLocales = const [
+                    Locale('en', 'US'),
+                    Locale('hi', 'IN'),
+                    Locale('ne', 'NP'),
+                  ];
+                  final selectedLocale = supportedLocales.firstWhere(
+                    (loc) =>
+                        loc == currentLocale ||
+                        loc.languageCode == currentLocale.languageCode,
+                    orElse: () => supportedLocales.first,
+                  );
                   return DropdownButtonHideUnderline(
                     child: DropdownButton<Locale>(
-                      value: currentLocale,
+                      value: selectedLocale,
                       borderRadius: BorderRadius.circular(16),
                       items: const [
                         DropdownMenuItem(
-                          value: Locale('en'),
+                          value: Locale('en', 'US'),
                           child: Text('English (US)'),
                         ),
                         DropdownMenuItem(
-                          value: Locale('ne'),
+                          value: Locale('hi', 'IN'),
+                          child: Text('Hindi (IN)'),
+                        ),
+                        DropdownMenuItem(
+                          value: Locale('ne', 'NP'),
                           child: Text('Nepali (NP)'),
                         ),
                       ],

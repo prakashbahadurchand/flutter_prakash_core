@@ -127,10 +127,14 @@ class _PrakashEffectListenerState extends State<PrakashEffectListener> {
   void _subscribe() {
     final cubit = widget.cubit;
     if (cubit != null) {
-      // Access effectStream dynamically — BaseCubit exposes it
-      final Stream<PrakashEffect>? stream = cubit.effectStream;
-      if (stream != null) {
-        _subscription = stream.listen(_handleEffect);
+      // Access effectStream dynamically — BaseCubit/BaseBloc exposes it
+      try {
+        final Stream<PrakashEffect>? stream = (cubit as dynamic).effectStream;
+        if (stream != null) {
+          _subscription = stream.listen(_handleEffect);
+        }
+      } catch (_) {
+        // Silently ignore if cubit does not expose effectStream
       }
     }
   }

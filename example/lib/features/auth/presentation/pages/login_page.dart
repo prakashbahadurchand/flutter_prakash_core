@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_prakash/flutter_prakash.dart';
 import 'package:flutter_prakash_example/core/router/app_router.dart';
 import 'package:flutter_prakash_example/core/di/injection.dart';
-import 'package:flutter_prakash_example/features/auth/presentation/blocs/login_cubit.dart';
 import 'package:flutter_prakash_example/core/themes/app_colors.dart';
+import 'package:flutter_prakash_example/features/auth/presentation/blocs/login/login_cubit.dart';
+import 'package:flutter_prakash_example/features/auth/presentation/blocs/login/login_state.dart';
 
 @RoutePage()
 class LoginPage extends StatefulWidget {
@@ -37,8 +38,8 @@ class _LoginPageState extends State<LoginPage> {
   void _fillDemoCredentials() {
     _emailController.text = 'demo@prakash.dev';
     _passwordController.text = 'Secret123!';
-    _loginCubit.emailChanged('demo@prakash.dev');
-    _loginCubit.passwordChanged('Secret123!');
+    _loginCubit.onEmailChanged('demo@prakash.dev');
+    _loginCubit.onPasswordChanged('Secret123!');
   }
 
   @override
@@ -121,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                       // Reactive Email Field (Infres hint, helper, validation automatically)
                       ReactiveTextField(
                         field: state.email,
-                        onChanged: _loginCubit.emailChanged,
+                        onChanged: _loginCubit.onEmailChanged,
                         keyboardType: TextInputType.emailAddress,
                         prefixIcon: const Icon(Icons.email_outlined),
                         helperText:
@@ -132,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
                       // Reactive Password Field
                       ReactiveTextField(
                         field: state.password,
-                        onChanged: _loginCubit.passwordChanged,
+                        onChanged: _loginCubit.onPasswordChanged,
                         obscureText: _obscurePassword,
                         prefixIcon: const Icon(Icons.lock_outline),
                         suffixIcon: IconButton(
@@ -175,18 +176,18 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           elevation: 4,
                         ),
-                        onPressed: state.isInProgress
+                        onPressed: state.status.isLoading
                             ? null
                             : () async {
                                 await _loginCubit.submit();
-                                if (_loginCubit.state.isSuccess &&
+                                if (_loginCubit.state.status.isSuccess &&
                                     context.mounted) {
                                   context.router.replace(
                                     const DashboardRoute(),
                                   );
                                 }
                               },
-                        child: state.isInProgress
+                        child: state.status.isLoading
                             ? const SizedBox(
                                 height: 22,
                                 width: 22,
