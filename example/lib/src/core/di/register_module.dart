@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_prakash/flutter_prakash.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,5 +21,13 @@ abstract class RegisterModule {
   ThemeCubit themeCubit(SharedPreferences prefs) => ThemeCubit(prefs);
 
   @lazySingleton
-  LocaleCubit localeCubit(SharedPreferences prefs) => LocaleCubit(prefs);
+  LocaleCubit localeCubit(SharedPreferences prefs) => LocaleCubit(
+    prefs,
+    defaultLocale: const Locale('en', 'US'),
+    supportedLocales: const [
+      Locale('en', 'US'), // English
+      Locale('hi', 'IN'), // India
+      Locale('ne', 'NP'), // Nepali
+    ],
+  );
 }
