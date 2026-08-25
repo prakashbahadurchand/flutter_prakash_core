@@ -121,41 +121,25 @@ class _DashboardSecondTabViewState extends State<DashboardSecondTabView>
                   style: TextStyle(color: Colors.grey),
                 ),
                 const SizedBox(height: 16),
-                TextField(
+                ReactiveTextField(
+                  field: state.fullName,
                   onChanged: _formCubit.fullNameChanged,
-                  decoration: InputDecoration(
-                    labelText: 'Full Name',
-                    border: const OutlineInputBorder(),
-                    errorText: state.fullName.hasError
-                        ? state.fullName.error
-                        : null,
-                  ),
+                  prefixIcon: const Icon(Icons.person_outline),
                 ),
                 const SizedBox(height: 12),
-                TextField(
+                ReactiveTextField(
+                  field: state.email,
                   onChanged: _formCubit.emailChanged,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    labelText: 'Email Address',
-                    helperText:
-                        'Type "error" in email to trigger domain failure',
-                    border: const OutlineInputBorder(),
-                    errorText: state.email.hasError
-                        ? state.email.error
-                        : null,
-                  ),
+                  prefixIcon: const Icon(Icons.email_outlined),
+                  helperText: 'Type "error" in email to trigger domain failure',
                 ),
                 const SizedBox(height: 12),
-                TextField(
+                ReactiveTextField(
+                  field: state.password,
                   onChanged: _formCubit.passwordChanged,
                   obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    border: const OutlineInputBorder(),
-                    errorText: state.password.hasError
-                        ? state.password.error
-                        : null,
-                  ),
+                  prefixIcon: const Icon(Icons.lock_outline),
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
