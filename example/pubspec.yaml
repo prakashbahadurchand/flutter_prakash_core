@@ -93,6 +93,7 @@ dependencies:
   path: ^1.9.1
   device_preview: ^1.2.0
   google_mobile_ads: ^9.0.0
+  envied: ^1.3.8
 
 
 dev_dependencies:
@@ -104,6 +105,7 @@ dev_dependencies:
   injectable_generator: ^2.7.0
   freezed: ^2.5.8
   json_serializable: ^6.8.0
+  envied_generator: ^1.1.1
 
 flutter:
   uses-material-design: true
@@ -111,3 +113,5 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/
+    - assets/images/app-icon/
+    - assets/images/native-splash/

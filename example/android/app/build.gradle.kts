@@ -41,6 +41,7 @@ android {
         }
         create("dev") {
             dimension = "default"
+            applicationIdSuffix = ".dev"
             matchingFallbacks += listOf("staging")
         }
     }

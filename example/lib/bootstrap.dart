@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_prakash/flutter_prakash.dart';
-import 'package:flutter_prakash_example/src/core/di/injection.dart';
+import 'package:flutter_prakash_example/app/app.dart';
+import 'package:flutter_prakash_example/core/di/injection.dart';
 
-Future<void> bootstrap(Widget Function() builder) async {
+Future<void> bootstrap({String? environment}) async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Configure enterprise BLoC observer for debug logging
@@ -17,8 +18,11 @@ Future<void> bootstrap(Widget Function() builder) async {
   logInfo('Initializing Flutter Prakash Example Bootstrap', tag: 'BOOTSTRAP');
 
   // Configure Dependency Injection container
-  await configureDependencies();
-  logInfo('Dependencies successfully initialized', tag: 'BOOTSTRAP');
+  await configureDependencies(environment: environment);
+  logInfo(
+    'Dependencies successfully initialized for env: $environment',
+    tag: 'BOOTSTRAP',
+  );
 
-  runApp(builder());
+  runApp(MyApp());
 }

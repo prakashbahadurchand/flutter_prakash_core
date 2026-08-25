@@ -1,4 +1,4 @@
-.PHONY: help setup fresh get clean gen gen-clean watch analyze fmt lint fix check outdated upgrade doctor run-dev run-prod build-apk-dev build-apk-prod build-appbundle-dev build-appbundle-prod build-dev-apk build-prod-apk build-dev-aab build-prod-aab app-icon icons-dev icons-prod native-splash splash-dev splash-prod deploy-firebase-dev deploy-firebase-prod deploy-playstore-internal deploy-playstore-beta deploy-playstore-prod deploy-play-internal deploy-play-beta deploy-play-prod
+.PHONY: help setup fresh get clean gen gen-clean watch analyze fmt lint fix check outdated upgrade doctor run-dev run-prod build-apk-dev build-apk-prod build-appbundle-dev build-appbundle-prod build-dev-apk build-prod-apk build-dev-aab build-prod-aab app-icon icons-dev icons-prod native-splash splash-dev splash-prod firebase-config firebase-config-dev firebase-config-prod deploy-firebase-dev deploy-firebase-prod deploy-playstore-internal deploy-playstore-beta deploy-playstore-prod deploy-play-internal deploy-play-beta deploy-play-prod
 
 # Default target
 .DEFAULT_GOAL := help
@@ -24,6 +24,11 @@ help: ## Display this help menu
 	@echo "  $(CYAN)outdated$(RESET)                 Check for outdated package dependencies"
 	@echo "  $(CYAN)upgrade$(RESET)                  Upgrade package dependencies"
 	@echo "  $(CYAN)doctor$(RESET)                   Run flutter doctor diagnostics"
+	@echo ""
+	@echo "$(YELLOW)[ 🔥 FIREBASE CONFIGURATION ]$(RESET)"
+	@echo "  $(CYAN)firebase-config$(RESET)          Configure Firebase (Interactive for DEV & PROD)"
+	@echo "  $(CYAN)firebase-config-dev$(RESET)      Configure Firebase for DEV environment"
+	@echo "  $(CYAN)firebase-config-prod$(RESET)     Configure Firebase for PROD environment"
 	@echo ""
 	@echo "$(YELLOW)[ ⚡ CODE GENERATION & QUALITY ]$(RESET)"
 	@echo "  $(CYAN)gen$(RESET)                      Run build_runner code generation"
@@ -164,6 +169,19 @@ splash-dev: ## Generate Native Splash Screen for DEV
 
 splash-prod: ## Generate Native Splash Screen for PROD
 	dart run flutter_native_splash:create --path=flutter_native_splash-prod.yaml
+
+# ==============================================================================
+# 🔥 FIREBASE CONFIGURATION
+# ==============================================================================
+
+firebase-config: ## Interactive Firebase setup for DEV & PROD
+	./tools/setup_firebase.sh
+
+firebase-config-dev: ## Configure Firebase for DEV environment
+	./tools/setup_firebase.sh dev
+
+firebase-config-prod: ## Configure Firebase for PROD environment
+	./tools/setup_firebase.sh prod
 
 # ==============================================================================
 # 🚢 AUTOMATED FASTLANE DEPLOYMENTS

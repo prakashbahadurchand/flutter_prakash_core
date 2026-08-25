@@ -1,0 +1,15 @@
+{
+  "@@locale": "es",
+  "appTitle": "Aplicación Empresarial Offline First",
+  "homeTitle": "Arquitectura Empresarial de Formularios y Listas",
+  "login": "Iniciar Sesión",
+  "register": "Registrarse",
+  "email": "Correo Electrónico",
+  "password": "Contraseña",
+  "submit": "Enviar",
+  "cancel": "Cancelar",
+  "search": "Buscar...",
+  "retry": "Reintentar",
+  "noItemsFound": "No se encontraron elementos",
+  "welcomeUser": "¡Bienvenido, {name}!"
+}

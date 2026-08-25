@@ -1,0 +1,26 @@
+{
+  "@@locale": "en",
+  "appTitle": "Offline First Enterprise App",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "homeTitle": "Enterprise Form & List Architecture",
+  "login": "Login",
+  "register": "Register",
+  "email": "Email",
+  "password": "Password",
+  "submit": "Submit",
+  "cancel": "Cancel",
+  "search": "Search...",
+  "retry": "Retry",
+  "noItemsFound": "No items found",
+  "welcomeUser": "Welcome, {name}!",
+  "@welcomeUser": {
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "John"
+      }
+    }
+  }
+}
