@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:injectable/injectable.dart';
+import 'package:flutter_prakash/flutter_prakash.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 @module
 abstract class RegisterModule {
@@ -11,4 +12,13 @@ abstract class RegisterModule {
       headers: {'Accept': 'application/json'},
     ),
   );
+  @preResolve
+  Future<SharedPreferences> get sharedPreferences =>
+      SharedPreferences.getInstance();
+
+  @lazySingleton
+  ThemeCubit themeCubit(SharedPreferences prefs) => ThemeCubit(prefs);
+
+  @lazySingleton
+  LocaleCubit localeCubit(SharedPreferences prefs) => LocaleCubit(prefs);
 }

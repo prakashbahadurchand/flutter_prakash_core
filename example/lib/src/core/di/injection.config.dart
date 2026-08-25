@@ -10,8 +10,10 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:dio/dio.dart' as _i361;
+import 'package:flutter_prakash/flutter_prakash.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
 import '../../features/auth/data/datasources/auth_data_source.dart' as _i970;
 import '../../features/auth/data/repositories/auth_repository.dart' as _i573;
@@ -24,24 +26,30 @@ import '../../features/demo/presentation/blocs/sample_fetch_cubit.dart' as _i43;
 import '../../features/demo/presentation/blocs/sample_form_cubit.dart' as _i90;
 import '../../features/demo/presentation/blocs/sample_paging_cubit.dart'
     as _i668;
-import '../localization/locale_cubit.dart' as _i960;
-import '../theme/theme_cubit.dart' as _i611;
 import 'register_module.dart' as _i291;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
-  _i174.GetIt init({
+  Future<_i174.GetIt> init({
     String? environment,
     _i526.EnvironmentFilter? environmentFilter,
-  }) {
+  }) async {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final registerModule = _$RegisterModule();
-    gh.factory<_i611.ThemeCubit>(() => _i611.ThemeCubit());
-    gh.factory<_i960.LocaleCubit>(() => _i960.LocaleCubit());
+    await gh.factoryAsync<_i460.SharedPreferences>(
+      () => registerModule.sharedPreferences,
+      preResolve: true,
+    );
     gh.factory<_i726.DashboardCubit>(() => _i726.DashboardCubit());
     gh.lazySingleton<_i361.Dio>(() => registerModule.dio);
     gh.lazySingleton<_i864.DemoDataSource>(() => _i864.DemoDataSource());
     gh.lazySingleton<_i970.AuthDataSource>(() => _i970.AuthDataSource());
+    gh.lazySingleton<_i361.ThemeCubit>(
+      () => registerModule.themeCubit(gh<_i460.SharedPreferences>()),
+    );
+    gh.lazySingleton<_i361.LocaleCubit>(
+      () => registerModule.localeCubit(gh<_i460.SharedPreferences>()),
+    );
     gh.lazySingleton<_i911.DemoRepository>(
       () => _i911.DemoRepository(gh<_i864.DemoDataSource>()),
     );

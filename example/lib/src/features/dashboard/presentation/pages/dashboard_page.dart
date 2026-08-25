@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_prakash/flutter_prakash.dart' hide ThemeCubit;
+import 'package:flutter_prakash/flutter_prakash.dart';
 import 'package:flutter_prakash_example/src/core/di/injection.dart';
 import 'package:flutter_prakash_example/src/features/dashboard/presentation/blocs/dashboard_cubit.dart';
 import 'package:flutter_prakash_example/src/features/dashboard/presentation/blocs/dashboard_state.dart';
-import 'package:flutter_prakash_example/src/core/theme/theme_cubit.dart';
 import 'package:flutter_prakash_example/src/features/dashboard/presentation/widgets/dashboard_bottom_nav_bar.dart';
 
 import 'package:flutter_prakash_example/src/features/dashboard/presentation/widgets/dashboard_first_tab_view.dart';
@@ -162,12 +161,7 @@ class DashboardView extends StatelessWidget {
                     color: AppPalette.warning,
                     onTap: () {
                       Navigator.pop(ctx);
-                      final themeCubit = context.read<ThemeCubit>();
-                      themeCubit.updateThemeMode(
-                        themeCubit.state == ThemeMode.dark
-                            ? ThemeMode.light
-                            : ThemeMode.dark,
-                      );
+                      context.read<ThemeCubit>().toggleTheme();
                     },
                   ),
                 ],

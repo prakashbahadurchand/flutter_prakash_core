@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_prakash/flutter_prakash.dart'
-    hide ThemeCubit, LocaleCubit;
+import 'package:flutter_prakash/flutter_prakash.dart';
 import 'package:flutter_prakash_example/src/config/routes/app_router.dart';
 import 'package:flutter_prakash_example/src/features/dashboard/presentation/blocs/dashboard_cubit.dart';
 import 'package:flutter_prakash_example/src/features/dashboard/presentation/blocs/dashboard_state.dart';
-import 'package:flutter_prakash_example/src/core/theme/theme_cubit.dart';
-import 'package:flutter_prakash_example/src/core/localization/locale_cubit.dart';
 import 'package:flutter_prakash_example/src/core/theme/app_colors.dart';
 
 class DashboardFourthTabView extends StatelessWidget {
@@ -135,7 +132,7 @@ class DashboardFourthTabView extends StatelessWidget {
                       ],
                       onChanged: (mode) {
                         if (mode != null) {
-                          context.read<ThemeCubit>().updateThemeMode(mode);
+                          context.read<ThemeCubit>().setThemeMode(mode);
                         }
                       },
                     ),
@@ -157,17 +154,17 @@ class DashboardFourthTabView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16),
                       items: const [
                         DropdownMenuItem(
-                          value: Locale('en', 'US'),
+                          value: Locale('en'),
                           child: Text('English (US)'),
                         ),
                         DropdownMenuItem(
-                          value: Locale('ne', 'NP'),
+                          value: Locale('ne'),
                           child: Text('Nepali (NP)'),
                         ),
                       ],
                       onChanged: (loc) {
                         if (loc != null) {
-                          context.read<LocaleCubit>().updateLocale(loc);
+                          context.read<LocaleCubit>().setLocale(loc);
                         }
                       },
                     ),
