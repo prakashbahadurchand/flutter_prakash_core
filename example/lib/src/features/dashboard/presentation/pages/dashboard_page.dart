@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_prakash/flutter_prakash.dart';
+import 'package:flutter_prakash/flutter_prakash.dart' hide ThemeCubit;
 import 'package:flutter_prakash_example/src/core/di/injection.dart';
 import 'package:flutter_prakash_example/src/features/dashboard/presentation/blocs/dashboard_cubit.dart';
 import 'package:flutter_prakash_example/src/features/dashboard/presentation/blocs/dashboard_state.dart';

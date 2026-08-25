@@ -1,21 +1,42 @@
 import 'package:flutter_prakash/flutter_prakash.dart';
 import 'package:flutter_prakash_example/src/features/demo/data/repositories/demo_repository.dart';
 
-/// Form State holding Formz inputs.
+/// Form State holding [Field] inputs.
 class SampleFormState extends FormCubitState<String> {
-  final PrakashEmailInput email;
-  final PrakashPasswordInput password;
-  final PrakashRequiredInput fullName;
+  final Field<String> email;
+  final Field<String> password;
+  final Field<String> fullName;
 
   const SampleFormState({
     super.status,
     super.isValid,
     super.failure,
     super.result,
-    this.email = const PrakashEmailInput.pure(),
-    this.password = const PrakashPasswordInput.pure(),
-    this.fullName = const PrakashRequiredInput.pure(),
+    this.email = const Field(value: '', validators: []),
+    this.password = const Field(value: '', validators: []),
+    this.fullName = const Field(value: '', validators: []),
   });
+
+  /// Factory with validators pre-configured.
+  factory SampleFormState.initial() {
+    return SampleFormState(
+      email: Field<String>(
+        value: '',
+        labelText: 'Email',
+        validators: Validators.required().email(),
+      ),
+      password: Field<String>(
+        value: '',
+        labelText: 'Password',
+        validators: Validators.required().minLength(6),
+      ),
+      fullName: Field<String>(
+        value: '',
+        labelText: 'Full Name',
+        validators: Validators.required().minLength(2),
+      ),
+    );
+  }
 
   @override
   SampleFormState copyWith({
@@ -23,9 +44,9 @@ class SampleFormState extends FormCubitState<String> {
     bool? isValid,
     Failure? failure,
     String? result,
-    PrakashEmailInput? email,
-    PrakashPasswordInput? password,
-    PrakashRequiredInput? fullName,
+    Field<String>? email,
+    Field<String>? password,
+    Field<String>? fullName,
   }) {
     return SampleFormState(
       status: status ?? this.status,
@@ -47,24 +68,30 @@ class SampleFormState extends FormCubitState<String> {
 class SampleFormCubit extends BaseFormCubit<SampleFormState, String> {
   final DemoRepository _demoRepository;
 
-  SampleFormCubit(this._demoRepository) : super(const SampleFormState());
+  SampleFormCubit(this._demoRepository) : super(SampleFormState.initial());
 
   void emailChanged(String value) {
-    final email = PrakashEmailInput.dirty(value);
-    final isValid = Formz.validate([email, state.password, state.fullName]);
-    safeEmit(state.copyWith(email: email, isValid: isValid));
+    final email = state.email.update(value);
+    safeEmit(state.copyWith(
+      email: email,
+      isValid: email.isValid && state.password.isValid && state.fullName.isValid,
+    ));
   }
 
   void passwordChanged(String value) {
-    final password = PrakashPasswordInput.dirty(value);
-    final isValid = Formz.validate([state.email, password, state.fullName]);
-    safeEmit(state.copyWith(password: password, isValid: isValid));
+    final password = state.password.update(value);
+    safeEmit(state.copyWith(
+      password: password,
+      isValid: state.email.isValid && password.isValid && state.fullName.isValid,
+    ));
   }
 
   void fullNameChanged(String value) {
-    final fullName = PrakashRequiredInput.dirty(value);
-    final isValid = Formz.validate([state.email, state.password, fullName]);
-    safeEmit(state.copyWith(fullName: fullName, isValid: isValid));
+    final fullName = state.fullName.update(value);
+    safeEmit(state.copyWith(
+      fullName: fullName,
+      isValid: state.email.isValid && state.password.isValid && fullName.isValid,
+    ));
   }
 
   Future<void> submit() async {

@@ -6,7 +6,7 @@ Future<void> bootstrap(Widget Function() builder) async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Configure enterprise BLoC observer for debug logging
-  Bloc.observer = EnterpriseBlocObserver(
+  Bloc.observer = const EnterpriseBlocObserver(
     logEvents: true,
     logTransitions: false,
     logChange: false,

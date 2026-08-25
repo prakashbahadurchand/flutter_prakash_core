@@ -1,19 +1,35 @@
 import 'package:flutter_prakash/flutter_prakash.dart';
 import 'package:flutter_prakash_example/src/features/auth/data/repositories/auth_repository.dart';
 
-/// Form State holding email and password Formz inputs.
+/// Form State holding email and password [Field] inputs.
 class LoginState extends FormCubitState<String> {
-  final PrakashEmailInput email;
-  final PrakashPasswordInput password;
+  final Field<String> email;
+  final Field<String> password;
 
   const LoginState({
     super.status,
     super.isValid,
     super.failure,
     super.result,
-    this.email = const PrakashEmailInput.pure(),
-    this.password = const PrakashPasswordInput.pure(),
+    this.email = const Field(value: '', validators: []),
+    this.password = const Field(value: '', validators: []),
   });
+
+  /// Factory with validators pre-configured.
+  factory LoginState.initial() {
+    return LoginState(
+      email: Field<String>(
+        value: '',
+        labelText: 'Email',
+        validators: Validators.required().email(),
+      ),
+      password: Field<String>(
+        value: '',
+        labelText: 'Password',
+        validators: Validators.required().minLength(6),
+      ),
+    );
+  }
 
   @override
   LoginState copyWith({
@@ -21,8 +37,8 @@ class LoginState extends FormCubitState<String> {
     bool? isValid,
     Failure? failure,
     String? result,
-    PrakashEmailInput? email,
-    PrakashPasswordInput? password,
+    Field<String>? email,
+    Field<String>? password,
   }) {
     return LoginState(
       status: status ?? this.status,
@@ -43,18 +59,22 @@ class LoginState extends FormCubitState<String> {
 class LoginCubit extends BaseFormCubit<LoginState, String> {
   final AuthRepository _authRepository;
 
-  LoginCubit(this._authRepository) : super(const LoginState());
+  LoginCubit(this._authRepository) : super(LoginState.initial());
 
   void emailChanged(String value) {
-    final email = PrakashEmailInput.dirty(value);
-    final isValid = Formz.validate([email, state.password]);
-    safeEmit(state.copyWith(email: email, isValid: isValid));
+    final email = state.email.update(value);
+    safeEmit(state.copyWith(
+      email: email,
+      isValid: email.isValid && state.password.isValid,
+    ));
   }
 
   void passwordChanged(String value) {
-    final password = PrakashPasswordInput.dirty(value);
-    final isValid = Formz.validate([state.email, password]);
-    safeEmit(state.copyWith(password: password, isValid: isValid));
+    final password = state.password.update(value);
+    safeEmit(state.copyWith(
+      password: password,
+      isValid: state.email.isValid && password.isValid,
+    ));
   }
 
   Future<void> submit() async {

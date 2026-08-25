@@ -147,9 +147,8 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           helperText:
                               'Tip: Enter "fail" to test error response handling',
-                          errorText:
-                              state.email.isNotValid && !state.email.isPure
-                              ? 'Please enter a valid email address'
+                          errorText: state.email.hasError
+                              ? state.email.error
                               : null,
                         ),
                       ),
@@ -193,10 +192,8 @@ class _LoginPageState extends State<LoginPage> {
                               width: 2,
                             ),
                           ),
-                          errorText:
-                              state.password.isNotValid &&
-                                  !state.password.isPure
-                              ? 'Password must be at least 6 characters'
+                          errorText: state.password.hasError
+                              ? state.password.error
                               : null,
                         ),
                       ),

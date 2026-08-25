@@ -1,5 +1,5 @@
 name: flutter_prakash
-description: "Ultimate Enterprise Multi-App Core Engine & Hybrid Plugin Framework: REST (Dio), GraphQL, Firebase, Supabase, AdMob, Media, Maps, Storage, Theme, and UI."
+description: "Result Plugin/Package for my all apps"
 version: 1.0.10
 publish_to: none
 homepage: https://github.com/prakashbahadurchand/flutter_prakash
@@ -37,30 +37,20 @@ dependencies:
 
   # Firebase Suite
   firebase_core: ^4.11.0
-  cloud_firestore: ^6.7.1
-  firebase_auth: ^6.5.6
-  firebase_crashlytics: ^5.2.4
   firebase_messaging: ^16.4.0
+  firebase_crashlytics: ^5.2.4
   firebase_analytics: ^12.4.5
-  firebase_remote_config: ^6.5.5
-
-  # Supabase Suite
-  supabase_flutter: ^2.8.4
 
   # AdMob Monetization
-  google_mobile_ads: ^9.0.0
+  google_mobile_ads: ^9.1.0
 
   # Media, PDF & Web
   audioplayers: ^6.0.0
-  flutter_pdfview: ^1.4.4
+  file_picker: ^12.1.0
   image_picker: ^1.2.2
   flutter_image_compress: ^2.4.0
+  flutter_pdfview: ^1.4.4
   webview_flutter: ^4.14.0
-
-  # Maps & Location
-  flutter_map: ^8.3.0
-  flutter_map_marker_cluster: ^8.2.2
-  latlong2: ^0.9.1
 
   # System Utilities & Widgets
   url_launcher: ^6.3.2
@@ -93,12 +83,10 @@ dependencies:
   firebase_performance: ^0.11.4+5
   flutter_secure_storage: ^10.3.1
   in_app_update: ^5.0.0
-  # Form Validation, Functional Programming & Routing
   in_app_review: ^2.0.12
-  formz: ^0.7.0
-  dartz: ^0.10.1
   freezed_annotation: ^2.4.4
   auto_route: ^9.3.0
+  meta: ^1.18.0
 
 dev_dependencies:
   flutter_test:

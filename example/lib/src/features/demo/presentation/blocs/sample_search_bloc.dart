@@ -40,7 +40,7 @@ class SearchState extends Equatable {
 
 /// Sample Search BLoC demonstrating:
 /// 1. RxDart Debounce event transformer (300ms)
-/// 2. BaseBloc async execution with Dartz Either support
+/// 2. BaseBloc async execution with Result support
 /// 3. UiState pattern matching
 class SampleSearchBloc extends BaseBloc<SearchEvent, SearchState> {
   static const List<String> _mockDatabase = [
@@ -48,8 +48,8 @@ class SampleSearchBloc extends BaseBloc<SearchEvent, SearchState> {
     'Flutter Prakash Plugin',
     'Clean Architecture in Flutter',
     'RxDart Reactive Streams',
-    'Formz Input Validation',
-    'Dartz Either Functional Handling',
+    'Field Input Validation',
+    'Result Sealed Class Handling',
     'Injectable Dependency Injection',
     'AutoRoute Navigation Guards',
     'Freezed Immutable Models',
@@ -81,8 +81,8 @@ class SampleSearchBloc extends BaseBloc<SearchEvent, SearchState> {
 
     safeEmit(state.copyWith(query: query), emit);
 
-    // Demonstrate handleEither with Dartz Either<Failure, List<String>>
-    await handleEither<Failure, List<String>>(
+    // Demonstrate handleResult with Result<List<String>>
+    await handleResult<List<String>>(
       call: () async {
         await Future.delayed(const Duration(milliseconds: 400));
         final filtered = _mockDatabase
@@ -90,10 +90,12 @@ class SampleSearchBloc extends BaseBloc<SearchEvent, SearchState> {
             .toList();
 
         if (filtered.isEmpty) {
-          return Left(const CacheFailure('No matching search results found.'));
+          return const Result.error(
+            CacheFailure('No matching search results found.'),
+          );
         }
 
-        return Right(filtered);
+        return Result.success(filtered);
       },
       emit: emit,
       builder: (uiState) => state.copyWith(resultState: uiState),

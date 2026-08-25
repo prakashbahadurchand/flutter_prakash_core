@@ -126,9 +126,8 @@ class _DashboardSecondTabViewState extends State<DashboardSecondTabView>
                   decoration: InputDecoration(
                     labelText: 'Full Name',
                     border: const OutlineInputBorder(),
-                    errorText:
-                        state.fullName.isNotValid && !state.fullName.isPure
-                        ? 'Full name is required'
+                    errorText: state.fullName.hasError
+                        ? state.fullName.error
                         : null,
                   ),
                 ),
@@ -141,8 +140,8 @@ class _DashboardSecondTabViewState extends State<DashboardSecondTabView>
                     helperText:
                         'Type "error" in email to trigger domain failure',
                     border: const OutlineInputBorder(),
-                    errorText: state.email.isNotValid && !state.email.isPure
-                        ? 'Please enter a valid email address'
+                    errorText: state.email.hasError
+                        ? state.email.error
                         : null,
                   ),
                 ),
@@ -153,9 +152,8 @@ class _DashboardSecondTabViewState extends State<DashboardSecondTabView>
                   decoration: InputDecoration(
                     labelText: 'Password',
                     border: const OutlineInputBorder(),
-                    errorText:
-                        state.password.isNotValid && !state.password.isPure
-                        ? 'Password must be at least 6 characters'
+                    errorText: state.password.hasError
+                        ? state.password.error
                         : null,
                   ),
                 ),
@@ -226,12 +224,19 @@ class _DashboardSecondTabViewState extends State<DashboardSecondTabView>
             child: BlocBuilder<SampleSearchBloc, SearchState>(
               bloc: _searchBloc,
               builder: (context, state) {
-                return UiStateBuilder<
-                  StateStreamable<UiState<List<String>>>,
-                  List<String>
-                >(
-                  bloc: _SearchStateStreamableAdapter(_searchBloc),
-                  onSuccess: (context, items) {
+                return state.resultState.when(
+                  initial: () => const Center(
+                    child: Text('Type something to search...'),
+                  ),
+                  loading: () =>
+                      const Center(child: CircularProgressIndicator()),
+                  failure: (msg) => Center(
+                    child: Text(msg, style: const TextStyle(color: Colors.red)),
+                  ),
+                  success: (items) {
+                    if (items.isEmpty) {
+                      return const Center(child: Text('No results found'));
+                    }
                     return ListView.builder(
                       itemCount: items.length,
                       itemBuilder: (context, index) {
@@ -242,8 +247,6 @@ class _DashboardSecondTabViewState extends State<DashboardSecondTabView>
                       },
                     );
                   },
-                  onEmpty: (context, message) =>
-                      Center(child: Text(message ?? 'No results found')),
                 );
               },
             ),
@@ -252,20 +255,6 @@ class _DashboardSecondTabViewState extends State<DashboardSecondTabView>
       ),
     );
   }
-}
-
-class _SearchStateStreamableAdapter
-    implements StateStreamable<UiState<List<String>>> {
-  final SampleSearchBloc bloc;
-
-  _SearchStateStreamableAdapter(this.bloc);
-
-  @override
-  UiState<List<String>> get state => bloc.state.resultState;
-
-  @override
-  Stream<UiState<List<String>>> get stream =>
-      bloc.stream.map((s) => s.resultState);
 }
 
 /// Tab 3: Core Utilities & Network Actions

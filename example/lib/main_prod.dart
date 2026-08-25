@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_prakash/flutter_prakash.dart';
+import 'package:flutter_prakash/flutter_prakash.dart'
+    hide ThemeCubit, LocaleCubit;
 import 'package:flutter_prakash_example/bootstrap.dart';
 import 'package:flutter_prakash_example/src/config/env/app_config.dart';
 import 'package:flutter_prakash_example/src/config/routes/app_router.dart';
