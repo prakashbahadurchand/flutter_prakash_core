@@ -73,7 +73,8 @@ class CustomAdModel {
   Future<bool> openStore() async {
     try {
       if (kIsWeb) {
-        final webUrl = playStoreUrl ??
+        final webUrl =
+            playStoreUrl ??
             'https://play.google.com/store/apps/details?id=$appPackageName';
         return await launchUrl(
           Uri.parse(webUrl),
@@ -82,7 +83,8 @@ class CustomAdModel {
       }
 
       if (Platform.isAndroid) {
-        final androidUrl = playStoreUrl ??
+        final androidUrl =
+            playStoreUrl ??
             'https://play.google.com/store/apps/details?id=$appPackageName';
         return await launchUrl(
           Uri.parse(androidUrl),

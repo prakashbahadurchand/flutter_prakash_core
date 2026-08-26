@@ -41,25 +41,29 @@ class UiStateBuilder<B extends StateStreamable<UiState<T>>, T>
       bloc: bloc,
       builder: (context, state) {
         return switch (state) {
-          UiInitial<T>() => onInitial?.call(context) ??
-              const SizedBox.shrink(),
-          UiLoading<T>() => onLoading?.call(context) ??
-              const Center(child: CircularProgressIndicator()),
-          UiFailure<T>(:final message) => onFailure?.call(context, message) ??
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.error_outline_rounded,
-                          size: 48, color: Colors.red),
-                      const SizedBox(height: 8),
-                      Text(message, textAlign: TextAlign.center),
-                    ],
+          UiInitial<T>() => onInitial?.call(context) ?? const SizedBox.shrink(),
+          UiLoading<T>() =>
+            onLoading?.call(context) ??
+                const Center(child: CircularProgressIndicator()),
+          UiFailure<T>(:final message) =>
+            onFailure?.call(context, message) ??
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.error_outline_rounded,
+                          size: 48,
+                          color: Colors.red,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(message, textAlign: TextAlign.center),
+                      ],
+                    ),
                   ),
                 ),
-              ),
           UiSuccess<T>(:final data) => _buildSuccess(context, data),
         };
       },

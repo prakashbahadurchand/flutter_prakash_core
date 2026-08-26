@@ -9,7 +9,6 @@ extension MapDynamicExt on Map<String, dynamic> {
   void toPrintPrettyJson() {
     log(toPrettyJson());
   }
-
 }
 
 extension ListDynamicExt on List<dynamic> {
@@ -20,7 +19,6 @@ extension ListDynamicExt on List<dynamic> {
   void toPrintPrettyJson() {
     log(toPrettyJson());
   }
-
 }
 
 extension IterableIndexed<E> on Iterable<E> {

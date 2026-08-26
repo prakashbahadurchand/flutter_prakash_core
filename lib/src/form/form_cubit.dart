@@ -57,7 +57,9 @@ abstract class FormCubit<S extends FormState> extends BaseCubit<S> {
     if (!evaluatedState.isFormValid) {
       final errorMsg =
           evaluatedState.firstError ?? 'Please fix the errors in the form.';
-      safeEmit(evaluatedState.copyWithStatus(BlocStatus.failure(errorMsg)) as S);
+      safeEmit(
+        evaluatedState.copyWithStatus(BlocStatus.failure(errorMsg)) as S,
+      );
       return;
     }
 

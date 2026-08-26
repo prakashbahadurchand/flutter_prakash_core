@@ -144,7 +144,7 @@ class InAppWebViewContainer extends StatefulWidget {
 
   /// Custom error builder when web resource fails to load.
   final Widget Function(BuildContext context, WebResourceError error)?
-      errorWidgetBuilder;
+  errorWidgetBuilder;
 
   /// Callback when page starts loading.
   final ValueChanged<String>? onPageStarted;
@@ -176,7 +176,7 @@ class InAppWebViewContainer extends StatefulWidget {
     Map<String, String> headers = const {},
     Widget? loadingWidget,
     Widget Function(BuildContext context, WebResourceError error)?
-        errorWidgetBuilder,
+    errorWidgetBuilder,
     ValueChanged<String>? onPageStarted,
     ValueChanged<String>? onPageFinished,
     ValueChanged<int>? onProgress,
@@ -263,10 +263,7 @@ class _InAppWebViewContainerState extends State<InAppWebViewContainer> {
           },
         ),
       )
-      ..loadRequest(
-        Uri.parse(widget.initialUrl),
-        headers: widget.headers,
-      );
+      ..loadRequest(Uri.parse(widget.initialUrl), headers: widget.headers);
   }
 
   @override
@@ -339,10 +336,11 @@ class _InAppWebViewContainerState extends State<InAppWebViewContainer> {
 
   Widget _buildNavigationControls(BuildContext context) {
     final theme = Theme.of(context);
-    final bgColor = widget.controlsBackgroundColor ??
+    final bgColor =
+        widget.controlsBackgroundColor ??
         theme.colorScheme.surfaceContainerHighest;
-    final fgColor = widget.controlsForegroundColor ??
-        theme.colorScheme.onSurface;
+    final fgColor =
+        widget.controlsForegroundColor ?? theme.colorScheme.onSurface;
 
     return FutureBuilder<bool>(
       future: _controller.canGoBack(),

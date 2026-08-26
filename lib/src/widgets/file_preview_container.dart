@@ -280,7 +280,8 @@ class _FilePreviewContainerState extends State<FilePreviewContainer> {
           loadingBuilder: (context, child, loadingProgress) {
             if (loadingProgress == null) return child;
             return Center(
-              child: widget.loadingWidget ??
+              child:
+                  widget.loadingWidget ??
                   const CircularProgressIndicator.adaptive(),
             );
           },
@@ -292,7 +293,11 @@ class _FilePreviewContainerState extends State<FilePreviewContainer> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.broken_image_rounded, size: 64, color: Colors.grey),
+                  Icon(
+                    Icons.broken_image_rounded,
+                    size: 64,
+                    color: Colors.grey,
+                  ),
                   SizedBox(height: 12),
                   Text(
                     'Failed to load image',
@@ -317,7 +322,11 @@ class _FilePreviewContainerState extends State<FilePreviewContainer> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.broken_image_rounded, size: 64, color: Colors.grey),
+                  Icon(
+                    Icons.broken_image_rounded,
+                    size: 64,
+                    color: Colors.grey,
+                  ),
                   SizedBox(height: 12),
                   Text(
                     'Local image file not found',
@@ -389,7 +398,8 @@ class _FilePreviewContainerState extends State<FilePreviewContainer> {
         ),
         if (!_isPdfReady)
           Center(
-            child: widget.loadingWidget ??
+            child:
+                widget.loadingWidget ??
                 const CircularProgressIndicator.adaptive(),
           ),
       ],
@@ -398,10 +408,11 @@ class _FilePreviewContainerState extends State<FilePreviewContainer> {
 
   Widget _buildPdfPageController(BuildContext context) {
     final theme = Theme.of(context);
-    final bgColor = widget.controlsBackgroundColor ??
+    final bgColor =
+        widget.controlsBackgroundColor ??
         theme.colorScheme.surfaceContainerHighest;
-    final fgColor = widget.controlsForegroundColor ??
-        theme.colorScheme.onSurface;
+    final fgColor =
+        widget.controlsForegroundColor ?? theme.colorScheme.onSurface;
 
     return Container(
       color: bgColor,
@@ -417,10 +428,7 @@ class _FilePreviewContainerState extends State<FilePreviewContainer> {
           ),
           Text(
             'Page ${_currentPage + 1} of $_totalPages',
-            style: TextStyle(
-              color: fgColor,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(color: fgColor, fontWeight: FontWeight.bold),
           ),
           IconButton(
             icon: Icon(Icons.chevron_right, color: fgColor),

@@ -24,17 +24,29 @@ class DashboardThirdTabView extends StatelessWidget {
               onPressed: () => Toast.info('Informational notification!'),
             ),
             ActionChip(
-              avatar: const Icon(Icons.check_circle_outline, size: 18, color: Colors.green),
+              avatar: const Icon(
+                Icons.check_circle_outline,
+                size: 18,
+                color: Colors.green,
+              ),
               label: const Text('Success Toast'),
               onPressed: () => Toast.success('Action finished successfully!'),
             ),
             ActionChip(
-              avatar: const Icon(Icons.warning_amber_rounded, size: 18, color: Colors.orange),
+              avatar: const Icon(
+                Icons.warning_amber_rounded,
+                size: 18,
+                color: Colors.orange,
+              ),
               label: const Text('Warning Toast'),
               onPressed: () => Toast.warning('Please be cautious!'),
             ),
             ActionChip(
-              avatar: const Icon(Icons.error_outline, size: 18, color: Colors.red),
+              avatar: const Icon(
+                Icons.error_outline,
+                size: 18,
+                color: Colors.red,
+              ),
               label: const Text('Error Toast'),
               onPressed: () => Toast.error('Something went wrong!'),
             ),
@@ -81,14 +93,18 @@ class DashboardThirdTabView extends StatelessWidget {
         const SizedBox(height: 8),
         Card(
           child: ListTile(
-            leading: const Icon(Icons.picture_as_pdf_outlined, color: Colors.red),
+            leading: const Icon(
+              Icons.picture_as_pdf_outlined,
+              color: Colors.red,
+            ),
             title: const Text('PDF Document Viewer'),
             subtitle: const Text('Opens FilePreviewContainer in PDF mode'),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
               FilePreviewContainer.show(
                 context,
-                filePath: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+                filePath:
+                    'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
                 fileType: FileType.pdf,
                 sourceType: FileSourceType.network,
                 title: 'Sample PDF Document',
@@ -101,7 +117,9 @@ class DashboardThirdTabView extends StatelessWidget {
           child: ListTile(
             leading: const Icon(Icons.public, color: Colors.indigo),
             title: const Text('In-App Web View'),
-            subtitle: const Text('Opens InAppWebViewContainer with progress & controls'),
+            subtitle: const Text(
+              'Opens InAppWebViewContainer with progress & controls',
+            ),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
               InAppWebViewContainer.show(

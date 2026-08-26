@@ -29,10 +29,7 @@ class EnterpriseBlocObserver extends BlocObserver {
   void onEvent(Bloc bloc, Object? event) {
     super.onEvent(bloc, event);
     if (logEvents) {
-      logDebug(
-        '⚡ ${bloc.runtimeType} → $event',
-        tag: 'BLOC_EVENT',
-      );
+      logDebug('⚡ ${bloc.runtimeType} → $event', tag: 'BLOC_EVENT');
     }
   }
 
@@ -66,9 +63,6 @@ class EnterpriseBlocObserver extends BlocObserver {
   @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
     super.onError(bloc, error, stackTrace);
-    logError(
-      '❌ ${bloc.runtimeType} Error: $error',
-      tag: 'BLOC_ERROR',
-    );
+    logError('❌ ${bloc.runtimeType} Error: $error', tag: 'BLOC_ERROR');
   }
 }

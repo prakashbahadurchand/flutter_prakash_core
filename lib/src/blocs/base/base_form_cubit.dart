@@ -118,9 +118,7 @@ abstract class BaseFormCubit<S extends FormCubitState<R>, R>
   }) async {
     // Validate
     if (!state.isValid) {
-      safeEmit(
-        state.copyWith(status: FormStatus.failure) as S,
-      );
+      safeEmit(state.copyWith(status: FormStatus.failure) as S);
       return;
     }
 
@@ -131,9 +129,7 @@ abstract class BaseFormCubit<S extends FormCubitState<R>, R>
     final result = await call();
     result.when(
       success: (data) {
-        safeEmit(
-          state.copyWith(status: FormStatus.success, result: data) as S,
-        );
+        safeEmit(state.copyWith(status: FormStatus.success, result: data) as S);
         onSuccess?.call(data);
       },
       error: (failure) {

@@ -23,8 +23,7 @@ import '../../form/bloc_status.dart';
 abstract class BasePagingCubit<T> extends Cubit<BasePagingState<T>> {
   final int pageSize;
 
-  BasePagingCubit({this.pageSize = 20})
-      : super(const BasePagingState());
+  BasePagingCubit({this.pageSize = 20}) : super(const BasePagingState());
 
   /// Subclasses implement the actual data-fetching logic.
   Future<Result<List<T>>> fetchPage(int page, int pageSize);
@@ -40,17 +39,17 @@ abstract class BasePagingCubit<T> extends Cubit<BasePagingState<T>> {
     result.when(
       success: (items) {
         final allItems = [...state.items, ...items];
-        emit(state.copyWith(
-          status: const BlocStatus.success(),
-          items: allItems,
-          currentPage: nextPage,
-          isLastPage: items.length < pageSize,
-        ));
+        emit(
+          state.copyWith(
+            status: const BlocStatus.success(),
+            items: allItems,
+            currentPage: nextPage,
+            isLastPage: items.length < pageSize,
+          ),
+        );
       },
       error: (failure) {
-        emit(state.copyWith(
-          status: BlocStatus.failure(failure.errorMessage),
-        ));
+        emit(state.copyWith(status: BlocStatus.failure(failure.errorMessage)));
       },
     );
   }
@@ -116,5 +115,6 @@ class BasePagingState<T> {
           items.length == other.items.length;
 
   @override
-  int get hashCode => Object.hash(status, currentPage, isLastPage, items.length);
+  int get hashCode =>
+      Object.hash(status, currentPage, isLastPage, items.length);
 }

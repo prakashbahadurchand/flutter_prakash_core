@@ -43,7 +43,8 @@ class ShowDialogEffect extends PrakashEffect {
 }
 
 /// Callback signature for handling [PrakashEffect] instances.
-typedef EffectHandler = void Function(BuildContext context, PrakashEffect effect);
+typedef EffectHandler =
+    void Function(BuildContext context, PrakashEffect effect);
 
 /// A widget that listens to the [effectStream] of a [BaseCubit] and fires
 /// one-shot side-effects (toasts, navigation, dialogs) without polluting BLoC state.
