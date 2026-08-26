@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
 
+const LinearGradient _defaultShimmerGradient = LinearGradient(
+  colors: [Color(0xFFEBEBF4), Color(0xFFF4F4F4), Color(0xFFEBEBF4)],
+  stops: [0.1, 0.3, 0.4],
+  begin: Alignment(-1.0, -0.3),
+  end: Alignment(1.0, 0.3),
+  tileMode: TileMode.clamp,
+);
+
 class Shimmer extends StatefulWidget {
   static ShimmerState? of(BuildContext context) {
     return context.findAncestorStateOfType<ShimmerState>();
@@ -8,16 +16,11 @@ class Shimmer extends StatefulWidget {
   const Shimmer({
     super.key,
     this.child,
+    this.linearGradient = _defaultShimmerGradient,
   });
 
   final Widget? child;
-  final LinearGradient linearGradient = const LinearGradient(
-    colors: [Color(0xFFEBEBF4), Color(0xFFF4F4F4), Color(0xFFEBEBF4)],
-    stops: [0.1, 0.3, 0.4],
-    begin: Alignment(-1.0, -0.3),
-    end: Alignment(1.0, 0.3),
-    tileMode: TileMode.clamp,
-  );
+  final LinearGradient linearGradient;
 
   @override
   ShimmerState createState() => ShimmerState();
@@ -39,27 +42,38 @@ class ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
     _shimmerController.dispose();
     super.dispose();
   }
-// code-excerpt-closing-bracket
 
   LinearGradient get gradient => LinearGradient(
-        colors: widget.linearGradient.colors,
-        stops: widget.linearGradient.stops,
-        begin: widget.linearGradient.begin,
-        end: widget.linearGradient.end,
-        transform:
-            _SlidingGradientTransform(slidePercent: _shimmerController.value),
-      );
+    colors: widget.linearGradient.colors,
+    stops: widget.linearGradient.stops,
+    begin: widget.linearGradient.begin,
+    end: widget.linearGradient.end,
+    transform: _SlidingGradientTransform(
+      slidePercent: _shimmerController.value,
+    ),
+  );
 
-  bool get isSized => (context.findRenderObject() as RenderBox).hasSize;
+  bool get isSized {
+    final renderObject = context.findRenderObject();
+    return renderObject is RenderBox && renderObject.hasSize;
+  }
 
-  Size get size => (context.findRenderObject() as RenderBox).size;
+  Size get size {
+    final renderObject = context.findRenderObject();
+    return renderObject is RenderBox && renderObject.hasSize
+        ? renderObject.size
+        : Size.zero;
+  }
 
   Offset getDescendantOffset({
     required RenderBox descendant,
     Offset offset = Offset.zero,
   }) {
-    final shimmerBox = context.findRenderObject() as RenderBox;
-    return descendant.localToGlobal(offset, ancestor: shimmerBox);
+    final renderObject = context.findRenderObject();
+    if (renderObject is RenderBox && renderObject.hasSize) {
+      return descendant.localToGlobal(offset, ancestor: renderObject);
+    }
+    return offset;
   }
 
   Listenable get shimmerChanges => _shimmerController;
@@ -71,9 +85,7 @@ class ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
 }
 
 class _SlidingGradientTransform extends GradientTransform {
-  const _SlidingGradientTransform({
-    required this.slidePercent,
-  });
+  const _SlidingGradientTransform({required this.slidePercent});
 
   final double slidePercent;
 
@@ -119,13 +131,10 @@ class _ShimmerLoadingState extends State<ShimmerLoading> {
   }
 
   void _onShimmerChange() {
-    if (widget.isLoading) {
-      setState(() {
-        // TODO update the shimmer painting.
-      });
+    if (widget.isLoading && mounted) {
+      setState(() {});
     }
   }
-// code-excerpt-closing-bracket
 
   @override
   Widget build(BuildContext context) {
@@ -133,17 +142,20 @@ class _ShimmerLoadingState extends State<ShimmerLoading> {
       return widget.child;
     }
 
-    // Collect ancestor shimmer info.
-    final shimmer = Shimmer.of(context)!;
-    if (!shimmer.isSized) {
-      // The ancestor Shimmer widget has not laid
-      // itself out yet. Return an empty box.
-      return const SizedBox();
+    final shimmer = Shimmer.of(context);
+    if (shimmer == null || !shimmer.isSized) {
+      return widget.child;
     }
+
+    final renderObject = context.findRenderObject();
+    if (renderObject is! RenderBox || !renderObject.hasSize) {
+      return widget.child;
+    }
+
     final shimmerSize = shimmer.size;
     final gradient = shimmer.gradient;
     final offsetWithinShimmer = shimmer.getDescendantOffset(
-      descendant: context.findRenderObject() as RenderBox,
+      descendant: renderObject,
     );
 
     return ShaderMask(

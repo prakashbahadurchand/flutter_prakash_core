@@ -1,7 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-/// Using: LiveData<T> instead of setState({});
-/// for better performance in StatefulWidget.
+/// Using: `LiveData<T>` instead of `setState({});`
+/// for better performance in `StatefulWidget`.
 ///
 ///```dart
 ///
@@ -24,14 +25,22 @@ import 'package:flutter/material.dart';
 ///```
 ///
 
-class LiveData<T> {
+class LiveData<T> implements ValueListenable<T> {
   final ValueNotifier<T> _notifier;
 
   LiveData(T initialValue) : _notifier = ValueNotifier<T>(initialValue);
 
+  @override
   T get value => _notifier.value;
 
   set value(T newValue) => _notifier.value = newValue;
+
+  @override
+  void addListener(VoidCallback listener) => _notifier.addListener(listener);
+
+  @override
+  void removeListener(VoidCallback listener) =>
+      _notifier.removeListener(listener);
 
   void observe(VoidCallback listener) => _notifier.addListener(listener);
 

@@ -46,7 +46,7 @@ extension StringExtensions on String {
   String ifEmpty(String another) => isEmpty ? another : this;
 
   String toPrettyJson() {
-    return "\n${"=" * 100}\n|| Pretty List ||:\n${"-" * 100}\n${const JsonEncoder.withIndent("\t").convert(jsonDecode(this))}\n${"-" * 100}\n";
+    return "\n${"=" * 100}\n|| Pretty JSON ||:\n${"-" * 100}\n${const JsonEncoder.withIndent("\t").convert(jsonDecode(this))}\n${"-" * 100}\n";
   }
 
   void toPrintPrettyJson() {
@@ -59,10 +59,13 @@ extension StringExtensions on String {
 }
 
 extension StringNullExt on String? {
-  // Replace with anotherText if null or empty
-  String et({String another = ""}) => this ?? another;
+  /// Replace with [another] if null or empty.
+  String et({String another = ""}) {
+    final str = this;
+    return (str == null || str.isEmpty) ? another : str;
+  }
 
-  static final List<String> arabicNumbers = [
+  static const List<String> arabicNumbers = [
     '0',
     '1',
     '2',
@@ -74,7 +77,7 @@ extension StringNullExt on String? {
     '8',
     '9',
   ];
-  static final List<String> nepaliUnicodeNumbers = [
+  static const List<String> nepaliUnicodeNumbers = [
     '०',
     '१',
     '२',
@@ -90,17 +93,17 @@ extension StringNullExt on String? {
   String toND() => toNepaliDigits();
 
   String toNepaliDigits() {
-    if (this == null || this?.isEmpty == true) return "";
+    final str = this;
+    if (str == null || str.isEmpty) return "";
 
-    final arabicNumberString = toString();
     final StringBuffer nepaliUnicodeNumber = StringBuffer();
 
-    for (int i = 0; i < arabicNumberString.length; i++) {
-      final index = arabicNumbers.indexOf(arabicNumberString[i]);
+    for (int i = 0; i < str.length; i++) {
+      final index = arabicNumbers.indexOf(str[i]);
       if (index != -1) {
         nepaliUnicodeNumber.write(nepaliUnicodeNumbers[index]);
       } else {
-        nepaliUnicodeNumber.write(arabicNumberString[i]);
+        nepaliUnicodeNumber.write(str[i]);
       }
     }
     return nepaliUnicodeNumber.toString();

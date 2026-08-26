@@ -4,15 +4,24 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class BasePrefs {
-  static late SharedPreferences _prefs;
+  static SharedPreferences? _prefs;
 
-  static SharedPreferences get prefs => _prefs;
-
-  Future<void> init() async {
-    _prefs = await SharedPreferences.getInstance();
+  static SharedPreferences get prefs {
+    final instance = _prefs;
+    if (instance == null) {
+      throw StateError(
+        'BasePrefs has not been initialized. Call `await BasePrefs.init()` during app bootstrap.',
+      );
+    }
+    return instance;
   }
 
-  static SharedPreferences get instance => _prefs;
+  static SharedPreferences get instance => prefs;
+
+  static Future<SharedPreferences> init() async {
+    _prefs = await SharedPreferences.getInstance();
+    return _prefs!;
+  }
 
   static T? getOrSet<T>(String key, T? value, T defaultValue) {
     if (value != null) {
@@ -58,28 +67,28 @@ abstract class BasePrefs {
   }
 
   static T? _getValue<T>(String key, {T? defaultValue}) {
-    final value = _prefs.get(key);
+    final value = prefs.get(key);
     return value != null ? value as T : defaultValue;
   }
 
   static Future<void> _setValue<T>(String key, T value) async {
     if (value is String) {
-      await _prefs.setString(key, value);
+      await prefs.setString(key, value);
     } else if (value is int) {
-      await _prefs.setInt(key, value);
+      await prefs.setInt(key, value);
     } else if (value is double) {
-      await _prefs.setDouble(key, value);
+      await prefs.setDouble(key, value);
     } else if (value is bool) {
-      await _prefs.setBool(key, value);
+      await prefs.setBool(key, value);
     } else if (value is List<String>) {
-      await _prefs.setStringList(key, value);
+      await prefs.setStringList(key, value);
     } else {
       throw Exception('Unsupported value type: $T');
     }
   }
 
   static T? getEnum<T>(String key, List<T> values, T defaultValue) {
-    final index = _prefs.getInt(key);
+    final index = prefs.getInt(key);
     if (index == null || index == -1 || index > values.length - 1) {
       return defaultValue;
     } else {
@@ -89,7 +98,7 @@ abstract class BasePrefs {
 
   static Future<void> setEnum<T>(String key, T value, List<T> values) async {
     final index = values.indexOf(value);
-    await _prefs.setInt(key, index);
+    await prefs.setInt(key, index);
   }
 
   // Model Class Get And Save
@@ -98,7 +107,7 @@ abstract class BasePrefs {
     required String key,
     required T Function(dynamic) fromJson,
   }) {
-    final jsonString = _prefs.getString(key);
+    final jsonString = prefs.getString(key);
     if (jsonString != null) {
       return fromJson(jsonDecode(jsonString));
     }
@@ -107,27 +116,27 @@ abstract class BasePrefs {
 
   static Future<void> setJson<T>(String key, T value) async {
     final jsonString = jsonEncode(value);
-    await _prefs.setString(key, jsonString);
+    await prefs.setString(key, jsonString);
   }
 
   // Clear All Prefs Data
 
-  static Future<bool> removeKey(String key) async => _prefs.remove(key);
+  static Future<bool> removeKey(String key) async => prefs.remove(key);
 
-  static Future<bool> clearAllPrefs() async => _prefs.clear();
+  static Future<bool> clearAllPrefs() async => prefs.clear();
 
   ///=================
   /// Other Utility Functions:
   ///=================
 
   // Calculate number of items
-  static int getItemCount() => _prefs.getKeys().length;
+  static int getItemCount() => prefs.getKeys().length;
 
   // Calculate size allocated in bytes
   static int getAllocatedSize() {
     var totalSize = 0;
-    for (final key in _prefs.getKeys()) {
-      final value = _prefs.get(key);
+    for (final key in prefs.getKeys()) {
+      final value = prefs.get(key);
       if (value is String) {
         totalSize += value.length;
       } else if (value is int) {
@@ -146,23 +155,23 @@ abstract class BasePrefs {
   }
 
   // Check if key exists
-  static bool containsKey(String key) => _prefs.containsKey(key);
+  static bool containsKey(String key) => prefs.containsKey(key);
 
   // Get all keys
-  static Set<String> getAllKeys() => _prefs.getKeys();
+  static Set<String> getAllKeys() => prefs.getKeys();
 
   // Get all values
   static Map<String, dynamic> getAllValues() {
     final values = <String, dynamic>{};
-    for (final key in _prefs.getKeys()) {
-      values[key] = _prefs.get(key);
+    for (final key in prefs.getKeys()) {
+      values[key] = prefs.get(key);
     }
     return values;
   }
 
   // Get key type
   static String getKeyType(String key) {
-    final value = _prefs.get(key);
+    final value = prefs.get(key);
     if (value is String) {
       return 'String';
     } else if (value is int) {
@@ -190,15 +199,15 @@ abstract class BasePrefs {
     for (final key in values.keys) {
       final value = values[key];
       if (value is String) {
-        await _prefs.setString(key, value);
+        await prefs.setString(key, value);
       } else if (value is int) {
-        await _prefs.setInt(key, value);
+        await prefs.setInt(key, value);
       } else if (value is double) {
-        await _prefs.setDouble(key, value);
+        await prefs.setDouble(key, value);
       } else if (value is bool) {
-        await _prefs.setBool(key, value);
+        await prefs.setBool(key, value);
       } else if (value is List<String>) {
-        await _prefs.setStringList(key, List<String>.from(value));
+        await prefs.setStringList(key, List<String>.from(value));
       }
     }
   }

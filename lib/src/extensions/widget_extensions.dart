@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 
 extension NullableWidget<T> on T? {
   Widget? nullOr(Widget Function(T) widgetBuilder) {
-    if (this == null) {
+    final value = this;
+    if (value == null) {
       return null;
     }
-    return widgetBuilder(this!);
+    return widgetBuilder(value);
   }
 }
 
