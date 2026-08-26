@@ -31,6 +31,7 @@ class _MyAppState extends State<MyApp> {
           final appEnv = getIt<AppEnv>();
           return MaterialApp.router(
             title: appEnv.appName,
+            scaffoldMessengerKey: Toast.scaffoldMessengerKey,
             debugShowCheckedModeBanner: false,
             theme: AppThemeBuilder.buildLightTheme(),
             darkTheme: AppThemeBuilder.buildDarkTheme(),

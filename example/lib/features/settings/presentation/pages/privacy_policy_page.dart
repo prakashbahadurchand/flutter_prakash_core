@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_prakash/flutter_prakash.dart';
 
 @RoutePage()
 class PrivacyPolicyPage extends StatelessWidget {
@@ -7,7 +8,7 @@ class PrivacyPolicyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = context.theme;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Privacy Policy'), centerTitle: true),

@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_prakash/flutter_prakash.dart';
 
 @RoutePage()
 class ReportFeedbackPage extends StatefulWidget {
@@ -21,31 +22,26 @@ class _ReportFeedbackPageState extends State<ReportFeedbackPage> {
 
   void _submitFeedback() async {
     if (_feedbackController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter your feedback first.')),
-      );
+      Toast.warning('Please enter your feedback first.');
       return;
     }
 
     setState(() => _isSubmitting = true);
 
-    // Mock API call
+    // Mock API submission
     await Future.delayed(const Duration(seconds: 1));
 
     if (!mounted) return;
 
     setState(() => _isSubmitting = false);
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Thank you for your feedback!')),
-    );
+    Toast.success('Thank you for your feedback!');
 
     context.router.maybePop();
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = context.theme;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Report Feedback'), centerTitle: true),

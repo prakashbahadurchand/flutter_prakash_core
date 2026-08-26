@@ -54,190 +54,170 @@ class _LoginPageState extends State<LoginPage> {
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
-      body: PrakashEffectListener.fromCubit(
-        cubit: _loginCubit,
-        child: BlocBuilder<LoginCubit, LoginState>(
-          bloc: _loginCubit,
-          builder: (context, state) {
-            return SafeArea(
-              child: Center(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24.0,
-                    vertical: 16.0,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Center(
-                        child: Container(
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: const LinearGradient(
-                              colors: [
-                                AppPalette.primary,
-                                AppPalette.primaryDark,
+      body: BlocProvider.value(
+        value: _loginCubit,
+        child: ReactiveFormListener<LoginCubit, LoginState>(
+          successMessage: 'Welcome back!',
+          onSuccess: (context, state) {
+            context.router.replace(const DashboardRoute());
+          },
+          child: BlocBuilder<LoginCubit, LoginState>(
+            builder: (context, state) {
+              return SafeArea(
+                child: Center(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24.0,
+                      vertical: 16.0,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Center(
+                          child: Container(
+                            padding: const EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: const LinearGradient(
+                                colors: [
+                                  AppPalette.primary,
+                                  AppPalette.primaryDark,
+                                ],
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppPalette.primary.withValues(
+                                    alpha: 0.3,
+                                  ),
+                                  blurRadius: 20,
+                                  spreadRadius: 4,
+                                ),
                               ],
                             ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppPalette.primary.withValues(
-                                  alpha: 0.3,
-                                ),
-                                blurRadius: 20,
-                                spreadRadius: 4,
+                            child: const Icon(
+                              Icons.lock_person_rounded,
+                              size: 48,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        Text(
+                          'Welcome Back',
+                          style: theme.textTheme.headlineMedium?.copyWith(
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: -0.5,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Sign in to access your enterprise dashboard',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: isDark
+                                ? Colors.grey.shade400
+                                : Colors.grey.shade600,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 32),
+
+                        // Reactive Email Field (Infers hint, helper, validation automatically)
+                        ReactiveTextField(
+                          field: state.email,
+                          onChanged: _loginCubit.onEmailChanged,
+                          keyboardType: TextInputType.emailAddress,
+                          prefixIcon: const Icon(Icons.email_outlined),
+                          helperText:
+                              'Tip: Enter "fail" to test error response handling',
+                        ),
+                        const SizedBox(height: 16),
+
+                        // Reactive Password Field
+                        ReactiveTextField(
+                          field: state.password,
+                          onChanged: _loginCubit.onPasswordChanged,
+                          obscureText: _obscurePassword,
+                          prefixIcon: const Icon(Icons.lock_outline),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _obscurePassword
+                                  ? Icons.visibility_outlined
+                                  : Icons.visibility_off_outlined,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _obscurePassword = !_obscurePassword;
+                              });
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+
+                        // Quick Demo Fill
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton.icon(
+                            onPressed: _fillDemoCredentials,
+                            icon: const Icon(Icons.auto_fix_high, size: 16),
+                            label: const Text('Fill Demo Credentials'),
+                            style: TextButton.styleFrom(
+                              foregroundColor: AppPalette.primary,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+
+                        // Submit Button
+                        ReactiveFormButton<LoginCubit, LoginState>(
+                          label: 'Sign In',
+                          icon: Icons.login_rounded,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppPalette.primary,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 18),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            elevation: 4,
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+
+                        // Register Link
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Don't have an account? ",
+                              style: TextStyle(
+                                color: isDark
+                                    ? Colors.grey.shade400
+                                    : Colors.grey.shade600,
                               ),
-                            ],
-                          ),
-                          child: const Icon(
-                            Icons.lock_person_rounded,
-                            size: 48,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      Text(
-                        'Welcome Back',
-                        style: theme.textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: -0.5,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Sign in to access your enterprise dashboard',
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: isDark
-                              ? Colors.grey.shade400
-                              : Colors.grey.shade600,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 32),
-
-                      // Reactive Email Field (Infres hint, helper, validation automatically)
-                      ReactiveTextField(
-                        field: state.email,
-                        onChanged: _loginCubit.onEmailChanged,
-                        keyboardType: TextInputType.emailAddress,
-                        prefixIcon: const Icon(Icons.email_outlined),
-                        helperText:
-                            'Tip: Enter "fail" to test error response handling',
-                      ),
-                      const SizedBox(height: 16),
-
-                      // Reactive Password Field
-                      ReactiveTextField(
-                        field: state.password,
-                        onChanged: _loginCubit.onPasswordChanged,
-                        obscureText: _obscurePassword,
-                        prefixIcon: const Icon(Icons.lock_outline),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscurePassword
-                                ? Icons.visibility_outlined
-                                : Icons.visibility_off_outlined,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _obscurePassword = !_obscurePassword;
-                            });
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-
-                      // Quick Demo Fill
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton.icon(
-                          onPressed: _fillDemoCredentials,
-                          icon: const Icon(Icons.auto_fix_high, size: 16),
-                          label: const Text('Fill Demo Credentials'),
-                          style: TextButton.styleFrom(
-                            foregroundColor: AppPalette.primary,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-
-                      // Submit Button
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppPalette.primary,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 18),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          elevation: 4,
-                        ),
-                        onPressed: state.status.isLoading
-                            ? null
-                            : () async {
-                                await _loginCubit.submit();
-                                if (_loginCubit.state.status.isSuccess &&
-                                    context.mounted) {
-                                  context.router.replace(
-                                    const DashboardRoute(),
-                                  );
-                                }
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                context.router.push(const RegisterRoute());
                               },
-                        child: state.status.isLoading
-                            ? const SizedBox(
-                                height: 22,
-                                width: 22,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.5,
-                                  color: Colors.white,
-                                ),
-                              )
-                            : const Text(
-                                'Sign In',
+                              child: const Text(
+                                'Register',
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  color: AppPalette.primary,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                      ),
-                      const SizedBox(height: 24),
-
-                      // Register Link
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Don't have an account? ",
-                            style: TextStyle(
-                              color: isDark
-                                  ? Colors.grey.shade400
-                                  : Colors.grey.shade600,
                             ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              context.router.push(const RegisterRoute());
-                            },
-                            child: const Text(
-                              'Register',
-                              style: TextStyle(
-                                color: AppPalette.primary,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );
