@@ -1,533 +1,489 @@
-# flutter_prakash 🚀
+# flutter_prakash 🚀✨
 
-**`flutter_prakash`** is an ultimate, enterprise-grade multi-app core engine and hybrid Flutter plugin framework. Built on **Clean Architecture**, **SOLID** principles and **zero-tight-coupling** dynamic exports, it serves as a plug-and-play foundation across all present and future Flutter applications.
+[![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![Clean Architecture](https://img.shields.io/badge/Architecture-Clean%20%26%20SOLID-success?style=for-the-badge)](#-clean-architecture-principles)
 
-```
-+------------------------------------------+
-|            Consuming Flutter App           |
-+------------------------------------------+
-                  |
-         PrakashEngine.initialize()
-                  |
-   +--------+--------+--------+--------+--------+--------+--------+
-   |  Core  | Network |  AdMob  | Media  |  Maps  |Storage  |Services|
-   +--------+--------+--------+--------+--------+--------+--------+
-```
+**`flutter_prakash`** is an ultimate, enterprise-grade multi-app core engine and hybrid Flutter package framework. Built on **Clean Architecture**, **SOLID principles**, and **zero-boilerplate reactive workflows**, it serves as a plug-and-play architectural foundation across all production Flutter applications. 🏗️⚡
 
 ---
 
-## ✨ Feature Overview
-
-- 🌐 **Omni-Backend**: REST (Dio) · GraphQL (Http/WS) · Firebase (Auth, Firestore, FCM, Crashlytics, Remote Config) · Supabase (Auth, Realtime, Storage, Edge).
-- 💰 **AdMob Monetization**: Banner · Interstitial · Rewarded · Native ads (test IDs included).
-- 🎵 **Media Engine**: Audio player · PDF viewer · Image compression & picker.
-- 🗺️ **Maps & Geo**: `flutter_map` wrapper · marker clustering · location + permissions.
-- 💾 **Storage**: typed key-value (`shared_preferences`) + object store (`hive_ce`).
-- 🔌 **Native Bridge**: extensible Android (Kotlin) & iOS (Swift) method channels.
-- 🧩 **Services**: Deep Links · Share · Home Widgets · Speech-to-Text · QR · Notifications · Permissions · Device Info.
-- 🛡️ **Core**: `Result<T, Failure>` & `AsyncValue<T>`, exceptions, extensions, logger, **DI via GetIt**.
-- 🎨 **Design System**: M3 theme builder, design tokens, universal image loader, shimmers, paginated lists.
+## 📑 Table of Contents
+- [🌟 Key Architectural Highlights](#-key-architectural-highlights)
+- [📦 Installation & Setup](#-installation--setup)
+- [🏛️ Architecture & Project Structure](#️-architecture--project-structure)
+- [🧩 Core Modules & Capabilities](#-core-modules--capabilities)
+  - [⚡ 1. BLoC State Management Engine](#-1-bloc-state-management-engine)
+  - [📝 2. Reactive Forms Framework (`FormCubit`)](#-2-reactive-forms-framework-formcubit)
+  - [🌐 3. Networking & Error Handling (`Result<T>`)](#-3-networking--error-handling-resultt)
+  - [🛠️ 4. DevTools Suite & Runtime Inspectors](#️-4-devtools-suite--runtime-inspectors)
+  - [🎨 5. Design System, Tokens & Theme Builder](#-5-design-system-tokens--theme-builder)
+  - [💰 6. AdMob Monetization & Cross-Promotion Engine](#-6-admob-monetization--cross-promotion-engine)
+  - [🔥 7. Firebase & Observability Suite](#-7-firebase--observability-suite)
+  - [🪟 8. UI Components & Overlays (`Toast`, `LoadingOverlay`, `FilePreview`)](#-8-ui-components--overlays-toast-loadingoverlay-filepreview)
+  - [🧪 9. Mock Data Generator (`Fake`)](#-9-mock-data-generator-fake)
+  - [🪄 10. Extensions & Helpers](#-10-extensions--helpers)
+- [📱 Example Application](#-example-application)
+- [📄 License & Authors](#-license--authors)
 
 ---
 
-## 📦 Setup
+## 🌟 Key Architectural Highlights
+
+* 🎯 **Clean Architecture & SOLID Enforced**: Strictly concrete Data Sources and Repositories with zero unnecessary abstractions or domain pollution.
+* ⚡ **Complete BLoC State Management**: `BaseCubit`, `BaseBloc`, `BaseUiCubit`, `BasePagingCubit`, and `EnterpriseBlocObserver`.
+* 🪄 **One-Shot UI Side-Effects Stream**: Dispatches Toasts, Navigations, and Dialogs cleanly without polluting state trees via `PrakashEffectListener`.
+* 📝 **Declarative Reactive Forms**: Type-safe validation chains (`Field<T>`, `Validators`, `ReactiveTextField`, `ReactiveDropdown`, `ReactiveCheckbox`, `ReactiveFormButton`, `ReactiveFormListener`).
+* 🛡️ **Type-Safe Sealed `Result<T>`**: Full failure/exception encapsulation for seamless asynchronous network and storage handling.
+* 🎛️ **Built-in DevTools Floating Dock**: Live inspection of HTTP traffic, GraphQL calls, `SharedPreferences`, logs, app storage, and custom overrides.
+* 💰 **Comprehensive AdMob & Offline Ad Fallbacks**: Google AdMob Banner, Adaptive Banner, Native templates, App Open, Interstitial, and Rewarded Ads with offline cross-promotions.
+* 🎭 **Universal Theme & Design Tokens**: Material 3 Theme Builder (`AppThemeBuilder`), `AppColors`, `AppSpacing`, `AppRadii`, and dynamic color generators.
+
+---
+
+## 📦 Installation & Setup
+
+Add `flutter_prakash` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
+  flutter:
+    sdk: flutter
   flutter_prakash:
-    git:
-      url: https://github.com/prakashbahadurchand/flutter_prakash
-```
-or for local development:
-
-```yaml
-dependencies:
-  flutter_prakash:
-    path: ../flutter_prakash
+    path: ../flutter_prakash # Or git reference
 ```
 
-Then `flutter pub get`. Run the bundled demo:
-
+Run pub get:
 ```bash
-cd example && flutter run
+flutter pub get
 ```
 
 ---
 
-## 🚀 Quick Start
+## 🏛️ Architecture & Project Structure
 
-### 1. Initialize the Engine
+`flutter_prakash` provides clean, granular exports under `lib/src/`:
 
-```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_prakash/flutter_prakash.dart';
-import 'package:get_it/get_it.dart';
-
-final getIt = GetIt.instance;
-
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await PrakashEngine.initialize(
-    getIt: getIt,
-    environment: AppEnvironment.dev,
-
-    // Backends — enable only what you use.
-    restConfig: const RestConfig(baseUrl: 'https://api.example.com'),
-    // graphqlConfig: GraphQLConfig(httpEndpoint: 'https://api.example.com/graphql'),
-    // firebaseConfig: const FirebaseEngineConfig(enableAuth: true),
-    // supabaseConfig: const SupabaseConfig(url: '...', publishableKey: '...'),
-
-    adMobConfig: const AdMobConfig(enabled: true),
-    mediaConfig: const MediaConfig(enableAudio: true),
-    enableStorage: true,
-    enablePlatformChannels: true,
-  );
-
-  runApp(
-    MaterialApp(
-      theme: AppThemeBuilder.buildLightTheme(),
-      darkTheme: AppThemeBuilder.buildDarkTheme(),
-      themeMode: ThemeMode.system,
-      home: const MyApp(),
-    ),
-  );
-}
+```
+lib/
+ └── src/
+      ├── admob/       💰 AdMob Services, Banners, Native Widgets, Offline Ad Pool
+      ├── base/        🏛️ Base Repository, Base DataSource, Model, UseCase
+      ├── blocs/       ⚡ Base BLoC/Cubit, Paging, Theme, Locale, AppEvent
+      ├── devtools/    🛠️ DevTools Dialog, Floating Dock, Network/Storage Inspectors
+      ├── di/          💉 GetIt & Injectable DI Helpers
+      ├── extensions/  🪄 Context, String, Int, DateTime, Collection extensions
+      ├── fake_data/   🧪 Comprehensive Mock & Placeholder Generator (`Fake`)
+      ├── firebase/    🔥 Crashlytics, Analytics, Cloud Messaging, Distribution
+      ├── form/        📝 Reactive Form Engine, Field<T>, Validators, Widgets
+      ├── loggers/     🪵 Ansi Color Loggers (REST, GraphQL, Supabase, Flutter)
+      ├── network/     🌐 Result<T>, Failure, NetworkException
+      ├── plugins/     🔌 Native Method Channels & Platform Interface
+      ├── routing/     🗺️ PrakashRouter & Route Guards
+      ├── theme/       🎨 AppThemeBuilder, AppColors, AppSpacing, AppRadii
+      ├── typedefs/    🏷️ Common Functional & Callback Type Aliases
+      ├── utilities/   🧰 Debouncer, In-App Review, In-App Update, ColorUtils
+      └── widgets/     🪟 Toast, LoadingOverlay, Shimmer, InAppWebView, FilePreview
 ```
 
 ---
 
-## 🔌 Modular Entrypoints
+## 🧩 Core Modules & Capabilities
 
-Import only what you need:
+### ⚡ 1. BLoC State Management Engine
 
-```dart
-import 'package:flutter_prakash/flutter_prakash.dart'; // All-in-one
-import 'package:flutter_prakash/core.dart';              // Result, AsyncValue, extensions, logger
-import 'package:flutter_prakash/rest.dart';
-import 'package:flutter_prakash/graphql.dart';
-import 'package:flutter_prakash/firebase.dart';
-import 'package:flutter_prakash/supabase.dart';
-import 'package:flutter_prakash/ads.dart';
-import 'package:flutter_prakash/media.dart';
-import 'package:flutter_prakash/maps.dart';
-import 'package:flutter_prakash/storage.dart';
-import 'package:flutter_prakash/services.dart';
-import 'package:flutter_prakash/platform.dart';
-import 'package:flutter_prakash/theme.dart';
-import 'package:flutter_prakash/ui.dart';
-```
+`flutter_prakash` eliminates state boilerplate with lifecycle-safe lifecycle methods and side-effect streams.
 
----
-
-## ⚡ BLoC State Management Engine
-
-
-`flutter_prakash` includes a boilerplate-free state management framework built on `flutter_bloc`, `rxdart`, `formz`, `dartz`, and `equatable`.
-
-### 1. `BaseUiCubit<T>` for Standard Data Fetching
-Eliminates state boilerplate with automatic loading, success, and error handling.
+#### 🔄 BaseUiCubit & UiStateBuilder
+Encapsulates async operations (`initial`, `loading`, `success`, `failure`) into a unified UI builder:
 
 ```dart
-class UserCubit extends BaseUiCubit<User> {
-  UserCubit() : super(const UiState.initial());
+// 1. Define Cubit
+@injectable
+class UserProfileCubit extends BaseUiCubit<UserProfile> {
+  UserProfileCubit(this._repo) : super(const UiState.initial());
+  final UserRepository _repo;
 
-  Future<void> loadUser(String userId) async {
-    await executeResult(
-      call: () => userRepository.getUser(userId),
-      onSuccess: (user) => emitEffect(ShowToastEffect('Welcome back ${user.name}')),
+  Future<void> fetchProfile(String id) {
+    return executeResult(
+      call: () => _repo.getUser(id),
+      onSuccess: (profile) => emitEffect(ShowToastEffect('Loaded ${profile.name}')),
     );
   }
 }
 
-// In UI:
-UiStateBuilder<UserCubit, User>(
-  onSuccess: (context, user) => Text(user.name),
-  onLoading: (context, progress, msg) => const CircularProgressIndicator(),
-  onError: (context, failure) => Text(failure.message),
+// 2. Consume in UI
+UiStateBuilder<UserProfileCubit, UserProfile>(
+  bloc: getIt<UserProfileCubit>(),
+  onSuccess: (context, profile) => ProfileCard(user: profile),
+  onLoading: (context, progress, message) => const ShimmerBox(height: 120),
+  onError: (context, failure) => ErrorRetryWidget(message: failure.message),
 );
 ```
 
-### 2. Single-Shot Side-Effects Channel (`PrakashEffectListener`)
-Decouples persistent state from transient actions (Toasts, Navigation, Dialogs).
+#### 🚀 Single-Shot UI Effects (`PrakashEffectListener`)
+Dispatches one-time events (snackbars, navigation routes, alerts) without polluting the state stream:
 
 ```dart
 PrakashEffectListener.fromCubit(
-  cubit: userCubit,
-  child: MyScreen(),
+  cubit: context.read<DashboardCubit>(),
+  onEffect: (context, effect) {
+    if (effect is NavigateEffect) {
+      context.router.pushNamed(effect.route);
+    }
+  },
+  child: const DashboardView(),
 );
-
-// Inside BLoC/Cubit:
-emitEffect(const ShowToastEffect('Operation successful!'));
-emitEffect(const ShowDialogEffect(title: 'Confirm', message: 'Proceed with changes?'));
-emitEffect(const NavigateToEffect('/dashboard'));
 ```
 
-### 3. `BaseFormCubit` + `Formz` Pre-built Validators
-Form validation with auto-validation and failure handling.
+#### 📜 BasePagingCubit & PagingListView
+Built-in infinite pagination with automated pull-to-refresh and pagination error recovery:
 
 ```dart
-class LoginFormCubit extends BaseFormCubit<LoginFormState, AuthToken> {
-  LoginFormCubit() : super(const LoginFormState());
-
-  void emailChanged(String v) => safeEmit(state.copyWith(email: PrakashEmailInput.dirty(v)));
-  void phoneChanged(String v) => safeEmit(state.copyWith(phone: PrakashPhoneInput.dirty(v)));
-
-  Future<void> login() async {
-    await submitForm(call: () => authRepo.login(state.email.value, state.password.value));
-  }
-}
-```
-
-### 4. `BasePagingCubit` + `PagingListView`
-Infinite scroll pagination engine with zero boilerplate.
-
-```dart
-class UserPagingCubit extends BasePagingCubit<User> {
-  UserPagingCubit() : super(pageSize: 20);
-
-  @override
-  Future<Result<List<User>>> fetchPage(int page, int pageSize) async {
-    return userRepository.getUsersPage(page: page, limit: pageSize);
-  }
-}
-
-// In UI:
 PagingListView<UserPagingCubit, User>(
   cubit: getIt<UserPagingCubit>(),
-  itemBuilder: (context, user, index) => ListTile(title: Text(user.name)),
-);
-```
-
-### 5. `PrakashEventTransformers` for Reactive RxDart Streams
-```dart
-on<SearchQueryChanged>(
-  _onSearch,
-  transformer: PrakashEventTransformers.debounce(const Duration(milliseconds: 300)),
-);
-```
-
----
-
-
-## 🌐 REST Engine
-
-The `DioClient` adds connectivity checks, auth-token injection/refresh, and
-retry on a single interceptor. Access it from DI:
-
-```dart
-final client = getIt.get<DioClient>();
-
-final response = await client.dio.get(
-  '/users?limit=10',
-  options: Options(responseType: ResponseType.json),
-);
-```
-
-Custom auth/logic strategy by passing an `IAuthTokenStrategy`:
-
-```dart
-class MyAuthStrategy implements IAuthTokenStrategy {
-  @override Future<String?> getAccessToken() async => store.read('token');
-  @override Future<bool> refreshTokens() async => true;
-  @override Future<void> onAuthenticationFailed() async {}
-}
-
-restConfig: RestConfig(
-  baseUrl: 'https://api.example.com',
-  authTokenStrategy: MyAuthStrategy(),
-),
-```
-
----
-
-## ♊ GraphQL
-
-```dart
-final graphql = getIt.get<GraphQLService>();
-
-// Query
-final res = await graphql.query(
-  r'''
-    query($id: ID!) { user(id: $id) { name email } }
-  ''',
-  variables: {'id': '1'},
-);
-
-// Mutation
-final mut = await graphql.mutate(
-  r'''
-    mutation($input: UserInput!) { createUser(input: $input) { id } }
-  ''',
-  variables: {'input': {...}},
-);
-```
-
-Configure an HTTP + optional WebSocket endpoint for subscriptions:
-
-```dart
-graphqlConfig: GraphQLConfig(
-  httpEndpoint: 'https://api.example.com/graphql',
-  wsEndpoint: 'wss://api.example.com/graphql', // enables subscriptions
-  getToken: () async => await auth.token(),
-),
-```
-
----
-
-## 🔥 Firebase
-
-```dart
-await FirebaseEngine.initialize(
-  config: const FirebaseEngineConfig(
-    enableAuth: true,
-    enableFirestore: true,
-    enableMessaging: true,
-    enableCrashlytics: true,
-    enableRemoteConfig: true,
+  itemBuilder: (context, user, index) => ListTile(
+    leading: CircleAvatar(child: Text('${index + 1}')),
+    title: Text(user.name),
+    subtitle: Text(user.email),
   ),
 );
 ```
 
-Helpers:
-
-```dart
-// Firestore
-final snapshots = await FirebaseEngine.getCollection('posts');
-
-// Remote config
-final banner = await FirebaseEngine.getRemoteString('home_banner');
-```
-
 ---
 
-## 🐘 Supabase
+### 📝 2. Reactive Forms Framework (`FormCubit`)
+
+Declarative, type-safe reactive forms with auto-inferred labels, hints, validation, and submission states.
 
 ```dart
-await SupabaseEngine.initialize(
-  const SupabaseConfig(url: 'https://xxx.supabase.co', publishableKey: 'anon_key'),
+// 1. Define State with FormMixin
+@freezed
+abstract class LoginFormState with _$LoginFormState, FormMixin implements FormState {
+  const LoginFormState._();
+  const factory LoginFormState({
+    required Field<String> email,
+    required Field<String> password,
+    @Default(BlocStatus.initial()) BlocStatus status,
+  }) = _LoginFormState;
+
+  factory LoginFormState.initial() => LoginFormState(
+    email: Field(
+      labelText: 'Email Address',
+      value: '',
+      validators: Validators.required().email(),
+    ),
+    password: Field(
+      labelText: 'Password',
+      value: '',
+      validators: Validators.required().minLength(8),
+    ),
+  );
+
+  @override
+  List<Field<dynamic>> get formFields => [email, password];
+
+  @override
+  LoginFormState copyWithStatus(BlocStatus status) => copyWith(status: status);
+}
+
+// 2. Define Cubit
+@injectable
+class LoginCubit extends FormCubit<LoginFormState> {
+  LoginCubit(this._authRepo) : super(LoginFormState.initial());
+  final AuthRepository _authRepo;
+
+  void onEmailChanged(String val) => emit(state.copyWith(email: state.email(val)));
+  void onPasswordChanged(String val) => emit(state.copyWith(password: state.password(val)));
+
+  @override
+  Future<Result<dynamic>> performSubmit() => _authRepo.login(state.email.value, state.password.value);
+}
+
+// 3. Declarative UI
+ReactiveFormListener<LoginCubit, LoginFormState>(
+  successMessage: 'Welcome back!',
+  onSuccess: (context, state) => context.router.replace(const DashboardRoute()),
+  child: Column(
+    children: [
+      ReactiveTextField(
+        field: state.email,
+        onChanged: cubit.onEmailChanged,
+        prefixIcon: const Icon(Icons.email_outlined),
+      ),
+      ReactiveTextField(
+        field: state.password,
+        onChanged: cubit.onPasswordChanged,
+        obscureText: true,
+        prefixIcon: const Icon(Icons.lock_outline),
+      ),
+      ReactiveFormButton<LoginCubit, LoginFormState>(
+        label: 'Sign In',
+        icon: Icons.login_rounded,
+      ),
+    ],
+  ),
 );
+```
 
-final rows   = await SupabaseEngine.select('profiles');           // Table select
-final stream = SupabaseEngine.streamTable('messages', primaryKey: 'id'); // Realtime
+Available Reactive Components:
+* 🔤 `ReactiveTextField`
+* 🔘 `ReactiveCheckbox`
+* 🎚️ `ReactiveSwitch`
+* 📋 `ReactiveDropdown<T>`
+* 📑 `ReactiveSegmentedButton<T>`
+* 🔢 `ReactivePinCodeField`
+* 🎚️ `ReactiveSlider`
+* 📅 `ReactiveDatePicker` & ⏰ `ReactiveTimePicker`
+* 🔘 `ReactiveRadioGroup<T>`
+* 🔘 `ReactiveFormButton`
+
+---
+
+### 🌐 3. Networking & Error Handling (`Result<T>`)
+
+Encapsulate async computations into clean, type-safe sealed `Result<T>` values:
+
+```dart
+@lazySingleton
+class AuthRepository {
+  final AuthDataSource _dataSource;
+  AuthRepository(this._dataSource);
+
+  FutureResult<UserModel> login(LoginRequestDto dto) {
+    return Result.fromAsync(call: () => _dataSource.login(dto));
+  }
+}
+
+// Handling in Cubit / Service:
+final result = await authRepo.login(dto);
+result.when(
+  success: (user) => print('Logged in as ${user.name}'),
+  failure: (failure) => print('Error [${failure.statusCode}]: ${failure.message}'),
+);
 ```
 
 ---
 
-## 💰 AdMob Monetization & Cross-Promotion
+### 🛠️ 4. DevTools Suite & Runtime Inspectors
 
-Zero-to-low boilerplate monetization engine supporting **App Open**, **Adaptive Banner**, **Native Templates**, **Interstitial**, **Rewarded Video**, and **Offline Custom App Cross-Promotion Fallbacks**.
-
-### 1. Initialize Once at App Start (`main.dart`)
+Embed a draggable floating inspection dock into your debug builds with a single widget:
 
 ```dart
+DevtoolsFloatingDock(
+  child: Scaffold(
+    appBar: AppBar(
+      title: const Text('My App'),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.bug_report_rounded),
+          onPressed: () => DevToolsDialog.show(context),
+        ),
+      ],
+    ),
+    body: const AppBody(),
+  ),
+);
+```
+
+#### Included Inspectors:
+* 🌐 **Network Inspector**: Real-time logging of HTTP headers, queries, payloads, and response times.
+* ♊ **GraphQL Inspector**: Query/Mutation debugger with execution timing and variables inspector.
+* 💾 **Preferences Inspector**: Live viewer & editor for all `SharedPreferences` keys.
+* 📦 **Storage Inspector**: Visual directory browser for app sandboxes, cache, and documents.
+* 🪵 **Log Inspector**: Filterable ANSI terminal logs with search and tag filters.
+* ⚙️ **Custom Options**: Dynamic toggles for environment URLs, mock overrides, and feature flags.
+
+---
+
+### 🎨 5. Design System, Tokens & Theme Builder
+
+Material 3 Theme generation with out-of-the-box light and dark themes:
+
+```dart
+MaterialApp.router(
+  theme: AppThemeBuilder.buildLightTheme(primaryColor: AppColors.primary),
+  darkTheme: AppThemeBuilder.buildDarkTheme(primaryColor: AppColors.primary),
+  themeMode: themeMode,
+  routerConfig: _appRouter.config(),
+);
+```
+
+Design Tokens:
+```dart
+// Colors
+AppColors.primary;
+AppColors.secondary;
+AppColors.success;
+AppColors.error;
+
+// Spacing & Radii
+AppSpacing.sm; // 8.0
+AppSpacing.md; // 16.0
+AppSpacing.lg; // 24.0
+AppRadii.borderLg; // BorderRadius.circular(16)
+```
+
+---
+
+### 💰 6. AdMob Monetization & Cross-Promotion Engine
+
+Unified monetization engine with Google AdMob & offline cross-promotion fallbacks:
+
+```dart
+// 1. Initialize AdMob with Custom Offline Ads
 await AdMobService.initialize(
   config: AdMobConfig(
-    bannerAndroidId: 'ca-app-pub-xxx/yyy',
-    interstitialAndroidId: 'ca-app-pub-xxx/yyy',
-    rewardedAndroidId: 'ca-app-pub-xxx/yyy',
-    appOpenAndroidId: 'ca-app-pub-xxx/yyy',
-    nativeAndroidId: 'ca-app-pub-xxx/yyy',
-    isTesting: kDebugMode, // Auto-uses Google test IDs when true
+    bannerAndroidId: 'ca-app-pub-xxx',
+    interstitialAndroidId: 'ca-app-pub-xxx',
+    rewardedAndroidId: 'ca-app-pub-xxx',
+    isTesting: kDebugMode,
     customAds: [
       CustomAdModel(
-        headerInfo: 'Recommended for you',
         appName: 'Hamro Maya App',
         appPackageName: 'com.princethakuri.hamromaya',
         appMessage: 'Best collection of Nepali Shayari & Quotes.',
-        appDetails: 'Hamro Maya brings you the best collection of quotes.',
         appIconPath: 'assets/icons/app_icon.png',
       ),
     ],
   ),
-  autoShowAppOpen: true, // Auto-shows App Open Ads on cold start & app resume!
+  autoShowAppOpen: true,
 );
-```
 
-### 2. Drop-in Banner & Adaptive Banner (1 Line)
+// 2. Drop-in Banners
+const AdMobBannerWidget();
+const AdMobAdaptiveBannerWidget();
 
-```dart
-// Standard Banner with automatic AdMob + Offline Custom Ad fallback
-const AdMobBannerWidget()
+// 3. Drop-in Native Ads
+const AdMobNativeWidget(templateType: TemplateType.medium);
 
-// Anchored Responsive Adaptive Banner
-const AdMobAdaptiveBannerWidget()
-```
+// 4. One-Line Interstitials & Rewarded Video
+AdMobService.showInterstitial(onCompleted: () => navigateNext());
+AdMobService.showRewarded(onUserEarnedReward: (reward) => giveReward());
 
-### 3. Native Ad with Flutter Templates (Zero Native Code Required)
-
-```dart
-// Medium Native Card Template (AdMob + Offline Fallback)
-const AdMobNativeWidget(templateType: TemplateType.medium)
-
-// Small Native Template
-const AdMobNativeWidget(templateType: TemplateType.small, height: 90)
-```
-
-### 4. 1-Line Interstitial with Auto-Capping & Guaranteed Completion
-
-```dart
-AdMobService.showInterstitial(
-  onCompleted: () => Navigator.pushNamed(context, '/next-screen'),
-);
-```
-
-### 5. 1-Line Rewarded Video Ad
-
-```dart
-AdMobService.showRewarded(
-  onUserEarnedReward: (reward) {
-    unlockPremiumFeature(reward.amount);
-  },
-  onAdFailedToShow: (error) {
-    Toast.error('Ad not ready yet');
-  },
-);
-```
-
-### 6. Instant Global Ad-Free / Premium Bypass
-
-```dart
-// Instantly disables all banners, app open ads, native ads, and interstitials app-wide:
+// 5. Global Ad-Free Mode
 AdMobService.setAdFree(true);
 ```
 
 ---
 
-## 🎵 Media Engine
+### 🔥 7. Firebase & Observability Suite
 
-### Audio
+Unified manager singletons for Firebase services:
 
 ```dart
-final audio = getIt.get<AudioPlayerService>();
-await audio.playUrl('https://example.com/song.mp3');
-await audio.pause();
-await audio.seek(const Duration(seconds: 30));
-audio.player.onPlayerStateChanged.listen((state) { /* UI */ });
+// Firebase Analytics
+FirebaseAnalyticsManager.logEvent(name: 'purchase_success', parameters: {'amount': 99});
+
+// Firebase Crashlytics
+FirebaseCrashlyticsManager.recordError(exception, stackTrace, reason: 'Network failure');
+
+// Cloud Messaging & App Distribution
+FirebaseCloudMessagingManager.initialize();
+FirebaseAppDistributionManager.checkForUpdate();
 ```
 
-### Image pick & compress
+---
+
+### 🪟 8. UI Components & Overlays
+
+#### 🍞 Global Toasts (`Toast`)
+Display notifications anywhere without a direct `BuildContext`:
 
 ```dart
-final file = await ImageHelper.pickAndCompress(
-  ImageSource.gallery,
-  options: const ImageCompressOptions(quality: 70, maxWidth: 1024),
+// Setup in MaterialApp.router:
+MaterialApp.router(
+  scaffoldMessengerKey: Toast.scaffoldMessengerKey,
+  ...
+);
+
+// Call anywhere:
+Toast.success('Profile updated successfully!');
+Toast.error('Failed to sync changes.');
+Toast.warning('Check your network connection.');
+Toast.info('New message received.');
+```
+
+#### ⏳ Global Loading Overlay (`LoadingOverlay`)
+Block UI during critical background operations:
+
+```dart
+LoadingOverlay.show(autoHideInSeconds: 10);
+await performHeavySync();
+LoadingOverlay.hide();
+```
+
+#### 📄 Media & Web Containers
+```dart
+// In-App Browser
+InAppWebViewContainer.show(context, initialUrl: 'https://flutter.dev', title: 'Flutter');
+
+// Interactive Zoomable Image / PDF Viewer
+FilePreviewContainer.show(
+  context,
+  filePath: 'https://example.com/sample.pdf',
+  fileType: FileType.pdf,
+  sourceType: FileSourceType.network,
+  title: 'Contract PDF',
 );
 ```
 
-### PDF
+---
+
+### 🧪 9. Mock Data Generator (`Fake`)
+
+Generate realistic mock data for unit tests, previews, and UI placeholders:
 
 ```dart
-PrakashPdfViewer(
-  filePath: '/path/to/doc.pdf',
-  swipeHorizontal: true,
-)
+final name = Fake.fullName;
+final email = Fake.email;
+final avatar = Fake.avatarUrl();
+final image = Fake.imageUrl(width: 800, height: 600);
+final price = Fake.price(min: 10, max: 200);
+final paragraphs = Fake.paragraphs(3);
+final fakeUsers = Fake.list((i) => User(id: Fake.id, name: Fake.fullName), count: 20);
 ```
 
 ---
 
-## 🗺️ Maps & Location
+### 🪄 10. Extensions & Helpers
+
+Ergonomic extensions built directly into Dart core classes:
 
 ```dart
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
+// BuildContext Extensions
+context.theme;
+context.colorScheme;
+context.textTheme;
+context.isDarkMode;
+context.isLightMode;
+context.screenWidth;
+context.screenHeight;
 
-// Basic map
-PrakashMapWidget(
-  initialCenter: const LatLng(27.7172, 85.324),
-  initialZoom: 12,
-  markers: [
-    Marker(
-      point: const LatLng(27.7172, 85.324),
-      width: 40,
-      height: 40,
-      child: const Icon(Icons.location_on, color: Colors.red),
-    ),
-  ],
-)
+// String Extensions
+'john doe'.capitalize(); // 'John doe'
+'john_doe'.toTitleCase(); // 'John Doe'
+'alex@company.com'.obscureEmail(); // 'a***x@company.com'
+'John Doe'.toInitials(); // 'JD'
+'12345'.toNepaliDigits(); // '१२३४५'
 
-// Clustering & location
-final loc = LocationService();
-final granted = await loc.requestPermission();
-final latLng  = await loc.getCurrentLocation(); // throws if 'unavailable'
-
-FlutterMap(
-  options: MapOptions(initialCenter: center, initialZoom: 10),
-  children: [
-    TileLayer(urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-              userAgentPackageName: 'com.example.myapp'),
-    ClusterMarkerLayer(markers: myMarkers),
-  ],
-)
+// DateTime Extensions
+DateTime.now().toIsoDateString(); // '2026-08-26'
+DateTime.now().toReadableDate(); // 'Aug 26, 2026'
+DateTime.now().subtract(const Duration(minutes: 5)).toTimeAgo(); // '5 minutes ago'
+DateTime.now().isToday; // true
 ```
 
 ---
 
-## 💾 Storage
+## 📱 Example Application
 
-```dart
-// Key–value (shared_preferences)
-final kv = getIt.get<KeyValueStore>();
-await kv.setString('token', 'abc');
-final token = await kv.getString('token');
+A complete enterprise-grade sample application demonstrating all patterns can be found in the [`example/`](file:///Users/prakashbahadurchand/Prakash_Bahadur_Chand/My_Projects/flutter_prakash/example) directory:
 
-// Object store (Hive)
-final box = await HiveStore.instance.openBox<dynamic>('posts');
-await box.put('1', {'name': 'Ada', 'likes': 120});
-final post = box.get('1');
-```
-
----
-
-## 🧩 Services
-
-```dart
-// Deep link / share
-await DeepLinkService.launch('https://flutter.dev');
-await DeepLinkService.call('+9779800000000');
-await DeepLinkService.email('a@b.co', subject: 'Hello');
-await DeepLinkService.share('Check out flutter_prakash!');
-
-// Notifications
-await LocalNotificationService.initialize();
-await LocalNotificationService.show(1, 'Title', 'Body');
-
-// Permissions
-final granted = await PermissionService.requestOne(PermissionService.camera);
-
-// Home widget update
-await HomeWidgetService.updateData({'score': 100});
-
-// QR
-QRService.render('https://flutter.dev', size: 180);
-```
-
----
-
-## 🎨 UI / Design System
-
-```dart
-// Universal image loader (network/SVG/asset + shimmer fallback)
-PrakashImage(imagePath: 'https://picsum.photos/400/150',
-             width: 300, height: 200, fit: BoxFit.cover);
-
-// Shimmer skeleton
-ShimmerBox(width: 120, height: 14);
-
-// Infinite paginated list
-PrakashPaginatedList<Post>(
-  fetchPage: (page) async {
-    final data = await dio.get('/posts?page=$page');
-    return PageResult(items: [...data], page: page, totalPages: 5);
-  },
-  itemBuilder: (context, post, index) => ListTile(title: Text(post.title)),
-);
-
-// Design tokens
-AppColors.primary     // Color
-AppSpacing.md         // double
-AppRadii.lg           // double
-AppElevation.low      // double
+```bash
+cd example
+flutter run
 ```
 
 ---
@@ -536,12 +492,13 @@ AppElevation.low      // double
 
 ```bash
 flutter analyze
-flutter test       # zero issues expected
+flutter test
 cd example && flutter run
 ```
 
 ---
 
-## 📄 License
+## 📄 License & Authors
 
-MIT © Prakash Bahadur Chand.
+Crafted with ❤️ by **Prakash Bahadur Chand**.
+Licensed under the [MIT License](LICENSE).
