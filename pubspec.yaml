@@ -87,6 +87,7 @@ dependencies:
   freezed_annotation: ^2.4.4
   auto_route: ^9.3.0
   meta: ^1.18.0
+  pretty_dio_logger: ^1.4.0
 
 dev_dependencies:
   flutter_test:
