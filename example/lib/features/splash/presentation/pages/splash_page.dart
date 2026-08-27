@@ -9,16 +9,27 @@ import 'package:flutter_prakash_core_example/features/splash/presentation/widget
 import 'package:flutter_prakash_core_example/features/splash/presentation/widgets/splash_loading_bar.dart';
 
 @RoutePage()
-class SplashPage extends StatefulWidget {
+class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
 
   @override
-  State<SplashPage> createState() => _SplashPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => getIt<SplashCubit>()..initialize(),
+      child: const _SplashView(),
+    );
+  }
 }
 
-class _SplashPageState extends State<SplashPage>
+class _SplashView extends StatefulWidget {
+  const _SplashView();
+
+  @override
+  State<_SplashView> createState() => _SplashViewState();
+}
+
+class _SplashViewState extends State<_SplashView>
     with SingleTickerProviderStateMixin {
-  late final SplashCubit _cubit;
   late final AnimationController _controller;
   late final Animation<double> _scaleAnimation;
   late final Animation<double> _fadeAnimation;
@@ -26,7 +37,6 @@ class _SplashPageState extends State<SplashPage>
   @override
   void initState() {
     super.initState();
-    _cubit = getIt<SplashCubit>();
 
     _controller = AnimationController(
       vsync: this,
@@ -44,13 +54,11 @@ class _SplashPageState extends State<SplashPage>
     );
 
     _controller.forward();
-    _cubit.initialize();
   }
 
   @override
   void dispose() {
     _controller.dispose();
-    _cubit.close();
     super.dispose();
   }
 
@@ -74,48 +82,45 @@ class _SplashPageState extends State<SplashPage>
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      body: BlocProvider.value(
-        value: _cubit,
-        child: BlocListener<SplashCubit, SplashState>(
-          listener: _onStateChange,
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: isDark
-                    ? [
-                        AppPalette.slate900,
-                        AppPalette.slate800,
-                        AppPalette.slate900,
-                      ]
-                    : [
-                        AppPalette.primaryBgLight,
-                        AppPalette.primaryBgHover,
-                        AppPalette.primaryLight,
-                      ],
-              ),
+      body: BlocListener<SplashCubit, SplashState>(
+        listener: _onStateChange,
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: isDark
+                  ? [
+                      AppPalette.slate900,
+                      AppPalette.slate800,
+                      AppPalette.slate900,
+                    ]
+                  : [
+                      AppPalette.primaryBgLight,
+                      AppPalette.primaryBgHover,
+                      AppPalette.primaryLight,
+                    ],
             ),
-            child: Center(
-              child: AnimatedBuilder(
-                animation: _controller,
-                builder: (context, child) {
-                  return FadeTransition(
-                    opacity: _fadeAnimation,
-                    child: ScaleTransition(
-                      scale: _scaleAnimation,
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SplashBrandLogo(),
-                          SizedBox(height: 48),
-                          SplashLoadingBar(),
-                        ],
-                      ),
+          ),
+          child: Center(
+            child: AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                return FadeTransition(
+                  opacity: _fadeAnimation,
+                  child: ScaleTransition(
+                    scale: _scaleAnimation,
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SplashBrandLogo(),
+                        SizedBox(height: 48),
+                        SplashLoadingBar(),
+                      ],
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
           ),
         ),
