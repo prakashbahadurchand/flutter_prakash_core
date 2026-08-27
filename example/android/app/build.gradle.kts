@@ -15,7 +15,8 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        // TODO: Specify your own unique Application ID
+        // (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.prakashbahadurchand.flutter_prakash_core_example"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
@@ -47,10 +48,14 @@ android {
     }
 }
 
-dependencies {
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+dependencies { coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4") }
+
+flutter { source = "../.." }
+            matchingFallbacks += listOf("staging")
+        }
+    }
 }
 
-flutter {
-    source = "../.."
-}
+dependencies { coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4") }
+
+flutter { source = "../.." }
