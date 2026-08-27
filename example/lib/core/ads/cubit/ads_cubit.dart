@@ -13,17 +13,23 @@ class AdsCubit extends Cubit<AdsState> {
   final AdsService adsService;
   static const String _keyEarnedCoins = 'user_earned_coins_balance';
 
+  void _safeEmit(AdsState newState) {
+    if (!isClosed) {
+      emit(newState);
+    }
+  }
+
   Future<void> _loadSavedCoins() async {
     final prefs = await SharedPreferences.getInstance();
     final savedCoins = prefs.getInt(_keyEarnedCoins) ?? 0;
     if (savedCoins > 0) {
-      emit(state.copyWith(coins: savedCoins));
+      _safeEmit(state.copyWith(coins: savedCoins));
     }
   }
 
   /// 🔄 Preload all ad formats at once
   void loadAllAds() {
-    emit(state.copyWith(statusMessage: 'Loading all ads in background...'));
+    _safeEmit(state.copyWith(statusMessage: 'Loading all ads in background...'));
 
     adsService.loadInterstitialAd(
       onLoaded: () => updateAdStatus('Interstitial Ad Ready'),
@@ -62,7 +68,7 @@ class AdsCubit extends Cubit<AdsState> {
             updateAdStatus('Interstitial Failed to Show: ${error.message}'),
       );
     } else {
-      emit(
+      _safeEmit(
         state.copyWith(
           snackBarMessage: 'Interstitial Ad not ready yet, loading...',
           isSuccessMessage: false,
@@ -71,7 +77,7 @@ class AdsCubit extends Cubit<AdsState> {
       adsService.loadInterstitialAd(
         onLoaded: () => updateAdStatus('Interstitial Ad Ready'),
         onFailedToLoad: (error) =>
-            updateAdStatus('Interstitial Failed: ${error.message}'),
+          updateAdStatus('Interstitial Failed: ${error.message}'),
       );
     }
   }
@@ -94,7 +100,7 @@ class AdsCubit extends Cubit<AdsState> {
             updateAdStatus('Rewarded Failed to Show: ${error.message}'),
       );
     } else {
-      emit(
+      _safeEmit(
         state.copyWith(
           snackBarMessage: 'Rewarded Ad not ready yet, loading...',
           isSuccessMessage: false,
@@ -127,7 +133,7 @@ class AdsCubit extends Cubit<AdsState> {
         ),
       );
     } else {
-      emit(
+      _safeEmit(
         state.copyWith(
           snackBarMessage: 'Rewarded Interstitial Ad not ready yet, loading...',
           isSuccessMessage: false,
@@ -153,7 +159,7 @@ class AdsCubit extends Cubit<AdsState> {
             updateAdStatus('App Open Failed to Show: ${error.message}'),
       );
     } else {
-      emit(
+      _safeEmit(
         state.copyWith(
           snackBarMessage: 'App Open Ad not ready yet, loading...',
           isSuccessMessage: false,
@@ -170,7 +176,7 @@ class AdsCubit extends Cubit<AdsState> {
   /// 💰 Update user reward coins and persist to storage
   void userEarnedReward(int amount) {
     final updatedCoins = state.coins + amount;
-    emit(
+    _safeEmit(
       state.copyWith(
         coins: updatedCoins,
         snackBarMessage: '🎉 Reward Granted: +$amount Coins!',
@@ -187,7 +193,7 @@ class AdsCubit extends Cubit<AdsState> {
 
   /// 📢 Update status message and ad readiness flags
   void updateAdStatus(String statusMessage) {
-    emit(
+    _safeEmit(
       state.copyWith(
         statusMessage: statusMessage,
         isInterstitialLoaded: adsService.isInterstitialAdAvailable,

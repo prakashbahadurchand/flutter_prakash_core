@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
 import 'package:flutter_prakash_core_example/config/config.dart';
-import 'package:flutter_prakash_core_example/core/ads/cubit/ads_cubit.dart';
 import 'package:flutter_prakash_core_example/core/core.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/auth_cubit.dart';
 

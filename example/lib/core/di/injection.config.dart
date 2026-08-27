@@ -10,10 +10,13 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:dio/dio.dart' as _i361;
+import 'package:flutter_prakash_ads/flutter_prakash_ads.dart' as _i499;
 import 'package:flutter_prakash_core/flutter_prakash_core.dart' as _i87;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart'
+    as _i161;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
 import '../../config/config.dart' as _i658;
@@ -76,6 +79,7 @@ import '../../features/splash/data/datasources/splash_local_data_source.dart'
 import '../../features/splash/data/repositories/splash_repository.dart'
     as _i120;
 import '../../features/splash/presentation/blocs/splash_cubit.dart' as _i856;
+import '../ads/cubit/ads_cubit.dart' as _i168;
 import 'register_module.dart' as _i291;
 
 const String _dev = 'dev';
@@ -97,6 +101,18 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i558.FlutterSecureStorage>(
       () => registerModule.secureStorage,
     );
+    gh.lazySingleton<_i161.InternetConnection>(
+      () => registerModule.provideInternetConnection(),
+    );
+    gh.lazySingleton<_i499.NetworkInfo>(
+      () => registerModule.provideNetworkInfo(),
+    );
+    gh.lazySingleton<_i499.AdsService>(
+      () => registerModule.provideAdsService(),
+    );
+    gh.lazySingleton<_i499.AppOpenAdManager>(
+      () => registerModule.provideAppOpenAdManager(),
+    );
     gh.lazySingleton<_i838.DashboardLocalDataSource>(
       () => const _i838.DashboardLocalDataSource(),
     );
@@ -114,6 +130,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i87.LocaleCubit>(
       () => registerModule.localeCubit(gh<_i460.SharedPreferences>()),
+    );
+    gh.lazySingleton<_i168.AdsCubit>(
+      () => _i168.AdsCubit(adsService: gh<_i499.AdsService>()),
     );
     gh.lazySingleton<_i599.SettingsLocalDataSource>(
       () => _i599.SettingsLocalDataSource(gh<_i460.SharedPreferences>()),
