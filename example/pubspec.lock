@@ -907,6 +907,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.35"
+  flutter_prakash_ads:
+    dependency: "direct main"
+    description:
+      name: flutter_prakash_ads
+      sha256: e7c028a5ae028ffaac22adeec84fd78d1d77ed65a2899c25d29c2bcad278def1
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2"
   flutter_prakash_core:
     dependency: "direct main"
     description:

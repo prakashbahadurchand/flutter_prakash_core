@@ -8,6 +8,7 @@ import 'package:flutter_prakash_core_example/features/splash/presentation/pages/
 import 'package:flutter_prakash_core_example/features/settings/presentation/pages/privacy_policy_page.dart';
 import 'package:flutter_prakash_core_example/features/settings/presentation/pages/report_feedback_page.dart';
 import 'package:flutter_prakash_core_example/features/settings/presentation/pages/terms_conditions_page.dart';
+import 'package:flutter_prakash_core_example/features/ads/presentation/pages/admob_showcase_page.dart';
 
 part 'app_router.gr.dart';
 
@@ -23,6 +24,7 @@ class AppRouter extends RootStackRouter {
       page: DashboardRoute.page,
       guards: [const ExampleAuthGuard(isAuthenticated: true)],
     ),
+    AutoRoute(page: AdMobShowcaseRoute.page),
     AutoRoute(page: PrivacyPolicyRoute.page),
     AutoRoute(page: TermsConditionsRoute.page),
     AutoRoute(page: ReportFeedbackRoute.page),

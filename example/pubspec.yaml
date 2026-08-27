@@ -15,6 +15,9 @@ dependencies:
   flutter_prakash_core:
     path: ../
 
+  # AdMob & Monetization
+  flutter_prakash_ads: ^0.0.2
+
   # State Management
   bloc: ^9.2.1
   flutter_bloc: ^9.1.1

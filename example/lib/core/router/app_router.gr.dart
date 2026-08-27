@@ -11,6 +11,22 @@
 part of 'app_router.dart';
 
 /// generated route for
+/// [AdMobShowcasePage]
+class AdMobShowcaseRoute extends PageRouteInfo<void> {
+  const AdMobShowcaseRoute({List<PageRouteInfo>? children})
+    : super(AdMobShowcaseRoute.name, initialChildren: children);
+
+  static const String name = 'AdMobShowcaseRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AdMobShowcasePage();
+    },
+  );
+}
+
+/// generated route for
 /// [DashboardPage]
 class DashboardRoute extends PageRouteInfo<void> {
   const DashboardRoute({List<PageRouteInfo>? children})
