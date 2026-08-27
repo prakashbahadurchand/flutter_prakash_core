@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_prakash_ads/flutter_prakash_ads.dart';
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
 import 'package:flutter_prakash_core_example/config/config.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 @module
@@ -17,9 +19,21 @@ abstract class RegisterModule {
     ),
   );
 
+  @lazySingleton
+  InternetConnection provideInternetConnection() => InternetConnection();
+
+  @lazySingleton
+  NetworkInfo provideNetworkInfo() => NetworkInfoImpl();
+
   @preResolve
   Future<SharedPreferences> get sharedPreferences =>
       SharedPreferences.getInstance();
+
+  @lazySingleton
+  AdsService provideAdsService() => AdsServiceImpl();
+
+  @lazySingleton
+  AppOpenAdManager provideAppOpenAdManager() => AppOpenAdManager.instance;
 
   @lazySingleton
   FlutterSecureStorage get secureStorage => const FlutterSecureStorage(

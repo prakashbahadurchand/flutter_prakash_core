@@ -3,8 +3,11 @@ import 'package:flutter_prakash_core/flutter_prakash_core.dart';
 import 'package:flutter_prakash_core_example/config/config.dart';
 import 'package:flutter_prakash_core_example/core/core.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/auth_cubit.dart';
+import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/auth_state.dart';
 import 'package:flutter_prakash_core_example/features/dashboard/presentation/blocs/dashboard_cubit.dart';
 import 'package:flutter_prakash_core_example/features/dashboard/presentation/blocs/dashboard_state.dart';
+import 'package:flutter_prakash_core_example/features/settings/presentation/widgets/settings_card.dart';
+import 'package:flutter_prakash_core_example/features/settings/presentation/widgets/settings_tile.dart';
 
 class DashboardFourthTabView extends StatelessWidget {
   final DashboardState state;
@@ -20,101 +23,111 @@ class DashboardFourthTabView extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       children: [
-        // Profile Hero Header
-        Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(24),
-            gradient: LinearGradient(
-              colors: [scheme.primary, scheme.secondary],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: scheme.primary.withValues(alpha: 0.3),
-                blurRadius: 16,
-                offset: const Offset(0, 6),
-              ),
-            ],
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: 64,
-                height: 64,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                  border: Border.all(color: Colors.white, width: 3),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.15),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
+        // Profile Hero Header with dynamic user data
+        BlocSelector<AuthCubit, AuthState, (String, String)>(
+          selector: (authState) => switch (authState) {
+            Authenticated(:final user) => (user.name, user.email),
+            _ => ('Prakash B. Chand', 'prakash@chand.dev'),
+          },
+          builder: (context, userData) {
+            final (name, email) = userData;
+
+            return Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(24),
+                gradient: LinearGradient(
+                  colors: [scheme.primary, scheme.secondary],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
-                child: const Icon(
-                  Icons.person_rounded,
-                  size: 38,
-                  color: AppPalette.primary,
-                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: scheme.primary.withValues(alpha: 0.3),
+                    blurRadius: 16,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
               ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Prakash B. Chand',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      'prakash@chand.dev',
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.85),
-                        fontSize: 13,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: const Text(
-                        'Verified Developer',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
+              child: Row(
+                children: [
+                  Container(
+                    width: 64,
+                    height: 64,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      border: Border.all(color: Colors.white, width: 3),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.15),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
+                    child: const Icon(
+                      Icons.person_rounded,
+                      size: 38,
+                      color: AppPalette.primary,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          name,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          email,
+                          style: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.85),
+                            fontSize: 13,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: const Text(
+                            'Verified Developer',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         ),
         const SizedBox(height: 24),
 
         // Section 1: Appearance & Theme
         _buildSectionHeader(context, 'Appearance & Localization'),
         const SizedBox(height: 10),
-        _SettingsCard(
+        SettingsCard(
           children: [
-            _SettingsTile(
+            SettingsTile(
               icon: Icons.palette_outlined,
               iconColor: AppPalette.primary,
               title: 'Theme Mode',
@@ -151,7 +164,7 @@ class DashboardFourthTabView extends StatelessWidget {
               ),
             ),
             const Divider(height: 1),
-            _SettingsTile(
+            SettingsTile(
               icon: Icons.language_rounded,
               iconColor: AppPalette.primary,
               title: 'Language',
@@ -204,9 +217,9 @@ class DashboardFourthTabView extends StatelessWidget {
         // Section 2: Preferences & Security
         _buildSectionHeader(context, 'Security & Privacy'),
         const SizedBox(height: 10),
-        _SettingsCard(
+        SettingsCard(
           children: [
-            _SettingsTile(
+            SettingsTile(
               icon: Icons.lock_reset_rounded,
               iconColor: AppPalette.primary,
               title: 'Change Password',
@@ -214,48 +227,68 @@ class DashboardFourthTabView extends StatelessWidget {
               onTap: () => context.router.push(const ChangePasswordRoute()),
             ),
             const Divider(height: 1),
-            _SettingsTile(
-              icon: Icons.fingerprint_rounded,
-              iconColor: AppPalette.secondary,
-              title: 'Biometric Login',
-              subtitle: 'Use Fingerprint or Face ID for fast sign-in',
-              trailing: Switch.adaptive(
-                value: state.biometricsEnabled,
-                onChanged: cubit.toggleBiometrics,
-              ),
+            BlocSelector<DashboardCubit, DashboardState, bool>(
+              selector: (s) => s.biometricsEnabled,
+              builder: (context, biometricsEnabled) {
+                return SettingsTile(
+                  icon: Icons.fingerprint_rounded,
+                  iconColor: AppPalette.secondary,
+                  title: 'Biometric Login',
+                  subtitle: 'Use Fingerprint or Face ID for fast sign-in',
+                  trailing: Switch.adaptive(
+                    value: biometricsEnabled,
+                    onChanged: cubit.toggleBiometrics,
+                  ),
+                );
+              },
             ),
             const Divider(height: 1),
-            _SettingsTile(
-              icon: Icons.notifications_active_outlined,
-              iconColor: AppPalette.warning,
-              title: 'Push Notifications',
-              subtitle: 'Receive alerts & real-time updates',
-              trailing: Switch.adaptive(
-                value: state.notificationsEnabled,
-                onChanged: cubit.toggleNotifications,
-              ),
+            BlocSelector<DashboardCubit, DashboardState, bool>(
+              selector: (s) => s.notificationsEnabled,
+              builder: (context, notificationsEnabled) {
+                return SettingsTile(
+                  icon: Icons.notifications_active_outlined,
+                  iconColor: AppPalette.warning,
+                  title: 'Push Notifications',
+                  subtitle: 'Receive alerts & real-time updates',
+                  trailing: Switch.adaptive(
+                    value: notificationsEnabled,
+                    onChanged: cubit.toggleNotifications,
+                  ),
+                );
+              },
             ),
             const Divider(height: 1),
-            _SettingsTile(
-              icon: Icons.analytics_outlined,
-              iconColor: AppPalette.info,
-              title: 'Usage Analytics',
-              subtitle: 'Help improve engine reliability',
-              trailing: Switch.adaptive(
-                value: state.analyticsEnabled,
-                onChanged: cubit.toggleAnalytics,
-              ),
+            BlocSelector<DashboardCubit, DashboardState, bool>(
+              selector: (s) => s.analyticsEnabled,
+              builder: (context, analyticsEnabled) {
+                return SettingsTile(
+                  icon: Icons.analytics_outlined,
+                  iconColor: AppPalette.info,
+                  title: 'Usage Analytics',
+                  subtitle: 'Help improve engine reliability',
+                  trailing: Switch.adaptive(
+                    value: analyticsEnabled,
+                    onChanged: cubit.toggleAnalytics,
+                  ),
+                );
+              },
             ),
             const Divider(height: 1),
-            _SettingsTile(
-              icon: Icons.bug_report_outlined,
-              iconColor: AppPalette.error,
-              title: 'Crash Reporting',
-              subtitle: 'Send non-fatal error reports',
-              trailing: Switch.adaptive(
-                value: state.crashlyticsEnabled,
-                onChanged: cubit.toggleCrashlytics,
-              ),
+            BlocSelector<DashboardCubit, DashboardState, bool>(
+              selector: (s) => s.crashlyticsEnabled,
+              builder: (context, crashlyticsEnabled) {
+                return SettingsTile(
+                  icon: Icons.bug_report_outlined,
+                  iconColor: AppPalette.error,
+                  title: 'Crash Reporting',
+                  subtitle: 'Send non-fatal error reports',
+                  trailing: Switch.adaptive(
+                    value: crashlyticsEnabled,
+                    onChanged: cubit.toggleCrashlytics,
+                  ),
+                );
+              },
             ),
           ],
         ),
@@ -264,9 +297,9 @@ class DashboardFourthTabView extends StatelessWidget {
         // Section 3: Engine Maintenance
         _buildSectionHeader(context, 'Storage & Maintenance'),
         const SizedBox(height: 10),
-        _SettingsCard(
+        SettingsCard(
           children: [
-            _SettingsTile(
+            SettingsTile(
               icon: Icons.cleaning_services_rounded,
               iconColor: AppPalette.pink,
               title: 'Clear Cache & Temp Files',
@@ -274,7 +307,7 @@ class DashboardFourthTabView extends StatelessWidget {
               onTap: cubit.clearCache,
             ),
             const Divider(height: 1),
-            _SettingsTile(
+            SettingsTile(
               icon: Icons.build_circle_outlined,
               iconColor: AppPalette.primary,
               title: 'Open DevTools',
@@ -288,9 +321,9 @@ class DashboardFourthTabView extends StatelessWidget {
         // Section 4: About & Legal
         _buildSectionHeader(context, 'About & Legal'),
         const SizedBox(height: 10),
-        _SettingsCard(
+        SettingsCard(
           children: [
-            _SettingsTile(
+            const SettingsTile(
               icon: Icons.info_outline_rounded,
               iconColor: AppPalette.slate500,
               title: 'Engine Version',
@@ -298,7 +331,7 @@ class DashboardFourthTabView extends StatelessWidget {
                   '${AppConstants.appVersion} (Build ${AppConstants.appBuildNumber}) • Clean Core',
             ),
             const Divider(height: 1),
-            _SettingsTile(
+            SettingsTile(
               icon: Icons.privacy_tip_outlined,
               iconColor: AppPalette.slate500,
               title: 'Privacy Policy',
@@ -306,7 +339,7 @@ class DashboardFourthTabView extends StatelessWidget {
               onTap: () => context.router.push(const PrivacyPolicyRoute()),
             ),
             const Divider(height: 1),
-            _SettingsTile(
+            SettingsTile(
               icon: Icons.description_outlined,
               iconColor: AppPalette.slate500,
               title: 'Terms of Service',
@@ -314,7 +347,7 @@ class DashboardFourthTabView extends StatelessWidget {
               onTap: () => context.router.push(const TermsAndConditionsRoute()),
             ),
             const Divider(height: 1),
-            _SettingsTile(
+            SettingsTile(
               icon: Icons.feedback_outlined,
               iconColor: AppPalette.slate500,
               title: 'Report Feedback',
@@ -378,112 +411,6 @@ class DashboardFourthTabView extends StatelessWidget {
           fontWeight: FontWeight.w700,
           color: Theme.of(context).colorScheme.primary,
           letterSpacing: 0.8,
-        ),
-      ),
-    );
-  }
-}
-
-class _SettingsCard extends StatelessWidget {
-  final List<Widget> children;
-
-  const _SettingsCard({required this.children});
-
-  @override
-  Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return Container(
-      decoration: BoxDecoration(
-        color: AppPalette.surface(isDark),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: isDark ? Colors.grey.shade800 : Colors.grey.shade200,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: Column(children: children),
-      ),
-    );
-  }
-}
-
-class _SettingsTile extends StatelessWidget {
-  final IconData icon;
-  final Color iconColor;
-  final String title;
-  final String subtitle;
-  final Widget? trailing;
-  final VoidCallback? onTap;
-
-  const _SettingsTile({
-    required this.icon,
-    required this.iconColor,
-    required this.title,
-    required this.subtitle,
-    this.trailing,
-    this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: iconColor.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(icon, color: iconColor, size: 22),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: isDark
-                          ? Colors.grey.shade400
-                          : Colors.grey.shade600,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            ?trailing,
-            if (trailing == null && onTap != null)
-              Icon(
-                Icons.chevron_right_rounded,
-                color: isDark ? Colors.grey.shade600 : Colors.grey.shade400,
-                size: 20,
-              ),
-          ],
         ),
       ),
     );

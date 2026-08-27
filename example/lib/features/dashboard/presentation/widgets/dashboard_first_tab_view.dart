@@ -16,63 +16,59 @@ class DashboardFirstTabView extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       children: [
         // Hero Header Card
-        BlocBuilder<AuthCubit, AuthState>(
-          builder: (context, authState) {
-            final userName = switch (authState) {
-              Authenticated(:final user) => user.name,
-              _ => 'Prakash B. Chand',
-            };
-
-            return Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(24),
-                gradient: const LinearGradient(
-                  colors: [AppPalette.primary, AppPalette.primaryDark],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppPalette.primary.withValues(alpha: 0.3),
-                    blurRadius: 20,
-                    offset: const Offset(0, 8),
-                  ),
-                ],
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            gradient: const LinearGradient(
+              colors: [AppPalette.primary, AppPalette.primaryDark],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: AppPalette.primary.withValues(alpha: 0.3),
+                blurRadius: 20,
+                offset: const Offset(0, 8),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              radius: 22,
-                              backgroundColor:
-                                  Colors.white.withValues(alpha: 0.2),
-                              child: const Icon(
-                                Icons.person_rounded,
-                                color: Colors.white,
+                  Expanded(
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 22,
+                          backgroundColor: Colors.white.withValues(alpha: 0.2),
+                          child: const Icon(
+                            Icons.person_rounded,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Welcome back,',
+                                style: TextStyle(
+                                  color: Colors.white.withValues(alpha: 0.8),
+                                  fontSize: 12,
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Welcome back,',
-                                    style: TextStyle(
-                                      color: Colors.white.withValues(
-                                        alpha: 0.8,
-                                      ),
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                  Text(
+                              BlocSelector<AuthCubit, AuthState, String>(
+                                selector: (authState) => switch (authState) {
+                                  Authenticated(:final user) => user.name,
+                                  _ => 'Prakash B. Chand',
+                                },
+                                builder: (context, userName) {
+                                  return Text(
                                     userName,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
@@ -81,66 +77,66 @@ class DashboardFirstTabView extends StatelessWidget {
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
                                     ),
-                                  ),
-                                ],
+                                  );
+                                },
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const Row(
-                          children: [
-                            Icon(
-                              Icons.circle,
-                              color: AppPalette.success,
-                              size: 8,
-                            ),
-                            SizedBox(width: 6),
-                            Text(
-                              'ENGINE ONLINE',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 0.8,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    AppConstants.appTagline,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    'State-driven dashboard powered by Clean Architecture and reactive BLoC patterns.',
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 13,
-                      height: 1.4,
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Row(
+                      children: [
+                        Icon(
+                          Icons.circle,
+                          color: AppPalette.success,
+                          size: 8,
+                        ),
+                        SizedBox(width: 6),
+                        Text(
+                          'ENGINE ONLINE',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.8,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-            );
-          },
+              const SizedBox(height: 16),
+              Text(
+                AppConstants.appTagline,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                'State-driven dashboard powered by Clean Architecture and reactive BLoC patterns.',
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 13,
+                  height: 1.4,
+                ),
+              ),
+            ],
+          ),
         ),
         const SizedBox(height: 24),
 

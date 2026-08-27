@@ -4,6 +4,10 @@ import 'package:flutter_prakash_core_example/core/di/injection.config.dart';
 
 final getIt = GetIt.instance;
 
-@InjectableInit(preferRelativeImports: true, asExtension: true)
+@InjectableInit(
+  initializerName: 'init',
+  preferRelativeImports: true,
+  asExtension: true,
+)
 Future<void> configureDependencies({String? environment}) async =>
     getIt.init(environment: environment);

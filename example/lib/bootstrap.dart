@@ -24,8 +24,8 @@ Future<void> bootstrap({String? environment}) async {
     tag: 'BOOTSTRAP',
   );
 
-  // Initialize Google Mobile Ads via core helper
-  await AppAdsHelper.initializeAds();
+  // Initialize Ads & Consent flow
+  await MyAdsService.initFromMain();
 
   runApp(const MyApp());
 }
