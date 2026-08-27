@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_prakash_core/src/loggers/flutter_logger.dart';
 
@@ -16,6 +17,8 @@ class FirebaseCloudMessagingManager {
   FirebaseCloudMessagingManager._();
 
   static final FirebaseMessaging _messaging = FirebaseMessaging.instance;
+  static StreamSubscription<RemoteMessage>? _foregroundMessageSubscription;
+  static StreamSubscription<RemoteMessage>? _messageOpenedAppSubscription;
 
   /// Initializes FCM setup, registers background handler, and requests permissions.
   static Future<NotificationSettings> initialize({
@@ -27,8 +30,12 @@ class FirebaseCloudMessagingManager {
     // Register background message handler
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
+    // Cancel existing listeners before re-subscribing
+    _foregroundMessageSubscription?.cancel();
+    _messageOpenedAppSubscription?.cancel();
+
     // Listen to foreground messages
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    _foregroundMessageSubscription = FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       FlutterLogger.info(
         'Foreground FCM message received: ${message.notification?.title}',
         tag: 'MESSAGING',
@@ -37,7 +44,7 @@ class FirebaseCloudMessagingManager {
     });
 
     // Listen to messages opened when app is in background/terminated
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    _messageOpenedAppSubscription = FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       FlutterLogger.info(
         'App opened via FCM notification: ${message.notification?.title}',
         tag: 'MESSAGING',
@@ -46,6 +53,14 @@ class FirebaseCloudMessagingManager {
     });
 
     return settings;
+  }
+
+  /// Cancels active message stream subscriptions.
+  static void dispose() {
+    _foregroundMessageSubscription?.cancel();
+    _foregroundMessageSubscription = null;
+    _messageOpenedAppSubscription?.cancel();
+    _messageOpenedAppSubscription = null;
   }
 
   /// Requests notification permissions on iOS / macOS / Web / Android 13+.

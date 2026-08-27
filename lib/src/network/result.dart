@@ -1,10 +1,10 @@
-import 'dart:async';
-import 'exceptions.dart';
+import 'dart:async' as async;
+import 'exceptions.dart' hide TimeoutException;
 import 'failures.dart';
 
 /// Type alias for cleaner repository signatures.
 /// Example: `FutureResult<User>` instead of `Future<Result<User>>`
-typedef FutureResult<T> = Future<Result<T>>;
+typedef FutureResult<T> = async.Future<Result<T>>;
 
 /// A sealed class representing either a successful outcome with data [T]
 /// or a failed outcome with a domain [Failure].
@@ -22,7 +22,7 @@ sealed class Result<T> {
   /// - Catches any thrown exceptions and processes them via optional [onError].
   /// - Runs optional [onSuccess] when the call succeeds.
   static FutureResult<T> fromAsync<T>({
-    required Future<T> Function() call,
+    required async.Future<T> Function() call,
     T Function(T data)? onSuccess,
     Failure Function(Object error, StackTrace stackTrace)? onError,
   }) async {
@@ -56,8 +56,12 @@ sealed class Result<T> {
         );
       } else if (error is FilePickerException) {
         return Result.error(FilePickerFailure(error.message));
-      } else if (error is TimeoutException) {
+      } else if (error is AppTimeoutException) {
         return Result.error(TimeoutFailure(error.message));
+      } else if (error is async.TimeoutException) {
+        return Result.error(
+          TimeoutFailure(error.message ?? 'Request timed out. Please try again.'),
+        );
       } else if (error is CancellationException) {
         return Result.error(CancelledFailure(error.message));
       } else if (error is ValidationException) {

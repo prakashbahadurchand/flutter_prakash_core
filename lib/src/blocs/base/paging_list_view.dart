@@ -41,6 +41,7 @@ class _PagingListViewState<C extends BasePagingCubit<T>, T>
   }
 
   void _onScroll() {
+    if (!_scrollController.hasClients) return;
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
       final cubit = widget.cubit ?? context.read<C>();

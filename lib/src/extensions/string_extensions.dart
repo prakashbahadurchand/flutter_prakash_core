@@ -46,7 +46,11 @@ extension StringExtensions on String {
   String ifEmpty(String another) => isEmpty ? another : this;
 
   String toPrettyJson() {
-    return "\n${"=" * 100}\n|| Pretty JSON ||:\n${"-" * 100}\n${const JsonEncoder.withIndent("\t").convert(jsonDecode(this))}\n${"-" * 100}\n";
+    try {
+      return "\n${"=" * 100}\n|| Pretty JSON ||:\n${"-" * 100}\n${const JsonEncoder.withIndent("\t").convert(jsonDecode(this))}\n${"-" * 100}\n";
+    } catch (_) {
+      return this;
+    }
   }
 
   void toPrintPrettyJson() {

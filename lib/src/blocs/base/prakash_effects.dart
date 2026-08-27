@@ -134,8 +134,15 @@ class _PrakashEffectListenerState extends State<PrakashEffectListener> {
         if (stream != null) {
           _subscription = stream.listen(_handleEffect);
         }
-      } catch (_) {
-        // Silently ignore if cubit does not expose effectStream
+      } catch (e) {
+        // In debug mode, surface the error so developers notice wrong cubit types.
+        assert(() {
+          debugPrint(
+            'PrakashEffectListener: cubit ${cubit.runtimeType} does not expose '
+            'effectStream — $e',
+          );
+          return true;
+        }());
       }
     }
   }

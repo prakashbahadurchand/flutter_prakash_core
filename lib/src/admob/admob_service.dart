@@ -429,5 +429,7 @@ class AdMobService {
     InterstitialAdManager.dispose();
     RewardedAdManager.dispose();
     _appOpenAdManager?.dispose();
+    _appLifecycleReactor?.dispose();
+    _isInitialized = false;
   }
 }

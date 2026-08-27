@@ -43,15 +43,8 @@ abstract class BasePrefs {
     } else {
       // Set Enum
       unawaited(setEnum(key, value, values));
-      return null;
+      return value;
     }
-    /*final existingValue = getEnum<T>(key, values);
-    if (existingValue != null) {
-      return existingValue;
-    } else {
-      setEnum(key, defaultValue, values);
-      return defaultValue;
-    }*/
   }
 
   static T? getOrSetModel<T>(
@@ -206,8 +199,11 @@ abstract class BasePrefs {
         await prefs.setDouble(key, value);
       } else if (value is bool) {
         await prefs.setBool(key, value);
-      } else if (value is List<String>) {
-        await prefs.setStringList(key, List<String>.from(value));
+      } else if (value is List) {
+        await prefs.setStringList(
+          key,
+          value.map((e) => e.toString()).toList(),
+        );
       }
     }
   }

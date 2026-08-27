@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter_prakash_core/src/admob/app_open_ad_manager.dart';
 import 'package:flutter_prakash_core/src/loggers/flutter_logger.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -8,15 +9,15 @@ class AppLifecycleReactor {
 
   final AppOpenAdManager appOpenAdManager;
   bool _hasBeenBackgrounded = false;
-  bool _isListening = false;
+  StreamSubscription<AppState>? _appStateSubscription;
 
   /// Starts listening to app state transitions (background / foreground).
   void listenToAppStateChanges() {
-    if (_isListening) return;
-    _isListening = true;
+    if (_appStateSubscription != null) return;
 
     AppStateEventNotifier.startListening();
-    AppStateEventNotifier.appStateStream.listen(_onAppStateChanged);
+    _appStateSubscription =
+        AppStateEventNotifier.appStateStream.listen(_onAppStateChanged);
   }
 
   void _onAppStateChanged(AppState appState) {
@@ -31,5 +32,12 @@ class AppLifecycleReactor {
     } else if (appState == AppState.foreground && _hasBeenBackgrounded) {
       appOpenAdManager.showAdIfAvailable();
     }
+  }
+
+  /// Disposes stream subscription and resets lifecycle state.
+  void dispose() {
+    _appStateSubscription?.cancel();
+    _appStateSubscription = null;
+    _hasBeenBackgrounded = false;
   }
 }

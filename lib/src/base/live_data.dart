@@ -57,39 +57,3 @@ class LiveData<T> implements ValueListenable<T> {
   Widget listens(Widget Function(BuildContext, T, Widget?) builder) =>
       ValueListenableBuilder<T>(valueListenable: _notifier, builder: builder);
 }
-
-// Live Data for Flutter HookWidget:
-
-/*LiveData<T> useLiveData<T>(T initialValue) {
-  return use(_LiveDataHook(initialValue));
-}
-
-class _LiveDataHook<T> extends Hook<LiveData<T>> {
-  final T initialValue;
-
-  const _LiveDataHook(this.initialValue);
-
-  @override
-  _LiveDataHookState<T> createState() => _LiveDataHookState<T>();
-}
-
-class _LiveDataHookState<T> extends HookState<LiveData<T>, _LiveDataHook<T>> {
-  late LiveData<T> _liveData;
-
-  @override
-  void initHook() {
-    super.initHook();
-    _liveData = LiveData<T>(hook.initialValue);
-  }
-
-  @override
-  LiveData<T> build(BuildContext context) {
-    return _liveData;
-  }
-
-  @override
-  void dispose() {
-    _liveData.dispose();
-    super.dispose();
-  }
-}*/

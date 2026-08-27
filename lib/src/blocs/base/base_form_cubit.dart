@@ -111,6 +111,9 @@ abstract class BaseFormCubit<S extends FormCubitState<R>, R>
   /// 2. Emits `FormStatus.inProgress`.
   /// 3. Calls [call] which must return `Result<R>`.
   /// 4. Maps success/error and emits the appropriate status.
+  ///
+  /// **Subclass contract**: Your concrete state's `copyWith()` must return `S`
+  /// (not the base `FormCubitState<R>`) to avoid runtime `_CastError`.
   Future<void> submitForm({
     required Future<Result<R>> Function() call,
     void Function(R data)? onSuccess,

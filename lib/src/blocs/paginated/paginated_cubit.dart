@@ -92,7 +92,7 @@ abstract class PaginatedCubit<T, F> extends Cubit<PaginatedState<T, F>> {
 
   /// Inserts a newly created item into the list without requiring a full network refetch.
   void insertItem(T item, [int index = 0]) {
-    final updated = List<T>.from(currentItems);
+    final updated = List<T>.of(currentItems);
     if (index >= 0 && index <= updated.length) {
       updated.insert(index, item);
     } else {
@@ -103,7 +103,7 @@ abstract class PaginatedCubit<T, F> extends Cubit<PaginatedState<T, F>> {
 
   /// Updates an item in-place matching the [matcher] predicate.
   void updateItem(bool Function(T item) matcher, T updatedItem) {
-    final updated = List<T>.from(currentItems);
+    final updated = List<T>.of(currentItems);
     final idx = updated.indexWhere(matcher);
     if (idx != -1) {
       updated[idx] = updatedItem;
@@ -113,7 +113,7 @@ abstract class PaginatedCubit<T, F> extends Cubit<PaginatedState<T, F>> {
 
   /// Removes an item in-place matching the [matcher] predicate.
   void removeItem(bool Function(T item) matcher) {
-    final updated = List<T>.from(currentItems);
+    final updated = List<T>.of(currentItems);
     final idx = updated.indexWhere(matcher);
     if (idx != -1) {
       updated.removeAt(idx);
@@ -147,8 +147,13 @@ abstract class PaginatedCubit<T, F> extends Cubit<PaginatedState<T, F>> {
 
   /// Loads the given [pageKey] and emits updated [PaginatedState].
   /// Guarantees out-of-order responses from stale requests are discarded.
+  ///
+  /// Returns items to [PagingController] which manages its own page/key state.
+  /// Only [PaginatedState] (BLoC state) is mutated here for UI tracking.
   Future<List<T>> loadPage(int pageKey) async {
-    final requestId = ++_activeRequestId;
+    // Capture current request ID — don't increment here since
+    // _abortInFlightRequest() already manages the ID on refresh/search.
+    final requestId = _activeRequestId;
     final cancelToken = CancelToken();
     _currentCancelToken = cancelToken;
 
@@ -160,7 +165,7 @@ abstract class PaginatedCubit<T, F> extends Cubit<PaginatedState<T, F>> {
       cancelToken: cancelToken,
     );
 
-    // If a newer search query or refresh was triggered, discard this stale response!
+    // If a newer search query or refresh was triggered, discard this stale response.
     if (requestId != _activeRequestId || isClosed) {
       return [];
     }
@@ -168,23 +173,16 @@ abstract class PaginatedCubit<T, F> extends Cubit<PaginatedState<T, F>> {
     return result.when(
       success: (items) {
         final isLast = items.length < pageSize;
-        final currentPages = pagingController.value.pages ?? [];
-        final currentKeys = pagingController.value.keys ?? [];
 
-        pagingController.value = PagingState<int, T>(
-          pages: [...currentPages, items],
-          keys: [...currentKeys, pageKey],
-          error: null,
-          hasNextPage: !isLast,
-        );
-
-        final total = pagingController.value.items?.length ?? items.length;
+        // Let PagingController manage its own pages/keys internally.
+        // We only update our BLoC state for UI tracking purposes.
+        final currentTotal = (pagingController.value.items?.length ?? 0) + items.length;
 
         if (!isClosed) {
           emit(
             state.copyWith(
               status: const BlocStatus.success(),
-              totalLoaded: total,
+              totalLoaded: currentTotal,
               isLastPage: isLast,
             ),
           );
@@ -192,16 +190,10 @@ abstract class PaginatedCubit<T, F> extends Cubit<PaginatedState<T, F>> {
         return items;
       },
       error: (appError) {
-        // If the request was cancelled intentionally due to debounce/refresh, do not mark as failure
-        if (cancelToken.isCancelled) return [];
+        // If the request was cancelled intentionally due to debounce/refresh, do not mark as failure.
+        if (cancelToken.isCancelled) return <T>[];
 
         final errorMsg = appError.errorMessage;
-        pagingController.value = PagingState<int, T>(
-          pages: pagingController.value.pages,
-          keys: pagingController.value.keys,
-          error: errorMsg,
-          hasNextPage: pagingController.value.hasNextPage,
-        );
         if (!isClosed) {
           emit(state.copyWith(status: BlocStatus.failure(errorMsg)));
         }

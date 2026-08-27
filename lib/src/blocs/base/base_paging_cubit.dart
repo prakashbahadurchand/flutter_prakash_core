@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../network/result.dart';
 import '../../form/bloc_status.dart';
@@ -112,9 +113,9 @@ class BasePagingState<T> {
           status == other.status &&
           currentPage == other.currentPage &&
           isLastPage == other.isLastPage &&
-          items.length == other.items.length;
+          listEquals(items, other.items);
 
   @override
   int get hashCode =>
-      Object.hash(status, currentPage, isLastPage, items.length);
+      Object.hash(status, currentPage, isLastPage, Object.hashAll(items));
 }

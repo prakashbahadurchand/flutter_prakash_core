@@ -107,17 +107,21 @@ class FilePickerException extends AppException {
 }
 
 /// Thrown when an operation exceeds its specified time limit.
-class TimeoutException extends AppException {
+class AppTimeoutException extends AppException {
   final String message;
 
-  const TimeoutException({this.message = 'Operation timed out'});
+  const AppTimeoutException({this.message = 'Operation timed out'});
 
   @override
   List<Object?> get props => [message];
 
   @override
-  String toString() => 'TimeoutException: $message';
+  String toString() => 'AppTimeoutException: $message';
 }
+
+/// Backwards compatibility alias for [AppTimeoutException].
+@Deprecated('Use AppTimeoutException to avoid collision with dart:async.TimeoutException')
+typedef TimeoutException = AppTimeoutException;
 
 /// Thrown when an asynchronous operation is explicitly cancelled by user or system.
 class CancellationException extends AppException {
