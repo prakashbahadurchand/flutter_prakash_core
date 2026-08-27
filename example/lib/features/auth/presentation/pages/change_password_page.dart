@@ -15,9 +15,6 @@ class ChangePasswordPage extends StatefulWidget {
 
 class _ChangePasswordPageState extends State<ChangePasswordPage> {
   late final ChangePasswordCubit _cubit;
-  bool _obscureCurrent = true;
-  bool _obscureNew = true;
-  bool _obscureConfirm = true;
 
   @override
   void initState() {
@@ -41,14 +38,12 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       body: SafeArea(
         child: BlocProvider.value(
           value: _cubit,
-          child: PrakashEffectListener.fromCubit(
-            cubit: _cubit,
-            child: BlocConsumer<ChangePasswordCubit, ChangePasswordState>(
-              listener: (context, state) {
-                if (state.isSuccess) {
-                  context.router.maybePop();
-                }
-              },
+          child: ReactiveFormListener<ChangePasswordCubit, ChangePasswordState>(
+            successMessage: 'Password successfully updated!',
+            onSuccess: (context, state) {
+              context.router.maybePop();
+            },
+            child: BlocBuilder<ChangePasswordCubit, ChangePasswordState>(
               builder: (context, state) {
                 return SingleChildScrollView(
                   padding: const EdgeInsets.all(24.0),
@@ -87,60 +82,51 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                           children: [
                             ReactiveTextField(
                               field: state.currentPassword,
-                              onChanged: _cubit.currentPasswordChanged,
-                              obscureText: _obscureCurrent,
+                              onChanged: _cubit.onCurrentPasswordChanged,
+                              obscureText: state.isCurrentPasswordObscured,
                               prefixIcon: const Icon(Icons.lock_outline),
                               suffixIcon: IconButton(
                                 icon: Icon(
-                                  _obscureCurrent
+                                  state.isCurrentPasswordObscured
                                       ? Icons.visibility_outlined
                                       : Icons.visibility_off_outlined,
                                 ),
-                                onPressed: () {
-                                  setState(() {
-                                    _obscureCurrent = !_obscureCurrent;
-                                  });
-                                },
+                                onPressed:
+                                    _cubit.toggleCurrentPasswordVisibility,
                               ),
                             ),
                             const SizedBox(height: 16),
                             ReactiveTextField(
                               field: state.newPassword,
-                              onChanged: _cubit.newPasswordChanged,
-                              obscureText: _obscureNew,
+                              onChanged: _cubit.onNewPasswordChanged,
+                              obscureText: state.isNewPasswordObscured,
                               prefixIcon:
                                   const Icon(Icons.lock_reset_outlined),
                               suffixIcon: IconButton(
                                 icon: Icon(
-                                  _obscureNew
+                                  state.isNewPasswordObscured
                                       ? Icons.visibility_outlined
                                       : Icons.visibility_off_outlined,
                                 ),
-                                onPressed: () {
-                                  setState(() {
-                                    _obscureNew = !_obscureNew;
-                                  });
-                                },
+                                onPressed:
+                                    _cubit.toggleNewPasswordVisibility,
                               ),
                             ),
                             const SizedBox(height: 16),
                             ReactiveTextField(
                               field: state.confirmPassword,
-                              onChanged: _cubit.confirmPasswordChanged,
-                              obscureText: _obscureConfirm,
+                              onChanged: _cubit.onConfirmPasswordChanged,
+                              obscureText: state.isConfirmPasswordObscured,
                               prefixIcon:
                                   const Icon(Icons.check_circle_outline),
                               suffixIcon: IconButton(
                                 icon: Icon(
-                                  _obscureConfirm
+                                  state.isConfirmPasswordObscured
                                       ? Icons.visibility_outlined
                                       : Icons.visibility_off_outlined,
                                 ),
-                                onPressed: () {
-                                  setState(() {
-                                    _obscureConfirm = !_obscureConfirm;
-                                  });
-                                },
+                                onPressed:
+                                    _cubit.toggleConfirmPasswordVisibility,
                               ),
                             ),
                           ],
@@ -148,16 +134,16 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       ),
                       const SizedBox(height: 32),
                       ElevatedButton(
-                        onPressed: state.isInProgress
+                        onPressed: state.status.isLoading
                             ? null
-                            : () => _cubit.changePassword(),
+                            : () => _cubit.submit(),
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),
                         ),
-                        child: state.isInProgress
+                        child: state.status.isLoading
                             ? const SizedBox(
                                 height: 22,
                                 width: 22,

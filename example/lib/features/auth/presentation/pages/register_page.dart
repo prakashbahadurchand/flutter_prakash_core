@@ -19,8 +19,6 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   late final RegisterCubit _cubit;
-  bool _obscurePassword = true;
-  bool _obscureConfirmPassword = true;
 
   @override
   void initState() {
@@ -44,16 +42,14 @@ class _RegisterPageState extends State<RegisterPage> {
       body: SafeArea(
         child: BlocProvider.value(
           value: _cubit,
-          child: PrakashEffectListener.fromCubit(
-            cubit: _cubit,
-            child: BlocConsumer<RegisterCubit, RegisterState>(
-              listener: (context, state) {
-                if (state.isSuccess) {
-                  context.router.push(
-                    EmailVerificationRoute(email: state.email.value),
-                  );
-                }
-              },
+          child: ReactiveFormListener<RegisterCubit, RegisterState>(
+            successMessage: 'Account created successfully!',
+            onSuccess: (context, state) {
+              context.router.push(
+                EmailVerificationRoute(email: state.email.value),
+              );
+            },
+            child: BlocBuilder<RegisterCubit, RegisterState>(
               builder: (context, state) {
                 return Center(
                   child: SingleChildScrollView(
@@ -96,54 +92,46 @@ class _RegisterPageState extends State<RegisterPage> {
                             children: [
                               ReactiveTextField(
                                 field: state.fullName,
-                                onChanged: _cubit.fullNameChanged,
+                                onChanged: _cubit.onFullNameChanged,
                                 prefixIcon: const Icon(Icons.person_outline),
                               ),
                               const SizedBox(height: 14),
                               ReactiveTextField(
                                 field: state.email,
-                                onChanged: _cubit.emailChanged,
+                                onChanged: _cubit.onEmailChanged,
                                 keyboardType: TextInputType.emailAddress,
                                 prefixIcon: const Icon(Icons.email_outlined),
                               ),
                               const SizedBox(height: 14),
                               ReactiveTextField(
                                 field: state.password,
-                                onChanged: _cubit.passwordChanged,
-                                obscureText: _obscurePassword,
+                                onChanged: _cubit.onPasswordChanged,
+                                obscureText: state.isPasswordObscured,
                                 prefixIcon: const Icon(Icons.lock_outline),
                                 suffixIcon: IconButton(
                                   icon: Icon(
-                                    _obscurePassword
+                                    state.isPasswordObscured
                                         ? Icons.visibility_outlined
                                         : Icons.visibility_off_outlined,
                                   ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _obscurePassword = !_obscurePassword;
-                                    });
-                                  },
+                                  onPressed: _cubit.togglePasswordVisibility,
                                 ),
                               ),
                               const SizedBox(height: 14),
                               ReactiveTextField(
                                 field: state.confirmPassword,
-                                onChanged: _cubit.confirmPasswordChanged,
-                                obscureText: _obscureConfirmPassword,
+                                onChanged: _cubit.onConfirmPasswordChanged,
+                                obscureText: state.isConfirmPasswordObscured,
                                 prefixIcon:
                                     const Icon(Icons.lock_reset_outlined),
                                 suffixIcon: IconButton(
                                   icon: Icon(
-                                    _obscureConfirmPassword
+                                    state.isConfirmPasswordObscured
                                         ? Icons.visibility_outlined
                                         : Icons.visibility_off_outlined,
                                   ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _obscureConfirmPassword =
-                                          !_obscureConfirmPassword;
-                                    });
-                                  },
+                                  onPressed:
+                                      _cubit.toggleConfirmPasswordVisibility,
                                 ),
                               ),
                               const SizedBox(height: 12),
@@ -156,11 +144,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                     height: 24,
                                     width: 24,
                                     child: Checkbox(
-                                      value: state.agreeToTerms,
-                                      onChanged: (v) =>
-                                          _cubit.agreeToTermsChanged(
-                                            v ?? false,
-                                          ),
+                                      value: state.agreeToTerms.value,
+                                      onChanged: _cubit.onAgreeToTermsChanged,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(4),
                                       ),
@@ -215,9 +200,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
                               // Submit Button
                               ElevatedButton(
-                                onPressed: state.isInProgress
+                                onPressed: state.status.isLoading
                                     ? null
-                                    : () => _cubit.register(),
+                                    : () => _cubit.submit(),
                                 style: ElevatedButton.styleFrom(
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 14,
@@ -226,7 +211,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     borderRadius: BorderRadius.circular(14),
                                   ),
                                 ),
-                                child: state.isInProgress
+                                child: state.status.isLoading
                                     ? const SizedBox(
                                         height: 20,
                                         width: 20,

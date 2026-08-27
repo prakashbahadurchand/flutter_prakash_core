@@ -38,14 +38,12 @@ class _FeedbackPageState extends State<FeedbackPage> {
       body: SafeArea(
         child: BlocProvider.value(
           value: _cubit,
-          child: PrakashEffectListener.fromCubit(
-            cubit: _cubit,
-            child: BlocConsumer<FeedbackCubit, FeedbackState>(
-              listener: (context, state) {
-                if (state.isSuccess) {
-                  context.router.maybePop();
-                }
-              },
+          child: ReactiveFormListener<FeedbackCubit, FeedbackState>(
+            successMessage: 'Thank you! Your feedback has been sent.',
+            onSuccess: (context, state) {
+              context.router.maybePop();
+            },
+            child: BlocBuilder<FeedbackCubit, FeedbackState>(
               builder: (context, state) {
                 return SingleChildScrollView(
                   padding: const EdgeInsets.all(24.0),
@@ -100,7 +98,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                       ),
                       const SizedBox(height: 28),
                       ElevatedButton(
-                        onPressed: state.isInProgress
+                        onPressed: state.status.isLoading
                             ? null
                             : () => _cubit.submit(),
                         style: ElevatedButton.styleFrom(
@@ -109,7 +107,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                             borderRadius: BorderRadius.circular(16),
                           ),
                         ),
-                        child: state.isInProgress
+                        child: state.status.isLoading
                             ? const SizedBox(
                                 height: 22,
                                 width: 22,

@@ -1,91 +1,61 @@
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
-import 'package:flutter_prakash_core_example/features/auth/data/models/auth_user_model.dart';
-import 'package:flutter_prakash_core_example/features/auth/data/models/register_request_model.dart';
 import 'package:flutter_prakash_core_example/features/auth/data/repositories/auth_repository.dart';
-import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/auth_cubit.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/register/register_state.dart';
 
 @injectable
-class RegisterCubit extends BaseFormCubit<RegisterState, AuthUserModel> {
-  final AuthRepository _repository;
-  final AuthCubit _authCubit;
+class RegisterCubit extends FormCubit<RegisterState> {
+  final AuthRepository _authRepository;
 
-  RegisterCubit(this._repository, this._authCubit) : super(RegisterState());
+  RegisterCubit(this._authRepository) : super(RegisterState.initial());
 
-  void fullNameChanged(String value) {
-    final field = state.fullName(value);
-    _validateState(fullName: field);
+  void onFullNameChanged(String value) =>
+      emit(state.copyWith(fullName: state.fullName(value)));
+
+  void onEmailChanged(String value) =>
+      emit(state.copyWith(email: state.email(value)));
+
+  void onPasswordChanged(String value) {
+    final updatedPass = state.password(value);
+    emit(state.copyWith(password: updatedPass));
   }
 
-  void emailChanged(String value) {
-    final field = state.email(value);
-    _validateState(email: field);
+  void onConfirmPasswordChanged(String value) {
+    final updatedConfirm = state.confirmPassword(value);
+    emit(state.copyWith(confirmPassword: updatedConfirm));
   }
 
-  void passwordChanged(String value) {
-    final field = state.password(value);
-    _validateState(password: field);
-  }
+  void onAgreeToTermsChanged(bool? value) =>
+      emit(state.copyWith(agreeToTerms: state.agreeToTerms(value ?? false)));
 
-  void confirmPasswordChanged(String value) {
-    final field = state.confirmPassword(value);
-    _validateState(confirmPassword: field);
-  }
+  void togglePasswordVisibility() =>
+      emit(state.copyWith(isPasswordObscured: !state.isPasswordObscured));
 
-  void agreeToTermsChanged(bool value) {
-    _validateState(agreeToTerms: value);
-  }
-
-  void _validateState({
-    Field<String>? fullName,
-    Field<String>? email,
-    Field<String>? password,
-    Field<String>? confirmPassword,
-    bool? agreeToTerms,
-  }) {
-    final curFullName = fullName ?? state.fullName;
-    final curEmail = email ?? state.email;
-    final curPassword = password ?? state.password;
-    final curConfirmPassword = confirmPassword ?? state.confirmPassword;
-    final curAgree = agreeToTerms ?? state.agreeToTerms;
-
-    final isMatch = curPassword.value == curConfirmPassword.value;
-    final isValid = curFullName.isValid &&
-        curEmail.isValid &&
-        curPassword.isValid &&
-        curConfirmPassword.isValid &&
-        isMatch &&
-        curAgree;
-
-    safeEmit(state.copyWith(
-      fullName: curFullName,
-      email: curEmail,
-      password: curPassword,
-      confirmPassword: curConfirmPassword,
-      agreeToTerms: curAgree,
-      isValid: isValid,
-    ));
-  }
-
-  Future<void> register() async {
-    await submitForm(
-      call: () => _repository.register(
-        RegisterRequestModel(
-          fullName: state.fullName.value,
-          email: state.email.value,
-          password: state.password.value,
-          agreeToTerms: state.agreeToTerms,
+  void toggleConfirmPasswordVisibility() => emit(
+        state.copyWith(
+          isConfirmPasswordObscured: !state.isConfirmPasswordObscured,
         ),
-      ),
-      onSuccess: (user) {
-        _authCubit.setAuthenticatedUser(user);
-        emitEffect(
-          ShowToastEffect('Account created successfully, ${user.name}!'),
-        );
-      },
-      onError: (failure) {
-        emitEffect(ShowToastEffect(failure.errorMessage));
-      },
-    );
+      );
+
+  void reset() => emit(RegisterState.initial());
+
+  @override
+  Future<Result<dynamic>> performSubmit() {
+    if (state.password.value != state.confirmPassword.value) {
+      return Future.value(
+        const Result.error(
+          ValidationFailure('Passwords do not match'),
+        ),
+      );
+    }
+    if (!state.agreeToTerms.value) {
+      return Future.value(
+        const Result.error(
+          ValidationFailure(
+            'You must agree to the Terms and Privacy Policy',
+          ),
+        ),
+      );
+    }
+    return _authRepository.register(state.toDto());
   }
 }

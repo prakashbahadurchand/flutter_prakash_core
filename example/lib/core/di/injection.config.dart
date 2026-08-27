@@ -169,12 +169,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i402.SamplePagingCubit>(
       () => _i402.SamplePagingCubit(gh<_i75.DashboardRepository>()),
     );
-    gh.factory<_i610.OnboardingCubit>(
-      () => _i610.OnboardingCubit(gh<_i284.OnboardingRepository>())..init(),
-    );
-    gh.factory<_i856.SplashCubit>(
-      () => _i856.SplashCubit(gh<_i120.SplashRepository>()),
-    );
     gh.factory<_i700.ResetPasswordCubit>(
       () => _i700.ResetPasswordCubit(gh<_i573.AuthRepository>()),
     );
@@ -184,18 +178,23 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i65.ChangePasswordCubit>(
       () => _i65.ChangePasswordCubit(gh<_i573.AuthRepository>()),
     );
+    gh.factory<_i459.RegisterCubit>(
+      () => _i459.RegisterCubit(gh<_i573.AuthRepository>()),
+    );
     gh.factory<_i301.EmailVerificationCubit>(
       () => _i301.EmailVerificationCubit(gh<_i573.AuthRepository>()),
     );
+    gh.factory<_i389.LoginCubit>(
+      () => _i389.LoginCubit(gh<_i573.AuthRepository>()),
+    );
+    gh.factory<_i610.OnboardingCubit>(
+      () => _i610.OnboardingCubit(gh<_i284.OnboardingRepository>())..init(),
+    );
+    gh.factory<_i856.SplashCubit>(
+      () => _i856.SplashCubit(gh<_i120.SplashRepository>()),
+    );
     gh.lazySingleton<_i67.AuthCubit>(
       () => _i67.AuthCubit(gh<_i573.AuthRepository>())..init(),
-    );
-    gh.factory<_i459.RegisterCubit>(
-      () =>
-          _i459.RegisterCubit(gh<_i573.AuthRepository>(), gh<_i67.AuthCubit>()),
-    );
-    gh.factory<_i389.LoginCubit>(
-      () => _i389.LoginCubit(gh<_i573.AuthRepository>(), gh<_i67.AuthCubit>()),
     );
     gh.factory<_i627.LegalCubit>(
       () => _i627.LegalCubit(gh<_i168.CommonRepository>()),

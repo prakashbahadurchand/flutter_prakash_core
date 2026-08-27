@@ -1,38 +1,37 @@
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core_example/features/auth/data/models/forgot_password_request_model.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class ForgotPasswordState extends FormCubitState<String> {
-  final Field<String> email;
+part 'forgot_password_state.freezed.dart';
 
-  ForgotPasswordState({
-    super.status,
-    super.isValid,
-    super.failure,
-    super.result,
-    Field<String>? email,
-  }) : email = email ??
-            Field(
-              value: '',
-              labelText: 'Email Address',
-              validators: Validators.required().email(),
-            );
+@freezed
+abstract class ForgotPasswordState with _$ForgotPasswordState, FormMixin implements FormState {
+  const ForgotPasswordState._();
 
-  @override
-  ForgotPasswordState copyWith({
-    FormStatus? status,
-    bool? isValid,
-    Failure? failure,
-    String? result,
-    Field<String>? email,
-  }) {
-    return ForgotPasswordState(
-      status: status ?? this.status,
-      isValid: isValid ?? this.isValid,
-      failure: failure ?? this.failure,
-      result: result ?? this.result,
-      email: email ?? this.email,
-    );
-  }
+  const factory ForgotPasswordState({
+    required Field<String> email,
+    @Default(BlocStatus.initial()) BlocStatus status,
+  }) = _ForgotPasswordState;
+
+  factory ForgotPasswordState.initial() => ForgotPasswordState(
+        email: Field(
+          labelText: 'Email Address',
+          value: '',
+          validators: Validators.required().email(),
+        ),
+      );
 
   @override
-  List<Object?> get props => [...super.props, email];
+  List<Field<dynamic>> get formFields => [email];
+
+  @override
+  ForgotPasswordState copyWithStatus(BlocStatus status) =>
+      copyWith(status: status);
+
+  @override
+  ForgotPasswordState makeAllDirty() => copyWith(email: email.makeDirty());
+
+  ForgotPasswordRequestModel toDto() => ForgotPasswordRequestModel(
+        email: email.value.trim(),
+      );
 }

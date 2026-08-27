@@ -1,78 +1,52 @@
 import 'dart:async';
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
 import 'package:flutter_prakash_core_example/features/auth/data/models/forgot_password_request_model.dart';
-import 'package:flutter_prakash_core_example/features/auth/data/models/verify_email_request_model.dart';
 import 'package:flutter_prakash_core_example/features/auth/data/repositories/auth_repository.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/email_verification/email_verification_state.dart';
 
 @injectable
-class EmailVerificationCubit
-    extends BaseFormCubit<EmailVerificationState, bool> {
-  final AuthRepository _repository;
+class EmailVerificationCubit extends FormCubit<EmailVerificationState> {
+  final AuthRepository _authRepository;
   Timer? _timer;
 
-  EmailVerificationCubit(this._repository) : super(EmailVerificationState());
+  EmailVerificationCubit(this._authRepository)
+      : super(EmailVerificationState.initial());
 
   void init(String email) {
-    safeEmit(state.copyWith(email: email));
+    emit(state.copyWith(email: email));
     _startCountdown();
   }
 
-  void otpChanged(String value) {
-    final field = state.otpCode(value);
-    safeEmit(state.copyWith(
-      otpCode: field,
-      isValid: field.isValid && value.length == 6,
-    ));
-  }
+  void onOtpChanged(String value) =>
+      emit(state.copyWith(otpCode: state.otpCode(value)));
 
   void _startCountdown() {
     _timer?.cancel();
-    safeEmit(state.copyWith(resendCountdown: 60, canResend: false));
-
+    emit(state.copyWith(resendCountdown: 60, canResend: false));
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (state.resendCountdown <= 1) {
         timer.cancel();
-        safeEmit(state.copyWith(resendCountdown: 0, canResend: true));
+        emit(state.copyWith(resendCountdown: 0, canResend: true));
       } else {
-        safeEmit(state.copyWith(resendCountdown: state.resendCountdown - 1));
+        emit(state.copyWith(resendCountdown: state.resendCountdown - 1));
       }
     });
   }
 
   Future<void> resendCode() async {
     if (!state.canResend) return;
-
-    final result = await _repository.forgotPassword(
+    _startCountdown();
+    await _authRepository.forgotPassword(
       ForgotPasswordRequestModel(email: state.email),
     );
-
-    result.when(
-      success: (msg) {
-        emitEffect(ShowToastEffect(msg));
-        _startCountdown();
-      },
-      error: (failure) {
-        emitEffect(ShowToastEffect(failure.errorMessage));
-      },
+    emitEffect(
+      const ShowToastEffect('A fresh verification code has been dispatched.'),
     );
   }
 
-  Future<void> verifyCode() async {
-    await submitForm(
-      call: () => _repository.verifyEmail(
-        VerifyEmailRequestModel(
-          email: state.email,
-          otpCode: state.otpCode.value,
-        ),
-      ),
-      onSuccess: (_) {
-        emitEffect(const ShowToastEffect('Email verified successfully!'));
-      },
-      onError: (failure) {
-        emitEffect(ShowToastEffect(failure.errorMessage));
-      },
-    );
+  @override
+  Future<Result<dynamic>> performSubmit() {
+    return _authRepository.verifyEmail(state.toDto());
   }
 
   @override

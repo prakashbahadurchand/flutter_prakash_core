@@ -1,69 +1,61 @@
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
-import 'package:flutter_prakash_core_example/features/auth/data/models/change_password_request_model.dart';
 import 'package:flutter_prakash_core_example/features/auth/data/repositories/auth_repository.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/change_password/change_password_state.dart';
 
 @injectable
-class ChangePasswordCubit extends BaseFormCubit<ChangePasswordState, bool> {
-  final AuthRepository _repository;
+class ChangePasswordCubit extends FormCubit<ChangePasswordState> {
+  final AuthRepository _authRepository;
 
-  ChangePasswordCubit(this._repository) : super(ChangePasswordState());
+  ChangePasswordCubit(this._authRepository)
+      : super(ChangePasswordState.initial());
 
-  void currentPasswordChanged(String value) {
-    final field = state.currentPassword(value);
-    _validate(currentPassword: field);
-  }
+  void onCurrentPasswordChanged(String value) =>
+      emit(state.copyWith(currentPassword: state.currentPassword(value)));
 
-  void newPasswordChanged(String value) {
-    final field = state.newPassword(value);
-    _validate(newPassword: field);
-  }
+  void onNewPasswordChanged(String value) =>
+      emit(state.copyWith(newPassword: state.newPassword(value)));
 
-  void confirmPasswordChanged(String value) {
-    final field = state.confirmPassword(value);
-    _validate(confirmPassword: field);
-  }
+  void onConfirmPasswordChanged(String value) =>
+      emit(state.copyWith(confirmPassword: state.confirmPassword(value)));
 
-  void _validate({
-    Field<String>? currentPassword,
-    Field<String>? newPassword,
-    Field<String>? confirmPassword,
-  }) {
-    final curCurrent = currentPassword ?? state.currentPassword;
-    final curNew = newPassword ?? state.newPassword;
-    final curConfirm = confirmPassword ?? state.confirmPassword;
-
-    final isMatch = curNew.value == curConfirm.value;
-    final isValid = curCurrent.isValid &&
-        curNew.isValid &&
-        curConfirm.isValid &&
-        isMatch &&
-        curNew.value != curCurrent.value;
-
-    safeEmit(state.copyWith(
-      currentPassword: curCurrent,
-      newPassword: curNew,
-      confirmPassword: curConfirm,
-      isValid: isValid,
-    ));
-  }
-
-  Future<void> changePassword() async {
-    await submitForm(
-      call: () => _repository.changePassword(
-        ChangePasswordRequestModel(
-          currentPassword: state.currentPassword.value,
-          newPassword: state.newPassword.value,
+  void toggleCurrentPasswordVisibility() => emit(
+        state.copyWith(
+          isCurrentPasswordObscured: !state.isCurrentPasswordObscured,
         ),
-      ),
-      onSuccess: (_) {
-        emitEffect(
-          const ShowToastEffect('Password changed successfully!'),
-        );
-      },
-      onError: (failure) {
-        emitEffect(ShowToastEffect(failure.errorMessage));
-      },
-    );
+      );
+
+  void toggleNewPasswordVisibility() => emit(
+        state.copyWith(
+          isNewPasswordObscured: !state.isNewPasswordObscured,
+        ),
+      );
+
+  void toggleConfirmPasswordVisibility() => emit(
+        state.copyWith(
+          isConfirmPasswordObscured: !state.isConfirmPasswordObscured,
+        ),
+      );
+
+  void reset() => emit(ChangePasswordState.initial());
+
+  @override
+  Future<Result<dynamic>> performSubmit() {
+    if (state.newPassword.value != state.confirmPassword.value) {
+      return Future.value(
+        const Result.error(
+          ValidationFailure('New passwords do not match'),
+        ),
+      );
+    }
+    if (state.newPassword.value == state.currentPassword.value) {
+      return Future.value(
+        const Result.error(
+          ValidationFailure(
+            'New password cannot be the same as current password',
+          ),
+        ),
+      );
+    }
+    return _authRepository.changePassword(state.toDto());
   }
 }

@@ -1,79 +1,52 @@
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
-import 'package:flutter_prakash_core_example/features/auth/data/models/reset_password_request_model.dart';
 import 'package:flutter_prakash_core_example/features/auth/data/repositories/auth_repository.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/reset_password/reset_password_state.dart';
 
 @injectable
-class ResetPasswordCubit extends BaseFormCubit<ResetPasswordState, bool> {
-  final AuthRepository _repository;
+class ResetPasswordCubit extends FormCubit<ResetPasswordState> {
+  final AuthRepository _authRepository;
 
-  ResetPasswordCubit(this._repository) : super(ResetPasswordState());
+  ResetPasswordCubit(this._authRepository)
+      : super(ResetPasswordState.initial());
 
   void init(String email, {String? defaultOtp}) {
-    safeEmit(state.copyWith(
-      email: email,
-      otpCode: defaultOtp != null ? state.otpCode(defaultOtp) : state.otpCode,
-    ));
+    var initial = state.copyWith(email: email);
+    if (defaultOtp != null && defaultOtp.isNotEmpty) {
+      initial = initial.copyWith(otpCode: state.otpCode(defaultOtp));
+    }
+    emit(initial);
   }
 
-  void otpChanged(String value) {
-    final field = state.otpCode(value);
-    _validate(otpCode: field);
-  }
+  void onOtpChanged(String value) =>
+      emit(state.copyWith(otpCode: state.otpCode(value)));
 
-  void newPasswordChanged(String value) {
-    final field = state.newPassword(value);
-    _validate(newPassword: field);
-  }
+  void onNewPasswordChanged(String value) =>
+      emit(state.copyWith(newPassword: state.newPassword(value)));
 
-  void confirmPasswordChanged(String value) {
-    final field = state.confirmPassword(value);
-    _validate(confirmPassword: field);
-  }
+  void onConfirmPasswordChanged(String value) =>
+      emit(state.copyWith(confirmPassword: state.confirmPassword(value)));
 
-  void _validate({
-    Field<String>? otpCode,
-    Field<String>? newPassword,
-    Field<String>? confirmPassword,
-  }) {
-    final curOtp = otpCode ?? state.otpCode;
-    final curNew = newPassword ?? state.newPassword;
-    final curConfirm = confirmPassword ?? state.confirmPassword;
+  void toggleNewPasswordVisibility() => emit(
+        state.copyWith(isNewPasswordObscured: !state.isNewPasswordObscured),
+      );
 
-    final isMatch = curNew.value == curConfirm.value;
-    final isValid = curOtp.isValid &&
-        curNew.isValid &&
-        curConfirm.isValid &&
-        isMatch &&
-        curOtp.value.length == 6;
-
-    safeEmit(state.copyWith(
-      otpCode: curOtp,
-      newPassword: curNew,
-      confirmPassword: curConfirm,
-      isValid: isValid,
-    ));
-  }
-
-  Future<void> resetPassword() async {
-    await submitForm(
-      call: () => _repository.resetPassword(
-        ResetPasswordRequestModel(
-          email: state.email,
-          otpCode: state.otpCode.value,
-          newPassword: state.newPassword.value,
+  void toggleConfirmPasswordVisibility() => emit(
+        state.copyWith(
+          isConfirmPasswordObscured: !state.isConfirmPasswordObscured,
         ),
-      ),
-      onSuccess: (_) {
-        emitEffect(
-          const ShowToastEffect(
-            'Password has been reset successfully! Please log in.',
-          ),
-        );
-      },
-      onError: (failure) {
-        emitEffect(ShowToastEffect(failure.errorMessage));
-      },
-    );
+      );
+
+  void reset() => emit(ResetPasswordState.initial());
+
+  @override
+  Future<Result<dynamic>> performSubmit() {
+    if (state.newPassword.value != state.confirmPassword.value) {
+      return Future.value(
+        const Result.error(
+          ValidationFailure('Passwords do not match'),
+        ),
+      );
+    }
+    return _authRepository.resetPassword(state.toDto());
   }
 }

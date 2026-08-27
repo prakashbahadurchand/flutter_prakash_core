@@ -1,63 +1,64 @@
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core_example/features/auth/data/models/change_password_request_model.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class ChangePasswordState extends FormCubitState<bool> {
-  final Field<String> currentPassword;
-  final Field<String> newPassword;
-  final Field<String> confirmPassword;
+part 'change_password_state.freezed.dart';
 
-  ChangePasswordState({
-    super.status,
-    super.isValid,
-    super.failure,
-    super.result,
-    Field<String>? currentPassword,
-    Field<String>? newPassword,
-    Field<String>? confirmPassword,
-  })  : currentPassword = currentPassword ??
-            Field(
-              value: '',
-              labelText: 'Current Password',
-              validators: Validators.required(),
-            ),
-        newPassword = newPassword ??
-            Field(
-              value: '',
-              labelText: 'New Password',
-              validators: Validators.required().minLength(6),
-            ),
-        confirmPassword = confirmPassword ??
-            Field(
-              value: '',
-              labelText: 'Confirm New Password',
-              validators: Validators.required(),
-            );
+@freezed
+abstract class ChangePasswordState with _$ChangePasswordState, FormMixin implements FormState {
+  const ChangePasswordState._();
 
-  @override
-  ChangePasswordState copyWith({
-    FormStatus? status,
-    bool? isValid,
-    Failure? failure,
-    bool? result,
-    Field<String>? currentPassword,
-    Field<String>? newPassword,
-    Field<String>? confirmPassword,
-  }) {
-    return ChangePasswordState(
-      status: status ?? this.status,
-      isValid: isValid ?? this.isValid,
-      failure: failure ?? this.failure,
-      result: result ?? this.result,
-      currentPassword: currentPassword ?? this.currentPassword,
-      newPassword: newPassword ?? this.newPassword,
-      confirmPassword: confirmPassword ?? this.confirmPassword,
-    );
-  }
+  const factory ChangePasswordState({
+    required Field<String> currentPassword,
+    required Field<String> newPassword,
+    required Field<String> confirmPassword,
+    @Default(true) bool isCurrentPasswordObscured,
+    @Default(true) bool isNewPasswordObscured,
+    @Default(true) bool isConfirmPasswordObscured,
+    @Default(BlocStatus.initial()) BlocStatus status,
+  }) = _ChangePasswordState;
+
+  factory ChangePasswordState.initial() => ChangePasswordState(
+        currentPassword: Field(
+          labelText: 'Current Password',
+          value: '',
+          validators: Validators.required(),
+        ),
+        newPassword: Field(
+          labelText: 'New Password',
+          value: '',
+          validators: Validators.required().minLength(6),
+        ),
+        confirmPassword: Field(
+          labelText: 'Confirm New Password',
+          value: '',
+          validators: Validators.required(),
+        ),
+        isCurrentPasswordObscured: true,
+        isNewPasswordObscured: true,
+        isConfirmPasswordObscured: true,
+      );
 
   @override
-  List<Object?> get props => [
-    ...super.props,
-    currentPassword,
-    newPassword,
-    confirmPassword,
-  ];
+  List<Field<dynamic>> get formFields => [
+        currentPassword,
+        newPassword,
+        confirmPassword,
+      ];
+
+  @override
+  ChangePasswordState copyWithStatus(BlocStatus status) =>
+      copyWith(status: status);
+
+  @override
+  ChangePasswordState makeAllDirty() => copyWith(
+        currentPassword: currentPassword.makeDirty(),
+        newPassword: newPassword.makeDirty(),
+        confirmPassword: confirmPassword.makeDirty(),
+      );
+
+  ChangePasswordRequestModel toDto() => ChangePasswordRequestModel(
+        currentPassword: currentPassword.value,
+        newPassword: newPassword.value,
+      );
 }

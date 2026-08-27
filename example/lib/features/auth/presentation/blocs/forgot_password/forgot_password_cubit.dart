@@ -1,33 +1,21 @@
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
-import 'package:flutter_prakash_core_example/features/auth/data/models/forgot_password_request_model.dart';
 import 'package:flutter_prakash_core_example/features/auth/data/repositories/auth_repository.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/forgot_password/forgot_password_state.dart';
 
 @injectable
-class ForgotPasswordCubit extends BaseFormCubit<ForgotPasswordState, String> {
-  final AuthRepository _repository;
+class ForgotPasswordCubit extends FormCubit<ForgotPasswordState> {
+  final AuthRepository _authRepository;
 
-  ForgotPasswordCubit(this._repository) : super(ForgotPasswordState());
+  ForgotPasswordCubit(this._authRepository)
+      : super(ForgotPasswordState.initial());
 
-  void emailChanged(String value) {
-    final field = state.email(value);
-    safeEmit(state.copyWith(
-      email: field,
-      isValid: field.isValid,
-    ));
-  }
+  void onEmailChanged(String value) =>
+      emit(state.copyWith(email: state.email(value)));
 
-  Future<void> sendResetCode() async {
-    await submitForm(
-      call: () => _repository.forgotPassword(
-        ForgotPasswordRequestModel(email: state.email.value),
-      ),
-      onSuccess: (message) {
-        emitEffect(ShowToastEffect(message));
-      },
-      onError: (failure) {
-        emitEffect(ShowToastEffect(failure.errorMessage));
-      },
-    );
+  void reset() => emit(ForgotPasswordState.initial());
+
+  @override
+  Future<Result<dynamic>> performSubmit() {
+    return _authRepository.forgotPassword(state.toDto());
   }
 }

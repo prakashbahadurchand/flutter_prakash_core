@@ -41,15 +41,13 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
       body: SafeArea(
         child: BlocProvider.value(
           value: _cubit,
-          child: PrakashEffectListener.fromCubit(
-            cubit: _cubit,
-            child:
-                BlocConsumer<EmailVerificationCubit, EmailVerificationState>(
-              listener: (context, state) {
-                if (state.isSuccess) {
-                  context.router.replaceAll([const DashboardRoute()]);
-                }
-              },
+          child: ReactiveFormListener<EmailVerificationCubit,
+              EmailVerificationState>(
+            successMessage: 'Email successfully verified!',
+            onSuccess: (context, state) {
+              context.router.replaceAll([const DashboardRoute()]);
+            },
+            child: BlocBuilder<EmailVerificationCubit, EmailVerificationState>(
               builder: (context, state) {
                 return Center(
                   child: SingleChildScrollView(
@@ -91,14 +89,14 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                             children: [
                               ReactivePinCodeField(
                                 field: state.otpCode,
-                                onChanged: _cubit.otpChanged,
+                                onChanged: _cubit.onOtpChanged,
                                 length: 6,
                               ),
                               const SizedBox(height: 24),
                               ElevatedButton(
-                                onPressed: state.isInProgress
+                                onPressed: state.status.isLoading
                                     ? null
-                                    : () => _cubit.verifyCode(),
+                                    : () => _cubit.submit(),
                                 style: ElevatedButton.styleFrom(
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 14,
@@ -107,7 +105,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                                     borderRadius: BorderRadius.circular(14),
                                   ),
                                 ),
-                                child: state.isInProgress
+                                child: state.status.isLoading
                                     ? const SizedBox(
                                         height: 20,
                                         width: 20,

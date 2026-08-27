@@ -1,68 +1,64 @@
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core_example/features/auth/data/models/reset_password_request_model.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class ResetPasswordState extends FormCubitState<bool> {
-  final String email;
-  final Field<String> otpCode;
-  final Field<String> newPassword;
-  final Field<String> confirmPassword;
+part 'reset_password_state.freezed.dart';
 
-  ResetPasswordState({
-    super.status,
-    super.isValid,
-    super.failure,
-    super.result,
-    this.email = '',
-    Field<String>? otpCode,
-    Field<String>? newPassword,
-    Field<String>? confirmPassword,
-  })  : otpCode = otpCode ??
-            Field(
-              value: '',
-              labelText: 'OTP Code',
-              validators: Validators.required().exactLength(6),
-            ),
-        newPassword = newPassword ??
-            Field(
-              value: '',
-              labelText: 'New Password',
-              validators: Validators.required().minLength(6),
-            ),
-        confirmPassword = confirmPassword ??
-            Field(
-              value: '',
-              labelText: 'Confirm Password',
-              validators: Validators.required(),
-            );
+@freezed
+abstract class ResetPasswordState with _$ResetPasswordState, FormMixin implements FormState {
+  const ResetPasswordState._();
 
-  @override
-  ResetPasswordState copyWith({
-    FormStatus? status,
-    bool? isValid,
-    Failure? failure,
-    bool? result,
-    String? email,
-    Field<String>? otpCode,
-    Field<String>? newPassword,
-    Field<String>? confirmPassword,
-  }) {
-    return ResetPasswordState(
-      status: status ?? this.status,
-      isValid: isValid ?? this.isValid,
-      failure: failure ?? this.failure,
-      result: result ?? this.result,
-      email: email ?? this.email,
-      otpCode: otpCode ?? this.otpCode,
-      newPassword: newPassword ?? this.newPassword,
-      confirmPassword: confirmPassword ?? this.confirmPassword,
-    );
-  }
+  const factory ResetPasswordState({
+    required Field<String> otpCode,
+    required Field<String> newPassword,
+    required Field<String> confirmPassword,
+    @Default('') String email,
+    @Default(true) bool isNewPasswordObscured,
+    @Default(true) bool isConfirmPasswordObscured,
+    @Default(BlocStatus.initial()) BlocStatus status,
+  }) = _ResetPasswordState;
+
+  factory ResetPasswordState.initial() => ResetPasswordState(
+        otpCode: Field(
+          labelText: '6-digit Reset Code',
+          value: '',
+          validators: Validators.required().exactLength(6),
+        ),
+        newPassword: Field(
+          labelText: 'New Password',
+          value: '',
+          validators: Validators.required().minLength(6),
+        ),
+        confirmPassword: Field(
+          labelText: 'Confirm New Password',
+          value: '',
+          validators: Validators.required(),
+        ),
+        isNewPasswordObscured: true,
+        isConfirmPasswordObscured: true,
+      );
 
   @override
-  List<Object?> get props => [
-    ...super.props,
-    email,
-    otpCode,
-    newPassword,
-    confirmPassword,
-  ];
+  List<Field<dynamic>> get formFields => [
+        otpCode,
+        newPassword,
+        confirmPassword,
+      ];
+
+  @override
+  ResetPasswordState copyWithStatus(BlocStatus status) =>
+      copyWith(status: status);
+
+  @override
+  ResetPasswordState makeAllDirty() => copyWith(
+        otpCode: otpCode.makeDirty(),
+        newPassword: newPassword.makeDirty(),
+        confirmPassword: confirmPassword.makeDirty(),
+      );
+
+  ResetPasswordRequestModel toDto() => ResetPasswordRequestModel(
+        email: email.trim(),
+        otpCode: otpCode.value.trim(),
+        newPassword: newPassword.value,
+      );
 }

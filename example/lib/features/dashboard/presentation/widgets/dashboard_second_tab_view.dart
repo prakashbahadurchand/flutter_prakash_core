@@ -76,43 +76,41 @@ class _DashboardSecondTabViewState extends State<DashboardSecondTabView>
       bloc: _fetchCubit,
       builder: (context, state) {
         return switch (state) {
-          UiInitial() || UiLoading() => const Center(
-              child: CircularProgressIndicator(),
-            ),
+          UiInitial() ||
+          UiLoading() => const Center(child: CircularProgressIndicator()),
           UiFailure(:final message) => Center(
-              child: Text(message, style: const TextStyle(color: Colors.red)),
-            ),
+            child: Text(message, style: const TextStyle(color: Colors.red)),
+          ),
           UiSuccess(:final data) => ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: data.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  margin: const EdgeInsets.only(bottom: 8),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.blue,
-                      child: Text(
-                        '${index + 1}',
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 12),
-                      ),
-                    ),
-                    title: Text(
-                      data[index],
-                      style: const TextStyle(fontSize: 14),
+            padding: const EdgeInsets.all(16),
+            itemCount: data.length,
+            itemBuilder: (context, index) {
+              return Card(
+                margin: const EdgeInsets.only(bottom: 8),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: Colors.blue,
+                    child: Text(
+                      '${index + 1}',
+                      style: const TextStyle(color: Colors.white, fontSize: 12),
                     ),
                   ),
-                );
-              },
-            ),
+                  title: Text(
+                    data[index],
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                ),
+              );
+            },
+          ),
         };
       },
     );
   }
 
   Widget _buildFormDemo() {
-    return PrakashEffectListener.fromCubit(
-      cubit: _formCubit,
+    return ReactiveFormListener<SampleFormCubit, SampleFormState>(
+      successMessage: 'Form submitted successfully!',
       child: BlocBuilder<SampleFormCubit, SampleFormState>(
         bloc: _formCubit,
         builder: (context, state) {
@@ -122,7 +120,7 @@ class _DashboardSecondTabViewState extends State<DashboardSecondTabView>
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const Text(
-                  'Formz + BaseFormCubit Demo',
+                  'Formz + FormCubit Demo',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
@@ -133,32 +131,32 @@ class _DashboardSecondTabViewState extends State<DashboardSecondTabView>
                 const SizedBox(height: 16),
                 ReactiveTextField(
                   field: state.fullName,
-                  onChanged: _formCubit.fullNameChanged,
+                  onChanged: _formCubit.onFullNameChanged,
                   prefixIcon: const Icon(Icons.person_outline),
                 ),
                 const SizedBox(height: 12),
                 ReactiveTextField(
                   field: state.email,
-                  onChanged: _formCubit.emailChanged,
+                  onChanged: _formCubit.onEmailChanged,
                   keyboardType: TextInputType.emailAddress,
                   prefixIcon: const Icon(Icons.email_outlined),
                 ),
                 const SizedBox(height: 12),
                 ReactiveTextField(
                   field: state.password,
-                  onChanged: _formCubit.passwordChanged,
+                  onChanged: _formCubit.onPasswordChanged,
                   obscureText: true,
                   prefixIcon: const Icon(Icons.lock_outline),
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: state.isInProgress
+                  onPressed: state.status.isLoading
                       ? null
                       : () => _formCubit.submit(),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
-                  child: state.isInProgress
+                  child: state.status.isLoading
                       ? const SizedBox(
                           height: 20,
                           width: 20,
@@ -250,26 +248,29 @@ class _DashboardSecondTabViewState extends State<DashboardSecondTabView>
               builder: (context, state) {
                 return switch (state.uiState) {
                   UiInitial() => const Center(
-                      child: Text('Type something to search...'),
-                    ),
+                    child: Text('Type something to search...'),
+                  ),
                   UiLoading() => const Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                    child: CircularProgressIndicator(),
+                  ),
                   UiFailure(:final message) => Center(
-                      child: Text(message,
-                          style: const TextStyle(color: Colors.red)),
+                    child: Text(
+                      message,
+                      style: const TextStyle(color: Colors.red),
                     ),
-                  UiSuccess(:final data) => data.isEmpty
-                      ? const Center(child: Text('No results found'))
-                      : ListView.builder(
-                          itemCount: data.length,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              leading: const Icon(Icons.search_rounded),
-                              title: Text(data[index]),
-                            );
-                          },
-                        ),
+                  ),
+                  UiSuccess(:final data) =>
+                    data.isEmpty
+                        ? const Center(child: Text('No results found'))
+                        : ListView.builder(
+                            itemCount: data.length,
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                leading: const Icon(Icons.search_rounded),
+                                title: Text(data[index]),
+                              );
+                            },
+                          ),
                 };
               },
             ),

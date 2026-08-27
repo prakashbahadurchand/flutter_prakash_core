@@ -38,16 +38,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       body: SafeArea(
         child: BlocProvider.value(
           value: _cubit,
-          child: PrakashEffectListener.fromCubit(
-            cubit: _cubit,
-            child: BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
-              listener: (context, state) {
-                if (state.isSuccess) {
-                  context.router.push(
-                    ResetPasswordRoute(email: state.email.value),
-                  );
-                }
-              },
+          child: ReactiveFormListener<ForgotPasswordCubit, ForgotPasswordState>(
+            successMessage: 'Reset code sent to your email!',
+            onSuccess: (context, state) {
+              context.router.push(
+                ResetPasswordRoute(email: state.email.value),
+              );
+            },
+            child: BlocBuilder<ForgotPasswordCubit, ForgotPasswordState>(
               builder: (context, state) {
                 return Center(
                   child: SingleChildScrollView(
@@ -89,15 +87,15 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             children: [
                               ReactiveTextField(
                                 field: state.email,
-                                onChanged: _cubit.emailChanged,
+                                onChanged: _cubit.onEmailChanged,
                                 keyboardType: TextInputType.emailAddress,
                                 prefixIcon: const Icon(Icons.email_outlined),
                               ),
                               const SizedBox(height: 24),
                               ElevatedButton(
-                                onPressed: state.isInProgress
+                                onPressed: state.status.isLoading
                                     ? null
-                                    : () => _cubit.sendResetCode(),
+                                    : () => _cubit.submit(),
                                 style: ElevatedButton.styleFrom(
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 14,
@@ -106,7 +104,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                     borderRadius: BorderRadius.circular(14),
                                   ),
                                 ),
-                                child: state.isInProgress
+                                child: state.status.isLoading
                                     ? const SizedBox(
                                         height: 20,
                                         width: 20,

@@ -19,7 +19,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   late final LoginCubit _cubit;
-  bool _obscurePassword = true;
 
   @override
   void initState() {
@@ -42,14 +41,12 @@ class _LoginPageState extends State<LoginPage> {
       body: SafeArea(
         child: BlocProvider.value(
           value: _cubit,
-          child: PrakashEffectListener.fromCubit(
-            cubit: _cubit,
-            child: BlocConsumer<LoginCubit, LoginState>(
-              listener: (context, state) {
-                if (state.isSuccess) {
-                  context.router.replaceAll([const DashboardRoute()]);
-                }
-              },
+          child: ReactiveFormListener<LoginCubit, LoginState>(
+            successMessage: 'Welcome back!',
+            onSuccess: (context, state) {
+              context.router.replaceAll([const DashboardRoute()]);
+            },
+            child: BlocBuilder<LoginCubit, LoginState>(
               builder: (context, state) {
                 return Center(
                   child: SingleChildScrollView(
@@ -92,27 +89,23 @@ class _LoginPageState extends State<LoginPage> {
                             children: [
                               ReactiveTextField(
                                 field: state.email,
-                                onChanged: _cubit.emailChanged,
+                                onChanged: _cubit.onEmailChanged,
                                 keyboardType: TextInputType.emailAddress,
                                 prefixIcon: const Icon(Icons.email_outlined),
                               ),
                               const SizedBox(height: 16),
                               ReactiveTextField(
                                 field: state.password,
-                                onChanged: _cubit.passwordChanged,
-                                obscureText: _obscurePassword,
+                                onChanged: _cubit.onPasswordChanged,
+                                obscureText: state.isPasswordObscured,
                                 prefixIcon: const Icon(Icons.lock_outline),
                                 suffixIcon: IconButton(
                                   icon: Icon(
-                                    _obscurePassword
+                                    state.isPasswordObscured
                                         ? Icons.visibility_outlined
                                         : Icons.visibility_off_outlined,
                                   ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _obscurePassword = !_obscurePassword;
-                                    });
-                                  },
+                                  onPressed: _cubit.togglePasswordVisibility,
                                 ),
                               ),
                               const SizedBox(height: 8),
@@ -128,11 +121,8 @@ class _LoginPageState extends State<LoginPage> {
                                         height: 24,
                                         width: 24,
                                         child: Checkbox(
-                                          value: state.rememberMe,
-                                          onChanged: (v) =>
-                                              _cubit.rememberMeChanged(
-                                                v ?? false,
-                                              ),
+                                          value: state.rememberMe.value,
+                                          onChanged: _cubit.onRememberMeChanged,
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(4),
@@ -166,9 +156,9 @@ class _LoginPageState extends State<LoginPage> {
 
                               // Submit Button
                               ElevatedButton(
-                                onPressed: state.isInProgress
+                                onPressed: state.status.isLoading
                                     ? null
-                                    : () => _cubit.login(),
+                                    : () => _cubit.submit(),
                                 style: ElevatedButton.styleFrom(
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 14,
@@ -177,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                                     borderRadius: BorderRadius.circular(14),
                                   ),
                                 ),
-                                child: state.isInProgress
+                                child: state.status.isLoading
                                     ? const SizedBox(
                                         height: 20,
                                         width: 20,

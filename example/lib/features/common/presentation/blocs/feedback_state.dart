@@ -1,53 +1,48 @@
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core_example/features/common/data/models/feedback_request_model.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class FeedbackState extends FormCubitState<bool> {
-  final Field<String> feedback;
-  final Field<String> email;
+part 'feedback_state.freezed.dart';
 
-  FeedbackState({
-    super.status,
-    super.isValid,
-    super.failure,
-    super.result,
-    Field<String>? feedback,
-    Field<String>? email,
-  })  : feedback = feedback ??
-            Field(
-              labelText: 'Feedback / Report',
-              hintText: 'Describe your feedback or issue...',
-              value: '',
-              validators: Validators.required().minLength(10),
-            ),
-        email = email ??
-            Field(
-              labelText: 'Email Address (Optional)',
-              hintText: 'Enter your email for follow-up...',
-              value: '',
-            );
+@freezed
+abstract class FeedbackState with _$FeedbackState, FormMixin implements FormState {
+  const FeedbackState._();
 
-  @override
-  FeedbackState copyWith({
-    FormStatus? status,
-    bool? isValid,
-    Failure? failure,
-    bool? result,
-    Field<String>? feedback,
-    Field<String>? email,
-  }) {
-    return FeedbackState(
-      status: status ?? this.status,
-      isValid: isValid ?? this.isValid,
-      failure: failure ?? this.failure,
-      result: result ?? this.result,
-      feedback: feedback ?? this.feedback,
-      email: email ?? this.email,
-    );
-  }
+  const factory FeedbackState({
+    required Field<String> email,
+    required Field<String> feedback,
+    @Default(BlocStatus.initial()) BlocStatus status,
+  }) = _FeedbackState;
+
+  factory FeedbackState.initial() => FeedbackState(
+        email: Field(
+          labelText: 'Email Address (Optional)',
+          hintText: 'Enter your email for follow-up...',
+          value: '',
+        ),
+        feedback: Field(
+          labelText: 'Feedback / Report',
+          hintText: 'Describe your feedback or issue...',
+          value: '',
+          validators: Validators.required().minLength(10),
+        ),
+      );
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        feedback,
-        email,
-      ];
+  List<Field<dynamic>> get formFields => [feedback];
+
+  @override
+  FeedbackState copyWithStatus(BlocStatus status) => copyWith(status: status);
+
+  @override
+  FeedbackState makeAllDirty() => copyWith(
+        email: email.makeDirty(),
+        feedback: feedback.makeDirty(),
+      );
+
+  FeedbackRequestModel toDto() => FeedbackRequestModel(
+        feedback: feedback.value.trim(),
+        userEmail: email.value.trim().isEmpty ? null : email.value.trim(),
+        timestamp: DateTime.now(),
+      );
 }

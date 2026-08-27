@@ -19,8 +19,6 @@ class ResetPasswordPage extends StatefulWidget {
 
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
   late final ResetPasswordCubit _cubit;
-  bool _obscureNew = true;
-  bool _obscureConfirm = true;
 
   @override
   void initState() {
@@ -44,14 +42,12 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       body: SafeArea(
         child: BlocProvider.value(
           value: _cubit,
-          child: PrakashEffectListener.fromCubit(
-            cubit: _cubit,
-            child: BlocConsumer<ResetPasswordCubit, ResetPasswordState>(
-              listener: (context, state) {
-                if (state.isSuccess) {
-                  context.router.replaceAll([const LoginRoute()]);
-                }
-              },
+          child: ReactiveFormListener<ResetPasswordCubit, ResetPasswordState>(
+            successMessage: 'Password successfully reset! Please sign in.',
+            onSuccess: (context, state) {
+              context.router.replaceAll([const LoginRoute()]);
+            },
+            child: BlocBuilder<ResetPasswordCubit, ResetPasswordState>(
               builder: (context, state) {
                 return Center(
                   child: SingleChildScrollView(
@@ -93,55 +89,48 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                             children: [
                               ReactiveTextField(
                                 field: state.otpCode,
-                                onChanged: _cubit.otpChanged,
+                                onChanged: _cubit.onOtpChanged,
                                 keyboardType: TextInputType.number,
-                                prefixIcon:
-                                    const Icon(Icons.pin_outlined),
+                                prefixIcon: const Icon(Icons.pin_outlined),
                               ),
                               const SizedBox(height: 16),
                               ReactiveTextField(
                                 field: state.newPassword,
-                                onChanged: _cubit.newPasswordChanged,
-                                obscureText: _obscureNew,
+                                onChanged: _cubit.onNewPasswordChanged,
+                                obscureText: state.isNewPasswordObscured,
                                 prefixIcon: const Icon(Icons.lock_outline),
                                 suffixIcon: IconButton(
                                   icon: Icon(
-                                    _obscureNew
+                                    state.isNewPasswordObscured
                                         ? Icons.visibility_outlined
                                         : Icons.visibility_off_outlined,
                                   ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _obscureNew = !_obscureNew;
-                                    });
-                                  },
+                                  onPressed:
+                                      _cubit.toggleNewPasswordVisibility,
                                 ),
                               ),
                               const SizedBox(height: 16),
                               ReactiveTextField(
                                 field: state.confirmPassword,
-                                onChanged: _cubit.confirmPasswordChanged,
-                                obscureText: _obscureConfirm,
+                                onChanged: _cubit.onConfirmPasswordChanged,
+                                obscureText: state.isConfirmPasswordObscured,
                                 prefixIcon:
                                     const Icon(Icons.lock_reset_outlined),
                                 suffixIcon: IconButton(
                                   icon: Icon(
-                                    _obscureConfirm
+                                    state.isConfirmPasswordObscured
                                         ? Icons.visibility_outlined
                                         : Icons.visibility_off_outlined,
                                   ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _obscureConfirm = !_obscureConfirm;
-                                    });
-                                  },
+                                  onPressed:
+                                      _cubit.toggleConfirmPasswordVisibility,
                                 ),
                               ),
                               const SizedBox(height: 24),
                               ElevatedButton(
-                                onPressed: state.isInProgress
+                                onPressed: state.status.isLoading
                                     ? null
-                                    : () => _cubit.resetPassword(),
+                                    : () => _cubit.submit(),
                                 style: ElevatedButton.styleFrom(
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 14,
@@ -150,7 +139,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                     borderRadius: BorderRadius.circular(14),
                                   ),
                                 ),
-                                child: state.isInProgress
+                                child: state.status.isLoading
                                     ? const SizedBox(
                                         height: 20,
                                         width: 20,

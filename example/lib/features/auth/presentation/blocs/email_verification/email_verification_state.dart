@@ -1,56 +1,42 @@
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core_example/features/auth/data/models/verify_email_request_model.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class EmailVerificationState extends FormCubitState<bool> {
-  final String email;
-  final Field<String> otpCode;
-  final int resendCountdown;
-  final bool canResend;
+part 'email_verification_state.freezed.dart';
 
-  EmailVerificationState({
-    super.status,
-    super.isValid,
-    super.failure,
-    super.result,
-    this.email = '',
-    Field<String>? otpCode,
-    this.resendCountdown = 60,
-    this.canResend = false,
-  }) : otpCode = otpCode ??
-            Field(
-              value: '',
-              labelText: '6-digit OTP Code',
-              validators: Validators.required().exactLength(6),
-            );
+@freezed
+abstract class EmailVerificationState with _$EmailVerificationState, FormMixin implements FormState {
+  const EmailVerificationState._();
 
-  @override
-  EmailVerificationState copyWith({
-    FormStatus? status,
-    bool? isValid,
-    Failure? failure,
-    bool? result,
-    String? email,
-    Field<String>? otpCode,
-    int? resendCountdown,
-    bool? canResend,
-  }) {
-    return EmailVerificationState(
-      status: status ?? this.status,
-      isValid: isValid ?? this.isValid,
-      failure: failure ?? this.failure,
-      result: result ?? this.result,
-      email: email ?? this.email,
-      otpCode: otpCode ?? this.otpCode,
-      resendCountdown: resendCountdown ?? this.resendCountdown,
-      canResend: canResend ?? this.canResend,
-    );
-  }
+  const factory EmailVerificationState({
+    required Field<String> otpCode,
+    @Default('') String email,
+    @Default(60) int resendCountdown,
+    @Default(false) bool canResend,
+    @Default(BlocStatus.initial()) BlocStatus status,
+  }) = _EmailVerificationState;
+
+  factory EmailVerificationState.initial() => EmailVerificationState(
+        otpCode: Field(
+          labelText: 'Verification Code',
+          value: '',
+          validators: Validators.required().exactLength(6),
+        ),
+      );
 
   @override
-  List<Object?> get props => [
-    ...super.props,
-    email,
-    otpCode,
-    resendCountdown,
-    canResend,
-  ];
+  List<Field<dynamic>> get formFields => [otpCode];
+
+  @override
+  EmailVerificationState copyWithStatus(BlocStatus status) =>
+      copyWith(status: status);
+
+  @override
+  EmailVerificationState makeAllDirty() =>
+      copyWith(otpCode: otpCode.makeDirty());
+
+  VerifyEmailRequestModel toDto() => VerifyEmailRequestModel(
+        email: email.trim(),
+        otpCode: otpCode.value.trim(),
+      );
 }

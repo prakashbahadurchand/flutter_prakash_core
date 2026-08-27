@@ -1,53 +1,29 @@
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
-import 'package:flutter_prakash_core_example/features/auth/data/models/auth_user_model.dart';
-import 'package:flutter_prakash_core_example/features/auth/data/models/login_request_model.dart';
 import 'package:flutter_prakash_core_example/features/auth/data/repositories/auth_repository.dart';
-import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/auth_cubit.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/login/login_state.dart';
 
 @injectable
-class LoginCubit extends BaseFormCubit<LoginState, AuthUserModel> {
-  final AuthRepository _repository;
-  final AuthCubit _authCubit;
+class LoginCubit extends FormCubit<LoginState> {
+  final AuthRepository _authRepository;
 
-  LoginCubit(this._repository, this._authCubit) : super(LoginState());
+  LoginCubit(this._authRepository) : super(LoginState.initial());
 
-  void emailChanged(String value) {
-    final field = state.email(value);
-    safeEmit(state.copyWith(
-      email: field,
-      isValid: field.isValid && state.password.isValid,
-    ));
-  }
+  void onEmailChanged(String value) =>
+      emit(state.copyWith(email: state.email(value)));
 
-  void passwordChanged(String value) {
-    final field = state.password(value);
-    safeEmit(state.copyWith(
-      password: field,
-      isValid: state.email.isValid && field.isValid,
-    ));
-  }
+  void onPasswordChanged(String value) =>
+      emit(state.copyWith(password: state.password(value)));
 
-  void rememberMeChanged(bool value) {
-    safeEmit(state.copyWith(rememberMe: value));
-  }
+  void onRememberMeChanged(bool? value) =>
+      emit(state.copyWith(rememberMe: state.rememberMe(value ?? false)));
 
-  Future<void> login() async {
-    await submitForm(
-      call: () => _repository.login(
-        LoginRequestModel(
-          email: state.email.value,
-          password: state.password.value,
-          rememberMe: state.rememberMe,
-        ),
-      ),
-      onSuccess: (user) {
-        _authCubit.setAuthenticatedUser(user);
-        emitEffect(ShowToastEffect('Welcome back, ${user.name}!'));
-      },
-      onError: (failure) {
-        emitEffect(ShowToastEffect(failure.errorMessage));
-      },
-    );
+  void togglePasswordVisibility() =>
+      emit(state.copyWith(isPasswordObscured: !state.isPasswordObscured));
+
+  void reset() => emit(LoginState.initial());
+
+  @override
+  Future<Result<dynamic>> performSubmit() {
+    return _authRepository.login(state.toDto());
   }
 }
