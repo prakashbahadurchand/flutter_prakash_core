@@ -80,28 +80,51 @@ class DevToolsDialog extends StatefulWidget {
     if (isOpen.value) return;
     isOpen.value = true;
 
-    final nav =
-        navigatorKey?.currentState ??
-        Navigator.maybeOf(context, rootNavigator: useRootNavigator) ??
-        Navigator.maybeOf(context, rootNavigator: !useRootNavigator);
-
     try {
-      if (nav != null) {
-        await showDialog<void>(
-          context: nav.context,
-          useRootNavigator: useRootNavigator,
-          builder: (_) => DevToolsDialog(customTheme: customTheme),
+      final nav =
+          navigatorKey?.currentState ??
+          Navigator.maybeOf(context, rootNavigator: useRootNavigator) ??
+          Navigator.maybeOf(context, rootNavigator: !useRootNavigator) ??
+          _findAppNavigator();
+
+      if (nav == null) {
+        debugPrint(
+          '[DevToolsDialog] Could not find a Navigator to host the DevTools '
+          'dialog. Call show() from a context under a Navigator, or pass a '
+          'navigatorKey. Falling back to silent no-op.',
         );
-      } else {
-        await showDialog<void>(
-          context: context,
-          useRootNavigator: useRootNavigator,
-          builder: (_) => DevToolsDialog(customTheme: customTheme),
-        );
+        return;
       }
+
+      await showDialog<void>(
+        context: nav.context,
+        useRootNavigator: useRootNavigator,
+        builder: (_) => DevToolsDialog(customTheme: customTheme),
+      );
     } finally {
       isOpen.value = false;
     }
+  }
+
+  /// Last-resort fallback for contexts living outside any navigator
+  /// (e.g. widgets hosted in `MaterialApp.builder`, which sit above the
+  /// [Navigator]). Walks the mounted element tree for the app's navigator.
+  static NavigatorState? _findAppNavigator() {
+    final root = WidgetsBinding.instance.rootElement;
+    if (root == null) return null;
+
+    NavigatorState? found;
+    void visit(Element element) {
+      if (found != null) return;
+      if (element is StatefulElement && element.state is NavigatorState) {
+        found = element.state as NavigatorState;
+        return;
+      }
+      element.visitChildren(visit);
+    }
+
+    visit(root);
+    return found;
   }
 
   @override

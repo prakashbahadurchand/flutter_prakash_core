@@ -45,6 +45,7 @@ class _MyAppState extends State<MyApp> {
                 builder: (context, child) {
                   return DevtoolsFloatingDock(
                     enabled: appEnv.isDev,
+                    navigatorKey: _appRouter.navigatorKey,
                     child: child ?? const SizedBox.shrink(),
                   );
                 },

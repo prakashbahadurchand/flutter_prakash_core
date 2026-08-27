@@ -273,6 +273,8 @@ MaterialApp.router(
   builder: (context, child) {
     return DevtoolsFloatingDock(
       enabled: appEnv.isDev,
+      // The dock lives above the Navigator, so hand it a key to reach it.
+      navigatorKey: _appRouter.navigatorKey,
       child: child ?? const SizedBox.shrink(),
     );
   },
