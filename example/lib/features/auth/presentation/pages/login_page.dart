@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_prakash/flutter_prakash.dart';
-import 'package:flutter_prakash_example/core/router/app_router.dart';
-import 'package:flutter_prakash_example/core/di/injection.dart';
-import 'package:flutter_prakash_example/core/themes/app_colors.dart';
-import 'package:flutter_prakash_example/features/auth/presentation/blocs/login/login_cubit.dart';
-import 'package:flutter_prakash_example/features/auth/presentation/blocs/login/login_state.dart';
+import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core_example/core/router/app_router.dart';
+import 'package:flutter_prakash_core_example/core/di/injection.dart';
+import 'package:flutter_prakash_core_example/core/themes/app_colors.dart';
+import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/login/login_cubit.dart';
+import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/login/login_state.dart';
 
 @RoutePage()
 class LoginPage extends StatefulWidget {

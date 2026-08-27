@@ -1,4 +1,4 @@
-group = "com.prakashbahadurchand.flutter_prakash"
+group = "com.prakashbahadurchand.flutter_prakash_core"
 version = "1.0-SNAPSHOT"
 
 buildscript {
@@ -26,7 +26,7 @@ plugins {
 }
 
 android {
-    namespace = "com.prakashbahadurchand.flutter_prakash"
+    namespace = "com.prakashbahadurchand.flutter_prakash_core"
 
     compileSdk = 36
 

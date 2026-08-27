@@ -18,7 +18,7 @@ class RadioOption<T> {
 
 /// A reactive radio group that binds to a [Field<T?>] or [Field<T>].
 ///
-/// Automatically infers the header label from [field.labelText] and displays validation errors.
+/// Automatically infers the header label from [Field.labelText] and displays validation errors.
 class ReactiveRadioGroup<T> extends StatelessWidget {
   final Field<T> field;
   final List<RadioOption<T>> options;

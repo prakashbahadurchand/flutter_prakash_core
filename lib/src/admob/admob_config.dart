@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:flutter_prakash/src/admob/admob_test_ids.dart';
-import 'package:flutter_prakash/src/admob/custom_ad_model.dart';
+import 'package:flutter_prakash_core/src/admob/admob_test_ids.dart';
+import 'package:flutter_prakash_core/src/admob/custom_ad_model.dart';
 
 /// Centralized configuration for Google AdMob monetization & custom cross-promotion ads.
 class AdMobConfig {

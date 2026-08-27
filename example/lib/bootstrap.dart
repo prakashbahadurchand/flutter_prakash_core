@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_prakash/flutter_prakash.dart';
-import 'package:flutter_prakash_example/app/app.dart';
-import 'package:flutter_prakash_example/core/di/injection.dart';
+import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core_example/app/app.dart';
+import 'package:flutter_prakash_core_example/core/di/injection.dart';
 
 Future<void> bootstrap({String? environment}) async {
   WidgetsFlutterBinding.ensureInitialized();

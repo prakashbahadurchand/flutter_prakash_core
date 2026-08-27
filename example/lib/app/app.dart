@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_prakash/flutter_prakash.dart';
-import 'package:flutter_prakash_example/core/envs/app_env.dart';
-import 'package:flutter_prakash_example/core/router/app_router.dart';
+import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core_example/core/envs/app_env.dart';
+import 'package:flutter_prakash_core_example/core/router/app_router.dart';
 
 import '../core/di/injection.dart';
 

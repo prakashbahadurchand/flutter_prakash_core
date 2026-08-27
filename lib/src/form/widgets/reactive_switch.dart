@@ -4,7 +4,7 @@ import '../field.dart';
 /// A reactive switch that binds to a [Field<bool>].
 ///
 /// Wraps [SwitchListTile] with consistent styling and optional subtitle.
-/// Auto-infers [title] from [field.labelText].
+/// Auto-infers [title] from [Field.labelText].
 class ReactiveSwitch extends StatelessWidget {
   final Field<bool> field;
   final String? title;

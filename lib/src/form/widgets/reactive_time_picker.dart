@@ -3,7 +3,7 @@ import '../field.dart';
 
 /// A reactive time picker that binds to a [Field<TimeOfDay?>].
 ///
-/// Automatically infers [labelText] from [field.labelText] and displays validation errors.
+/// Automatically infers [Field.labelText] from [Field.labelText] and displays validation errors.
 class ReactiveTimePicker extends StatelessWidget {
   final Field<TimeOfDay?> field;
   final ValueChanged<TimeOfDay?> onChanged;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_prakash/src/admob/custom_ad_model.dart';
-import 'package:flutter_prakash/src/admob/smart_custom_ad_dialog.dart';
+import 'package:flutter_prakash_core/src/admob/custom_ad_model.dart';
+import 'package:flutter_prakash_core/src/admob/smart_custom_ad_dialog.dart';
 
 /// Styled App Icon wrapper with an overlay "Ad" badge and subtle shadow.
 class AdIcon extends StatelessWidget {

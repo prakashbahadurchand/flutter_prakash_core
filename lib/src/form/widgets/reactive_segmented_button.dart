@@ -3,7 +3,7 @@ import '../field.dart';
 
 /// A reactive segmented button that binds to a [Field<T>].
 ///
-/// Automatically infers the header label from [field.labelText] and displays validation errors.
+/// Automatically infers the header label from [Field.labelText] and displays validation errors.
 class ReactiveSegmentedButton<T> extends StatelessWidget {
   final Field<T> field;
   final List<ButtonSegment<T>> segments;

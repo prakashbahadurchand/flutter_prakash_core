@@ -107,7 +107,7 @@ abstract class BaseFormCubit<S extends FormCubitState<R>, R>
 
   /// Executes a form submission with automatic status lifecycle management.
   ///
-  /// 1. Validates [state.isValid] — emits failure if invalid.
+  /// 1. Validates `state.isValid` — emits failure if invalid.
   /// 2. Emits `FormStatus.inProgress`.
   /// 3. Calls [call] which must return `Result<R>`.
   /// 4. Maps success/error and emits the appropriate status.

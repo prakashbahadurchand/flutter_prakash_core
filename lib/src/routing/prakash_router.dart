@@ -16,6 +16,7 @@ abstract class PrakashRouteGuard extends AutoRouteGuard {
     resolver.next(false);
   }
 
+  /// Intercepts navigation to check permissions via [canNavigate] and delegates to [onUnauthorized] if access is denied.
   @override
   void onNavigation(NavigationResolver resolver, StackRouter router) async {
     final allowed = await canNavigate(resolver);

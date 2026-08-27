@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_prakash/src/admob/admob_service.dart';
-import 'package:flutter_prakash/src/admob/custom_ad_model.dart';
-import 'package:flutter_prakash/src/admob/custom_ad_pool.dart';
-import 'package:flutter_prakash/src/admob/smart_custom_ad_dialog.dart';
-import 'package:flutter_prakash/src/loggers/flutter_logger.dart';
-import 'package:flutter_prakash/src/widgets/toast_overlay.dart';
+import 'package:flutter_prakash_core/src/admob/admob_service.dart';
+import 'package:flutter_prakash_core/src/admob/custom_ad_model.dart';
+import 'package:flutter_prakash_core/src/admob/custom_ad_pool.dart';
+import 'package:flutter_prakash_core/src/admob/smart_custom_ad_dialog.dart';
+import 'package:flutter_prakash_core/src/loggers/flutter_logger.dart';
+import 'package:flutter_prakash_core/src/widgets/toast_overlay.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
@@ -27,7 +27,7 @@ class AdMobBannerWidget extends StatefulWidget {
     this.keepAlive = true,
   });
 
-  /// Specific Ad Unit ID for this banner. If omitted, [AdMobService.config.bannerAdUnitId] is used.
+  /// Specific Ad Unit ID for this banner. If omitted, `AdMobService.config.bannerAdUnitId` is used.
   final String? adUnitId;
 
   /// AdMob banner size (default: [AdSize.banner]).

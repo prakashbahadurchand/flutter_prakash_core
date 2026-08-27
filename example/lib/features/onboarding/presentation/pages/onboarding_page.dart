@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_prakash_example/core/router/app_router.dart';
-import 'package:flutter_prakash_example/core/themes/app_colors.dart';
+import 'package:flutter_prakash_core_example/core/router/app_router.dart';
+import 'package:flutter_prakash_core_example/core/themes/app_colors.dart';
 
 @RoutePage()
 class OnboardingPage extends StatefulWidget {

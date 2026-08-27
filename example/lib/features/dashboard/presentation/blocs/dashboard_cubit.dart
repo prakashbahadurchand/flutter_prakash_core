@@ -1,5 +1,5 @@
-import 'package:flutter_prakash/flutter_prakash.dart';
-import 'package:flutter_prakash_example/features/dashboard/presentation/blocs/dashboard_state.dart';
+import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core_example/features/dashboard/presentation/blocs/dashboard_state.dart';
 
 @injectable
 class DashboardCubit extends BaseCubit<DashboardState> {

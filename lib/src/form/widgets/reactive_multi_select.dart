@@ -16,7 +16,7 @@ class MultiSelectOption<T> {
 
 /// A reactive multi-select chip group that binds to a [Field<List<T>>].
 ///
-/// Automatically infers header label from [field.labelText] and displays validation errors.
+/// Automatically infers header label from [Field.labelText] and displays validation errors.
 class ReactiveMultiSelect<T> extends StatelessWidget {
   final Field<List<T>> field;
   final List<MultiSelectOption<T>> options;

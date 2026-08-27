@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'package:flutter_prakash/src/admob/custom_ad_model.dart';
+import 'package:flutter_prakash_core/src/admob/custom_ad_model.dart';
 
 /// Registry and pool of developer custom ads used as offline fallbacks or direct cross-promotions.
 class CustomAdPool {

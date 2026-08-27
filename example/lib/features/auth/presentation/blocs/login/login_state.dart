@@ -1,5 +1,5 @@
-import 'package:flutter_prakash/flutter_prakash.dart';
-import 'package:flutter_prakash_example/features/auth/data/models/login_request_dto.dart';
+import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core_example/features/auth/data/models/login_request_dto.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'login_state.freezed.dart';

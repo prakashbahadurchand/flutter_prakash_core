@@ -4,7 +4,7 @@ import '../field.dart';
 
 /// A reactive text field that binds to a [Field<String>].
 ///
-/// Automatically infers [labelText], [hintText], and [helperText] from [Field]
+/// Automatically infers [Field.labelText], [hintText], and [helperText] from [Field]
 /// metadata, shows validation errors when dirty, and preserves controller state.
 class ReactiveTextField extends StatefulWidget {
   final Field<String> field;

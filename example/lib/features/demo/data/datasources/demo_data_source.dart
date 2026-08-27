@@ -1,5 +1,5 @@
 import 'package:injectable/injectable.dart';
-import 'package:flutter_prakash_example/features/demo/data/models/sample_item_model.dart';
+import 'package:flutter_prakash_core_example/features/demo/data/models/sample_item_model.dart';
 
 @lazySingleton
 class DemoDataSource {

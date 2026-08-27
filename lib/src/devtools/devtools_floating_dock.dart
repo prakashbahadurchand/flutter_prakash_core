@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_prakash/src/devtools/devtools_dialog.dart';
+import 'package:flutter_prakash_core/src/devtools/devtools_dialog.dart';
 
 enum DockSide { left, right }
 

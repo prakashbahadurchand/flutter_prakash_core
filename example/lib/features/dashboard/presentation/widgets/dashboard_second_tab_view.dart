@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_prakash/flutter_prakash.dart';
-import 'package:flutter_prakash_example/core/di/injection.dart';
-import 'package:flutter_prakash_example/features/demo/presentation/blocs/sample_fetch_cubit.dart';
-import 'package:flutter_prakash_example/features/demo/presentation/blocs/sample_form_cubit.dart';
-import 'package:flutter_prakash_example/features/demo/presentation/blocs/sample_paging_cubit.dart';
-import 'package:flutter_prakash_example/features/demo/presentation/blocs/sample_search_bloc.dart';
+import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core_example/core/di/injection.dart';
+import 'package:flutter_prakash_core_example/features/demo/presentation/blocs/sample_fetch_cubit.dart';
+import 'package:flutter_prakash_core_example/features/demo/presentation/blocs/sample_form_cubit.dart';
+import 'package:flutter_prakash_core_example/features/demo/presentation/blocs/sample_paging_cubit.dart';
+import 'package:flutter_prakash_core_example/features/demo/presentation/blocs/sample_search_bloc.dart';
 
 class DashboardSecondTabView extends StatefulWidget {
   const DashboardSecondTabView({super.key});

@@ -1,5 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_prakash/src/loggers/flutter_logger.dart';
+import 'package:flutter_prakash_core/src/loggers/flutter_logger.dart';
 
 /// Background message handler callback for FCM. Must be a top-level function.
 @pragma('vm:entry-point')

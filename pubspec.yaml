@@ -1,11 +1,21 @@
-name: flutter_prakash
-description: "Result Plugin/Package for my all apps"
+name: flutter_prakash_core
+description: "Enterprise-grade Flutter core package & hybrid plugin framework with Clean Architecture, BLoC state management, reactive forms, DevTools, and monetization."
 version: 1.0.10
-publish_to: none
-homepage: https://github.com/prakashbahadurchand/flutter_prakash
+homepage: https://github.com/prakashbahadurchand/flutter_prakash_core
+repository: https://github.com/prakashbahadurchand/flutter_prakash_core
+issue_tracker: https://github.com/prakashbahadurchand/flutter_prakash_core/issues
+documentation: https://github.com/prakashbahadurchand/flutter_prakash_core#readme
+
+topics:
+  - state-management
+  - clean-architecture
+  - devtools
+  - admob
+  - firebase
 
 environment:
   sdk: ">=3.10.0 <4.0.0"
+  flutter: ">=3.10.0"
 
 dependencies:
   flutter:
@@ -32,8 +42,8 @@ dependencies:
   dio: ^5.9.2
   dio_cache_interceptor: ^4.0.6
   internet_connection_checker_plus: ^3.1.0
-  graphql: ^5.2.0-beta.6
-  graphql_flutter: ^5.2.0-beta.6
+  graphql: ^5.2.4
+  graphql_flutter: ^5.3.0
 
   # Firebase Suite
   firebase_core: ^4.11.0
@@ -102,8 +112,8 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.prakashbahadurchand.flutter_prakash
-        pluginClass: FlutterPrakashPlugin
+        package: com.prakashbahadurchand.flutter_prakash_core
+        pluginClass: FlutterPrakashCorePlugin
       ios:
-        pluginClass: FlutterPrakashPlugin
+        pluginClass: FlutterPrakashCorePlugin
   uses-material-design: true

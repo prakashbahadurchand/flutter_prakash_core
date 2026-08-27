@@ -72,7 +72,7 @@ Initialize the engine once in your app's `main()` function:
 ```dart
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_prakash/flutter_prakash.dart';
+import 'package:flutter_prakash_core/flutter_prakash_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

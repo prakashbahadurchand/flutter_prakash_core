@@ -1,7 +1,7 @@
 // import 'package:firebase_app_distribution/firebase_app_distribution.dart'
 //     as app_dist;
 // import 'package:flutter/foundation.dart';
-// import 'package:flutter_prakash/src/core/loggers/flutter_logger.dart';
+// import 'package:flutter_prakash_core/src/core/loggers/flutter_logger.dart';
 
 // /// Firebase App Distribution manager for tester authentication and in-app release update checks.
 // ///

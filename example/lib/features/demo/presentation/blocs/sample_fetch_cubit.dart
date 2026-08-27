@@ -1,5 +1,5 @@
-import 'package:flutter_prakash/flutter_prakash.dart';
-import 'package:flutter_prakash_example/features/demo/data/repositories/demo_repository.dart';
+import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core_example/features/demo/data/repositories/demo_repository.dart';
 
 /// Sample Cubit demonstrating data-fetching from [DemoRepository] with [BaseUiCubit].
 @injectable

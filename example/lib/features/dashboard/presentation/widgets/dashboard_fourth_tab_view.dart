@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_prakash/flutter_prakash.dart';
-import 'package:flutter_prakash_example/core/router/app_router.dart';
-import 'package:flutter_prakash_example/features/dashboard/presentation/blocs/dashboard_cubit.dart';
-import 'package:flutter_prakash_example/features/dashboard/presentation/blocs/dashboard_state.dart';
-import 'package:flutter_prakash_example/core/themes/app_colors.dart';
+import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core_example/core/router/app_router.dart';
+import 'package:flutter_prakash_core_example/features/dashboard/presentation/blocs/dashboard_cubit.dart';
+import 'package:flutter_prakash_core_example/features/dashboard/presentation/blocs/dashboard_state.dart';
+import 'package:flutter_prakash_core_example/core/themes/app_colors.dart';
 
 class DashboardFourthTabView extends StatelessWidget {
   final DashboardState state;

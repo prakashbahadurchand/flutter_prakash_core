@@ -3,7 +3,7 @@ import UIKit
 import XCTest
 
 
-@testable import flutter_prakash
+@testable import flutter_prakash_core
 
 // This demonstrates a simple unit test of the Swift portion of this plugin's implementation.
 //
@@ -12,7 +12,7 @@ import XCTest
 class RunnerTests: XCTestCase {
 
   func testGetPlatformVersion() {
-    let plugin = FlutterPrakashPlugin()
+    let plugin = FlutterPrakashCorePlugin()
 
     let call = FlutterMethodCall(methodName: "getPlatformVersion", arguments: [])
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_prakash/src/admob/admob_banner_widget.dart';
-import 'package:flutter_prakash/src/admob/admob_service.dart';
-import 'package:flutter_prakash/src/admob/custom_ad_model.dart';
-import 'package:flutter_prakash/src/loggers/flutter_logger.dart';
+import 'package:flutter_prakash_core/src/admob/admob_banner_widget.dart';
+import 'package:flutter_prakash_core/src/admob/admob_service.dart';
+import 'package:flutter_prakash_core/src/admob/custom_ad_model.dart';
+import 'package:flutter_prakash_core/src/loggers/flutter_logger.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 /// Helper widget to easily load and display Adaptive Banner Ads dynamically calculated from context width.
@@ -22,7 +22,7 @@ class AdMobAdaptiveBannerWidget extends StatefulWidget {
     this.keepAlive = true,
   });
 
-  /// Specific Ad Unit ID for this adaptive banner. If omitted, [AdMobService.config.bannerAdUnitId] is used.
+  /// Specific Ad Unit ID for this adaptive banner. If omitted, `AdMobService.config.bannerAdUnitId` is used.
   final String? adUnitId;
 
   /// Outer padding.

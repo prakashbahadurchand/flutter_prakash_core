@@ -1,6 +1,6 @@
-# flutter_prakash_example 📱✨
+# flutter_prakash_core_core_example 📱✨
 
-A production-grade sample application demonstrating the complete capabilities of the **[`flutter_prakash`](../)** engine. Built adhering to **Clean Architecture** (no domain layer, direct concrete data sources & repositories), **SOLID principles**, and **reactive form management**.
+A production-grade sample application demonstrating the complete capabilities of the **[`flutter_prakash_core`](../)** engine. Built adhering to **Clean Architecture** (no domain layer, direct concrete data sources & repositories), **SOLID principles**, and **reactive form management**.
 
 ---
 

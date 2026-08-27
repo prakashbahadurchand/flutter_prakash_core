@@ -1,5 +1,5 @@
-import 'package:flutter_prakash/flutter_prakash.dart';
-import 'package:flutter_prakash_example/core/router/app_router.dart';
+import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core_example/core/router/app_router.dart';
 
 /// Example authentication route guard demonstrating [PrakashRouteGuard].
 class ExampleAuthGuard extends PrakashRouteGuard {

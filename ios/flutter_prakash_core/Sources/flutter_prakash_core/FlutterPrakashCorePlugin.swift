@@ -2,14 +2,14 @@ import Flutter
 import UIKit
 import CoreLocation
 
-/// FlutterPrakashPlugin — extensible native bridge for iOS.
-public class FlutterPrakashPlugin: NSObject, FlutterPlugin {
+/// FlutterPrakashCorePlugin — extensible native bridge for iOS.
+public class FlutterPrakashCorePlugin: NSObject, FlutterPlugin {
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(
-      name: "flutter_prakash",
+      name: "flutter_prakash_core",
       binaryMessenger: registrar.messenger()
     )
-    let instance = FlutterPrakashPlugin()
+    let instance = FlutterPrakashCorePlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
 

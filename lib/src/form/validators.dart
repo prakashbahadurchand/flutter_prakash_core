@@ -2,7 +2,7 @@ import 'dart:collection';
 import 'dart:convert';
 
 /// A function that returns an error message or `null` if valid.
-/// Supports dynamic runtime value inspection and contextual [fieldName] / [labelText] interpolation.
+/// Supports dynamic runtime value inspection and contextual [fieldName] / [Field.labelText] interpolation.
 typedef Validator = String? Function(dynamic value, [String? fieldName]);
 
 /// Enterprise-grade, reusable, composable field validators with automatic
@@ -221,7 +221,7 @@ class Validators {
       if (str.isEmpty) return null;
       final name = fieldName ?? 'Email';
       final regex = RegExp(
-        r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$',
+        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$",
       );
       return regex.hasMatch(str)
           ? null

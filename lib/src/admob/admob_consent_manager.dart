@@ -1,4 +1,4 @@
-import 'package:flutter_prakash/src/loggers/flutter_logger.dart';
+import 'package:flutter_prakash_core/src/loggers/flutter_logger.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 /// User Messaging Platform (UMP) consent manager for handling GDPR / CCPA privacy consents.

@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_prakash/src/admob/admob_service.dart';
-import 'package:flutter_prakash/src/loggers/flutter_logger.dart';
+import 'package:flutter_prakash_core/src/admob/admob_service.dart';
+import 'package:flutter_prakash_core/src/loggers/flutter_logger.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 /// Utility class that manages loading, caching, and displaying App Open Ads with zero boilerplate.

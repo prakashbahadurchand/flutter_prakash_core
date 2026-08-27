@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_prakash/flutter_prakash.dart';
+import 'package:flutter_prakash_core/flutter_prakash_core.dart';
 
 class DashboardThirdTabView extends StatelessWidget {
   const DashboardThirdTabView({super.key});

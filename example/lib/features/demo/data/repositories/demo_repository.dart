@@ -1,6 +1,6 @@
-import 'package:flutter_prakash/flutter_prakash.dart';
-import 'package:flutter_prakash_example/features/demo/data/datasources/demo_data_source.dart';
-import 'package:flutter_prakash_example/features/demo/data/models/sample_item_model.dart';
+import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core_example/features/demo/data/datasources/demo_data_source.dart';
+import 'package:flutter_prakash_core_example/features/demo/data/models/sample_item_model.dart';
 
 @lazySingleton
 class DemoRepository {

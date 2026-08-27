@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_prakash/src/admob/admob_service.dart';
-import 'package:flutter_prakash/src/loggers/flutter_logger.dart';
+import 'package:flutter_prakash_core/src/admob/admob_service.dart';
+import 'package:flutter_prakash_core/src/loggers/flutter_logger.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 /// Smart Interstitial Ad manager supporting background preloading, frequency capping, and 1-line display.

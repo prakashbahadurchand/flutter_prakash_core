@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
-import 'flutter_prakash_platform_interface.dart';
+import 'flutter_prakash_core_platform_interface.dart';
 
-/// An implementation of [FlutterPrakashPlatform] that uses method channels.
-class MethodChannelFlutterPrakash extends FlutterPrakashPlatform {
+/// An implementation of [FlutterPrakashCorePlatform] that uses method channels.
+class MethodChannelFlutterPrakashCore extends FlutterPrakashCorePlatform {
   /// The method channel used to interact with the native platform.
   @visibleForTesting
-  final methodChannel = const MethodChannel('flutter_prakash');
+  final methodChannel = const MethodChannel('flutter_prakash_core');
 
   @override
   Future<String?> getPlatformVersion() async {

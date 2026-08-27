@@ -1,9 +1,10 @@
-name: flutter_prakash_example
-description: "Demonstrates how to use the flutter_prakash plugin with Clean Architecture."
+name: flutter_prakash_core_example
+description: "Demonstrates how to use the flutter_prakash_core plugin with Clean Architecture."
 publish_to: 'none'
 
 environment:
   sdk: ">=3.10.0 <4.0.0"
+  flutter: ">=3.10.0"
 
 dependencies:
   flutter:
@@ -11,7 +12,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  flutter_prakash:
+  flutter_prakash_core:
     path: ../
 
   # State Management

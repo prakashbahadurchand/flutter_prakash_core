@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
-/// Enterprise event transformers using [rxdart] for BLoC event streams.
+/// Enterprise event transformers using RxDart for BLoC event streams.
 ///
 /// ### Usage:
 /// ```dart

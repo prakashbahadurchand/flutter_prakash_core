@@ -46,7 +46,7 @@ class ShowDialogEffect extends PrakashEffect {
 typedef EffectHandler =
     void Function(BuildContext context, PrakashEffect effect);
 
-/// A widget that listens to the [effectStream] of a [BaseCubit] and fires
+/// A widget that listens to the `effectStream` of a [BaseCubit] and fires
 /// one-shot side-effects (toasts, navigation, dialogs) without polluting BLoC state.
 ///
 /// ### Usage:
@@ -70,7 +70,7 @@ typedef EffectHandler =
 /// )
 /// ```
 class PrakashEffectListener extends StatefulWidget {
-  /// The cubit whose [effectStream] to listen to.
+  /// The cubit whose `effectStream` to listen to.
   /// Must expose a `Stream<PrakashEffect> get effectStream`.
   final dynamic cubit;
 
@@ -88,7 +88,7 @@ class PrakashEffectListener extends StatefulWidget {
   });
 
   /// Factory constructor that provides default [ShowToastEffect] handling
-  /// via [ScaffoldMessenger.showSnackBar].
+  /// via [ScaffoldMessenger].
   factory PrakashEffectListener.fromCubit({
     Key? key,
     required dynamic cubit,

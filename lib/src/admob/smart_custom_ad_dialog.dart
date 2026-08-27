@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_prakash/src/admob/ad_icon.dart';
-import 'package:flutter_prakash/src/admob/custom_ad_model.dart';
+import 'package:flutter_prakash_core/src/admob/ad_icon.dart';
+import 'package:flutter_prakash_core/src/admob/custom_ad_model.dart';
 
 /// Helper widget to render custom app icon safely whether it's an asset, network URL, or placeholder icon.
 class CustomAdIconWidget extends StatelessWidget {

@@ -1,4 +1,4 @@
-import 'package:flutter_prakash_example/bootstrap.dart';
+import 'package:flutter_prakash_core_example/bootstrap.dart';
 
 void main() {
   bootstrap(environment: 'prod');

@@ -4,8 +4,8 @@
 # Description: Configures Firebase for Dev & Prod environments (Android & iOS)
 #              using FlutterFire CLI.
 # Package Name / Bundle ID:
-#   - Prod: com.prakashbahadurchand.flutter_prakash_example / com.prakashbahadurchand.flutterPrakashExample
-#   - Dev:  com.prakashbahadurchand.flutter_prakash_example.dev / com.prakashbahadurchand.flutterPrakashExample.dev
+#   - Prod: com.prakashbahadurchand.flutter_prakash_core_example / com.prakashbahadurchand.flutterPrakashCoreExample
+#   - Dev:  com.prakashbahadurchand.flutter_prakash_core_example.dev / com.prakashbahadurchand.flutterPrakashCoreExample.dev
 # Outputs:
 #   - Dev:  lib/firebase_options_dev.dart
 #   - Prod: lib/firebase_options_prod.dart
@@ -28,11 +28,11 @@ EXAMPLE_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 cd "${EXAMPLE_DIR}"
 
 # Package / Bundle ID Configurations
-PROD_ANDROID_PKG="com.prakashbahadurchand.flutter_prakash_example"
-DEV_ANDROID_PKG="com.prakashbahadurchand.flutter_prakash_example.dev"
+PROD_ANDROID_PKG="com.prakashbahadurchand.flutter_prakash_core_example"
+DEV_ANDROID_PKG="com.prakashbahadurchand.flutter_prakash_core_example.dev"
 
-PROD_IOS_BUNDLE="com.prakashbahadurchand.flutterPrakashExample"
-DEV_IOS_BUNDLE="com.prakashbahadurchand.flutterPrakashExample.dev"
+PROD_IOS_BUNDLE="com.prakashbahadurchand.flutterPrakashCoreExample"
+DEV_IOS_BUNDLE="com.prakashbahadurchand.flutterPrakashCoreExample.dev"
 
 DEV_OUT_FILE="lib/firebase_options_dev.dart"
 PROD_OUT_FILE="lib/firebase_options_prod.dart"

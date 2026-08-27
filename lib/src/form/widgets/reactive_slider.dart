@@ -3,7 +3,7 @@ import '../field.dart';
 
 /// A reactive slider that binds to a [Field<double>].
 ///
-/// Automatically infers header label from [field.labelText] and displays current value and validation errors.
+/// Automatically infers header label from [Field.labelText] and displays current value and validation errors.
 class ReactiveSlider extends StatelessWidget {
   final Field<double> field;
   final ValueChanged<double> onChanged;

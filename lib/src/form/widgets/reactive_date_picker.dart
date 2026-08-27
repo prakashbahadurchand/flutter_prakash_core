@@ -3,7 +3,7 @@ import '../field.dart';
 
 /// A reactive date picker that binds to a [Field<DateTime?>].
 ///
-/// Shows validation errors when the field is dirty and auto-infers [label] from [field.labelText].
+/// Shows validation errors when the field is dirty and auto-infers [label] from [Field.labelText].
 class ReactiveDatePicker extends StatelessWidget {
   final Field<DateTime?> field;
   final ValueChanged<DateTime?> onChanged;

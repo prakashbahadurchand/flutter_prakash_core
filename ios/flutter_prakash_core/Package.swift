@@ -4,19 +4,19 @@
 import PackageDescription
 
 let package = Package(
-    name: "flutter_prakash",
+    name: "flutter_prakash_core",
     platforms: [
         .iOS("13.0")
     ],
     products: [
-        .library(name: "flutter-prakash", targets: ["flutter_prakash"])
+        .library(name: "flutter-prakash-core", targets: ["flutter_prakash_core"])
     ],
     dependencies: [
         .package(name: "FlutterFramework", path: "../FlutterFramework")
     ],
     targets: [
         .target(
-            name: "flutter_prakash",
+            name: "flutter_prakash_core",
             dependencies: [
                 .product(name: "FlutterFramework", package: "FlutterFramework")
             ],

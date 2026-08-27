@@ -1,7 +1,7 @@
-import 'package:flutter_prakash_example/features/auth/data/models/login_request_dto.dart';
-import 'package:flutter_prakash_example/features/auth/data/models/register_request_dto.dart';
+import 'package:flutter_prakash_core_example/features/auth/data/models/login_request_dto.dart';
+import 'package:flutter_prakash_core_example/features/auth/data/models/register_request_dto.dart';
 import 'package:injectable/injectable.dart';
-import 'package:flutter_prakash_example/features/auth/data/models/user_model.dart';
+import 'package:flutter_prakash_core_example/features/auth/data/models/user_model.dart';
 
 @lazySingleton
 class AuthDataSource {

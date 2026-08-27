@@ -1,4 +1,4 @@
-import 'package:flutter_prakash/flutter_prakash.dart';
+import 'package:flutter_prakash_core/flutter_prakash_core.dart';
 
 // Events
 abstract class SearchEvent extends BaseEvent {

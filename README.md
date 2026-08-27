@@ -1,11 +1,11 @@
-# flutter_prakash 🚀✨
+# flutter_prakash_core 🚀✨
 
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Clean Architecture](https://img.shields.io/badge/Architecture-Clean%20%26%20SOLID-success?style=for-the-badge)](#-clean-architecture-principles)
 
-**`flutter_prakash`** is an ultimate, enterprise-grade multi-app core engine and hybrid Flutter package framework. Built on **Clean Architecture**, **SOLID principles**, and **zero-boilerplate reactive workflows**, it serves as a plug-and-play architectural foundation across all production Flutter applications. 🏗️⚡
+**`flutter_prakash_core`** is an ultimate, enterprise-grade multi-app core engine and hybrid Flutter package framework. Built on **Clean Architecture**, **SOLID principles**, and **zero-boilerplate reactive workflows**, it serves as a plug-and-play architectural foundation across all production Flutter applications. 🏗️⚡
 
 ---
 
@@ -44,14 +44,14 @@
 
 ## 📦 Installation & Setup
 
-Add `flutter_prakash` to your `pubspec.yaml`:
+Add `flutter_prakash_core` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
   flutter:
     sdk: flutter
-  flutter_prakash:
-    path: ../flutter_prakash # Or git reference
+  flutter_prakash_core:
+    path: ../flutter_prakash_core # Or git reference
 ```
 
 Run pub get:
@@ -63,7 +63,7 @@ flutter pub get
 
 ## 🏛️ Architecture & Project Structure
 
-`flutter_prakash` provides clean, granular exports under `lib/src/`:
+`flutter_prakash_core` provides clean, granular exports under `lib/src/`:
 
 ```
 lib/
@@ -93,7 +93,7 @@ lib/
 
 ### ⚡ 1. BLoC State Management Engine
 
-`flutter_prakash` eliminates state boilerplate with lifecycle-safe lifecycle methods and side-effect streams.
+`flutter_prakash_core` eliminates state boilerplate with lifecycle-safe lifecycle methods and side-effect streams.
 
 #### 🔄 BaseUiCubit & UiStateBuilder
 Encapsulates async operations (`initial`, `loading`, `success`, `failure`) into a unified UI builder:
@@ -479,7 +479,7 @@ DateTime.now().isToday; // true
 
 ## 📱 Example Application
 
-A complete enterprise-grade sample application demonstrating all patterns can be found in the [`example/`](file:///Users/prakashbahadurchand/Prakash_Bahadur_Chand/My_Projects/flutter_prakash/example) directory:
+A complete enterprise-grade sample application demonstrating all patterns can be found in the [`example/`](file:///Users/prakashbahadurchand/Prakash_Bahadur_Chand/My_Projects/flutter_prakash_core/example) directory:
 
 ```bash
 cd example

@@ -3,7 +3,7 @@ import '../field.dart';
 
 /// A reactive dropdown that binds to a [Field<T?>].
 ///
-/// Shows validation errors when the field is dirty and auto-infers [label] from [field.labelText].
+/// Shows validation errors when the field is dirty and auto-infers [label] from [Field.labelText].
 class ReactiveDropdown<T> extends StatelessWidget {
   final Field<T?> field;
   final List<DropdownMenuItem<T>> items;

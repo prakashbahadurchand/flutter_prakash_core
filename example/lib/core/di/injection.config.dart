@@ -10,7 +10,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:dio/dio.dart' as _i361;
-import 'package:flutter_prakash/flutter_prakash.dart' as _i361;
+import 'package:flutter_prakash_core/flutter_prakash_core.dart' as _i87;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
@@ -56,20 +56,27 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i864.DemoDataSource>(() => _i864.DemoDataSource());
     gh.lazySingleton<_i970.AuthDataSource>(() => _i970.AuthDataSource());
-    gh.lazySingleton<_i361.ThemeCubit>(
+    gh.lazySingleton<_i87.ThemeCubit>(
       () => registerModule.themeCubit(gh<_i460.SharedPreferences>()),
     );
-    gh.lazySingleton<_i361.LocaleCubit>(
+    gh.lazySingleton<_i87.LocaleCubit>(
       () => registerModule.localeCubit(gh<_i460.SharedPreferences>()),
+    );
+    gh.lazySingleton<_i573.AuthRepository>(
+      () => _i573.AuthRepository(gh<_i970.AuthDataSource>()),
+    );
+    gh.factory<_i459.RegisterCubit>(
+      () => _i459.RegisterCubit(gh<_i573.AuthRepository>()),
+    );
+    gh.factory<_i389.LoginCubit>(
+      () => _i389.LoginCubit(gh<_i573.AuthRepository>()),
     );
     gh.lazySingleton<_i911.DemoRepository>(
       () => _i911.DemoRepository(gh<_i864.DemoDataSource>()),
     );
     gh.lazySingleton<_i214.AppEnv>(() => _i954.DevEnv(), registerFor: {_dev});
     gh.lazySingleton<_i214.AppEnv>(() => _i580.ProdEnv(), registerFor: {_prod});
-    gh.lazySingleton<_i573.AuthRepository>(
-      () => _i573.AuthRepository(gh<_i970.AuthDataSource>()),
-    );
+    gh.lazySingleton<_i361.Dio>(() => registerModule.dio(gh<_i217.AppEnv>()));
     gh.factory<_i90.SampleFormCubit>(
       () => _i90.SampleFormCubit(gh<_i911.DemoRepository>()),
     );
@@ -79,13 +86,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i668.SamplePagingCubit>(
       () => _i668.SamplePagingCubit(gh<_i911.DemoRepository>()),
     );
-    gh.factory<_i459.RegisterCubit>(
-      () => _i459.RegisterCubit(gh<_i573.AuthRepository>()),
-    );
-    gh.factory<_i389.LoginCubit>(
-      () => _i389.LoginCubit(gh<_i573.AuthRepository>()),
-    );
-    gh.lazySingleton<_i361.Dio>(() => registerModule.dio(gh<_i217.AppEnv>()));
     return this;
   }
 }

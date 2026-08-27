@@ -1,4 +1,4 @@
-package com.prakashbahadurchand.flutter_prakash
+package com.prakashbahadurchand.flutter_prakash_core
 
 import android.content.Context
 import android.location.LocationManager
@@ -9,8 +9,8 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 
-/** FlutterPrakashPlugin — extensible native bridge. */
-class FlutterPrakashPlugin :
+/** FlutterPrakashCorePlugin — extensible native bridge. */
+class FlutterPrakashCorePlugin :
     FlutterPlugin,
     MethodCallHandler {
     private lateinit var channel: MethodChannel
@@ -18,7 +18,7 @@ class FlutterPrakashPlugin :
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         applicationContext = binding.applicationContext
-        channel = MethodChannel(binding.binaryMessenger, "flutter_prakash")
+        channel = MethodChannel(binding.binaryMessenger, "flutter_prakash_core")
         channel.setMethodCallHandler(this)
     }
 

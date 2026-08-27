@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 ///
 /// Usage Example:
 /// ```dart
-/// import 'package:flutter_prakash/src/core/fake_data/fake_data.dart';
+/// import 'package:flutter_prakash_core/src/core/fake_data/fake_data.dart';
 ///
 /// // 1. Mock User Data & Profiles
 /// final name = Fake.fullName;
@@ -212,7 +212,7 @@ class Fake {
   /// Generates a fake country.
   static String get country => _faker.address.country();
 
-  /// Generates fake geographical coordinates [latitude, longitude].
+  /// Generates fake geographical coordinates `(latitude, longitude)`.
   static Map<String, double> get latLng => {
     'latitude': (_faker.randomGenerator.decimal() * 180) - 90, // -90 to +90
     'longitude': (_faker.randomGenerator.decimal() * 360) - 180, // -180 to +180

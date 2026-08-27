@@ -3,7 +3,7 @@ import '../field.dart';
 
 /// A reactive checkbox that binds to a [Field<bool>].
 ///
-/// Shows validation errors when the field is dirty and auto-infers [title] from [field.labelText].
+/// Shows validation errors when the field is dirty and auto-infers [title] from [Field.labelText].
 class ReactiveCheckbox extends StatelessWidget {
   final Field<bool> field;
   final String? title;

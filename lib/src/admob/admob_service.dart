@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_prakash/src/admob/admob_config.dart';
-import 'package:flutter_prakash/src/admob/admob_consent_manager.dart';
-import 'package:flutter_prakash/src/admob/app_lifecycle_reactor.dart';
-import 'package:flutter_prakash/src/admob/app_open_ad_manager.dart';
-import 'package:flutter_prakash/src/admob/custom_ad_model.dart';
-import 'package:flutter_prakash/src/admob/custom_ad_pool.dart';
-import 'package:flutter_prakash/src/admob/interstitial_ad_manager.dart';
-import 'package:flutter_prakash/src/admob/rewarded_ad_manager.dart';
-import 'package:flutter_prakash/src/loggers/flutter_logger.dart';
+import 'package:flutter_prakash_core/src/admob/admob_config.dart';
+import 'package:flutter_prakash_core/src/admob/admob_consent_manager.dart';
+import 'package:flutter_prakash_core/src/admob/app_lifecycle_reactor.dart';
+import 'package:flutter_prakash_core/src/admob/app_open_ad_manager.dart';
+import 'package:flutter_prakash_core/src/admob/custom_ad_model.dart';
+import 'package:flutter_prakash_core/src/admob/custom_ad_pool.dart';
+import 'package:flutter_prakash_core/src/admob/interstitial_ad_manager.dart';
+import 'package:flutter_prakash_core/src/admob/rewarded_ad_manager.dart';
+import 'package:flutter_prakash_core/src/loggers/flutter_logger.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 /// Comprehensive Master AdMob & Monetization Service Engine.

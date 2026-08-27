@@ -1,13 +1,13 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter_prakash_example/features/auth/presentation/guards/auth_guard.dart';
-import 'package:flutter_prakash_example/features/auth/presentation/pages/login_page.dart';
-import 'package:flutter_prakash_example/features/auth/presentation/pages/register_page.dart';
-import 'package:flutter_prakash_example/features/dashboard/presentation/pages/dashboard_page.dart';
-import 'package:flutter_prakash_example/features/onboarding/presentation/pages/onboarding_page.dart';
-import 'package:flutter_prakash_example/features/splash/presentation/pages/splash_page.dart';
-import 'package:flutter_prakash_example/features/settings/presentation/pages/privacy_policy_page.dart';
-import 'package:flutter_prakash_example/features/settings/presentation/pages/report_feedback_page.dart';
-import 'package:flutter_prakash_example/features/settings/presentation/pages/terms_conditions_page.dart';
+import 'package:flutter_prakash_core_example/features/auth/presentation/guards/auth_guard.dart';
+import 'package:flutter_prakash_core_example/features/auth/presentation/pages/login_page.dart';
+import 'package:flutter_prakash_core_example/features/auth/presentation/pages/register_page.dart';
+import 'package:flutter_prakash_core_example/features/dashboard/presentation/pages/dashboard_page.dart';
+import 'package:flutter_prakash_core_example/features/onboarding/presentation/pages/onboarding_page.dart';
+import 'package:flutter_prakash_core_example/features/splash/presentation/pages/splash_page.dart';
+import 'package:flutter_prakash_core_example/features/settings/presentation/pages/privacy_policy_page.dart';
+import 'package:flutter_prakash_core_example/features/settings/presentation/pages/report_feedback_page.dart';
+import 'package:flutter_prakash_core_example/features/settings/presentation/pages/terms_conditions_page.dart';
 
 part 'app_router.gr.dart';
 

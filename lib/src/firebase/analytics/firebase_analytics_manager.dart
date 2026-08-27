@@ -1,6 +1,6 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_prakash/src/loggers/flutter_logger.dart';
+import 'package:flutter_prakash_core/src/loggers/flutter_logger.dart';
 
 /// Firebase Analytics Manager supporting custom events, screen tracking, user ID and properties.
 class FirebaseAnalyticsManager {

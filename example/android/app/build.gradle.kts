@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.prakashbahadurchand.flutter_prakash_example"
+    namespace = "com.prakashbahadurchand.flutter_prakash_core_example"
     compileSdk = 37
     ndkVersion = flutter.ndkVersion
 
@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.prakashbahadurchand.flutter_prakash_example"
+        applicationId = "com.prakashbahadurchand.flutter_prakash_core_example"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
