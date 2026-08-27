@@ -8,6 +8,7 @@ import 'package:flutter_prakash_core_example/features/auth/presentation/pages/fo
 import 'package:flutter_prakash_core_example/features/auth/presentation/pages/login_page.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/pages/register_page.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/pages/reset_password_page.dart';
+import 'package:flutter_prakash_core_example/features/common/presentation/pages/feedback/feedback_page.dart';
 import 'package:flutter_prakash_core_example/features/common/presentation/pages/file_preview/file_preview_page.dart';
 import 'package:flutter_prakash_core_example/features/common/presentation/pages/inapp_webview/inapp_webview_page.dart';
 import 'package:flutter_prakash_core_example/features/common/presentation/pages/privacy_policy/privacy_policy_page.dart';
@@ -15,7 +16,7 @@ import 'package:flutter_prakash_core_example/features/common/presentation/pages/
 import 'package:flutter_prakash_core_example/features/dashboard/presentation/pages/admob_showcase_page.dart';
 import 'package:flutter_prakash_core_example/features/dashboard/presentation/pages/dashboard_page.dart';
 import 'package:flutter_prakash_core_example/features/onboarding/presentation/pages/onboarding_page.dart';
-import 'package:flutter_prakash_core_example/features/settings/presentation/pages/report_feedback_page.dart';
+import 'package:flutter_prakash_core_example/features/settings/presentation/pages/settings_page.dart';
 import 'package:flutter_prakash_core_example/features/splash/presentation/pages/splash_page.dart';
 
 part 'app_router.gr.dart';
@@ -37,7 +38,8 @@ class AppRouter extends RootStackRouter {
       guards: [const ExampleAuthGuard(isAuthenticated: true)],
     ),
     AutoRoute(page: AdMobShowcaseRoute.page),
-    AutoRoute(page: ReportFeedbackRoute.page),
+    AutoRoute(page: SettingsRoute.page),
+    AutoRoute(page: FeedbackRoute.page),
     AutoRoute(page: FilePreviewRoute.page),
     AutoRoute(page: InAppWebViewRoute.page),
     AutoRoute(page: PrivacyPolicyRoute.page),

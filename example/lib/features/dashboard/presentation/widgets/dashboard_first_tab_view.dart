@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
 import 'package:flutter_prakash_core_example/config/config.dart';
+import 'package:flutter_prakash_core_example/core/core.dart';
+import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/auth_cubit.dart';
+import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/auth_state.dart';
 
 class DashboardFirstTabView extends StatelessWidget {
   const DashboardFirstTabView({super.key});
@@ -12,117 +15,136 @@ class DashboardFirstTabView extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(20),
       children: [
-        Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(24),
-            gradient: const LinearGradient(
-              colors: [AppPalette.primary, AppPalette.primaryDark],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: AppPalette.primary.withValues(alpha: 0.3),
-                blurRadius: 20,
-                offset: const Offset(0, 8),
+        // Hero Header Card
+        BlocBuilder<AuthCubit, AuthState>(
+          builder: (context, authState) {
+            final userName = switch (authState) {
+              Authenticated(:final user) => user.name,
+              _ => 'Prakash B. Chand',
+            };
+
+            return Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(24),
+                gradient: const LinearGradient(
+                  colors: [AppPalette.primary, AppPalette.primaryDark],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppPalette.primary.withValues(alpha: 0.3),
+                    blurRadius: 20,
+                    offset: const Offset(0, 8),
+                  ),
+                ],
               ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 22,
-                          backgroundColor: Colors.white.withValues(alpha: 0.2),
-                          child: const Icon(
-                            Icons.person_rounded,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Welcome back,',
-                                style: TextStyle(
-                                  color: Colors.white.withValues(alpha: 0.8),
-                                  fontSize: 12,
-                                ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 22,
+                              backgroundColor:
+                                  Colors.white.withValues(alpha: 0.2),
+                              child: const Icon(
+                                Icons.person_rounded,
+                                color: Colors.white,
                               ),
-                              Text(
-                                Fake.fullName,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Welcome back,',
+                                    style: TextStyle(
+                                      color: Colors.white.withValues(
+                                        alpha: 0.8,
+                                      ),
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  Text(
+                                    userName,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Row(
+                          children: [
+                            Icon(
+                              Icons.circle,
+                              color: AppPalette.success,
+                              size: 8,
+                            ),
+                            SizedBox(width: 6),
+                            Text(
+                              'ENGINE ONLINE',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.8,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    AppConstants.appTagline,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Row(
-                      children: [
-                        Icon(Icons.circle, color: AppPalette.success, size: 8),
-                        SizedBox(width: 6),
-                        Text(
-                          'ENGINE ONLINE',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 0.8,
-                          ),
-                        ),
-                      ],
+                  const SizedBox(height: 4),
+                  const Text(
+                    'State-driven dashboard powered by Clean Architecture and reactive BLoC patterns.',
+                    style: TextStyle(
+                      color: Colors.white70,
+                      fontSize: 13,
+                      height: 1.4,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
-              Text(
-                AppConstants.appTagline,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 4),
-              const Text(
-                'State-driven dashboard powered by DashboardCubit and Clean Architecture.',
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 13,
-                  height: 1.4,
-                ),
-              ),
-            ],
-          ),
+            );
+          },
         ),
         const SizedBox(height: 24),
+
+        // Architecture stats
         Row(
           children: [
             Expanded(
@@ -146,6 +168,74 @@ class DashboardFirstTabView extends StatelessWidget {
             ),
           ],
         ),
+        const SizedBox(height: 24),
+
+        // Quick Actions
+        const Text(
+          'Quick Actions',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: _buildQuickActionCard(
+                context,
+                icon: Icons.image_outlined,
+                iconColor: AppPalette.blue,
+                title: 'Image Zoom',
+                onTap: () {
+                  context.router.push(
+                    FilePreviewRoute(
+                      filePath: 'https://picsum.photos/800/1200',
+                      fileType: FileType.image,
+                      sourceType: FileSourceType.network,
+                      title: 'Sample Image',
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _buildQuickActionCard(
+                context,
+                icon: Icons.picture_as_pdf_outlined,
+                iconColor: AppPalette.error,
+                title: 'PDF Viewer',
+                onTap: () {
+                  context.router.push(
+                    FilePreviewRoute(
+                      filePath:
+                          'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+                      fileType: FileType.pdf,
+                      sourceType: FileSourceType.network,
+                      title: 'Sample PDF',
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _buildQuickActionCard(
+                context,
+                icon: Icons.public_rounded,
+                iconColor: AppPalette.primary,
+                title: 'In-App Web',
+                onTap: () {
+                  context.router.push(
+                    InAppWebViewRoute(
+                      initialUrl: 'https://flutter.dev',
+                      title: 'Flutter Dev',
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+
         const SizedBox(height: 24),
         const Text(
           'Platform Highlights',
@@ -177,6 +267,61 @@ class DashboardFirstTabView extends StatelessWidget {
               'Type-safe Result<T> sealed pattern with NetworkException mapping',
         ),
       ],
+    );
+  }
+
+  Widget _buildQuickActionCard(
+    BuildContext context, {
+    required IconData icon,
+    required Color iconColor,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
+        decoration: BoxDecoration(
+          color: AppPalette.surface(isDark),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: isDark ? Colors.grey.shade800 : Colors.grey.shade200,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.03),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: iconColor.withValues(alpha: 0.12),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: iconColor, size: 20),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -224,7 +369,8 @@ class DashboardFirstTabView extends StatelessWidget {
                   title,
                   style: TextStyle(
                     fontSize: 11,
-                    color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
+                    color:
+                        isDark ? Colors.grey.shade400 : Colors.grey.shade600,
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -294,7 +440,8 @@ class DashboardFirstTabView extends StatelessWidget {
                 Text(
                   subtitle,
                   style: TextStyle(
-                    color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
+                    color:
+                        isDark ? Colors.grey.shade400 : Colors.grey.shade600,
                     fontSize: 12,
                     height: 1.3,
                   ),

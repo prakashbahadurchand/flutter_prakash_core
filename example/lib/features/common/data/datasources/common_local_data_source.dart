@@ -1,43 +1,65 @@
+import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core_example/features/common/data/models/feedback_request_model.dart';
 import 'package:flutter_prakash_core_example/features/common/data/models/legal_document_model.dart';
-import 'package:injectable/injectable.dart';
 
 @lazySingleton
 class CommonLocalDataSource {
+  const CommonLocalDataSource();
+
   Future<LegalDocumentModel> getPrivacyPolicy() async {
+    await Future.delayed(const Duration(milliseconds: 300));
     return const LegalDocumentModel(
       title: 'Privacy Policy',
-      lastUpdated: 'August 2026',
-      content:
-          'Flutter Prakash takes your privacy seriously. We process data securely on-device with zero untracked data leaks. '
-          'We do not collect personal information without your explicit consent.\n\n'
-          '1. Data Collection\n'
-          'We only collect data that is necessary for the core functionality of the application. '
-          'This may include device information and crash reports to improve stability.\n\n'
-          '2. Data Usage\n'
-          'Your data is never sold to third parties. It is exclusively used to provide and improve the service.\n\n'
-          '3. Security\n'
-          'We implement industry-standard encryption to protect your data both in transit and at rest.\n\n'
-          'If you have any questions about this Privacy Policy, please contact our support team.',
+      content: '''
+# Privacy Policy
+
+**Effective Date:** January 1, 2026
+
+## 1. Introduction
+Welcome to flutter_prakash_core. We respect your privacy and are committed to protecting your personal data.
+
+## 2. Information We Collect
+- Device information and operating system version.
+- Crash reports and application diagnostic telemetry.
+- Preferences (Theme Mode, Selected Locale).
+
+## 3. How We Use Information
+We use your information solely to ensure optimal application performance and deliver a smooth user experience.
+
+## 4. Contact Us
+If you have any questions, please reach out via our feedback channel.
+''',
+      lastUpdated: 'January 1, 2026',
     );
   }
 
   Future<LegalDocumentModel> getTermsAndConditions() async {
+    await Future.delayed(const Duration(milliseconds: 300));
     return const LegalDocumentModel(
-      title: 'Terms of Service',
-      lastUpdated: 'August 2026',
-      content:
-          'Please read these Terms of Service carefully before using the Flutter Prakash application.\n\n'
-          '1. Acceptance of Terms\n'
-          'By accessing or using the application, you agree to be bound by these Terms. '
-          'If you disagree with any part of the terms, you do not have permission to access the service.\n\n'
-          '2. License Use\n'
-          'We grant you a personal, non-exclusive, non-transferable, limited privilege to enter and use the Application. '
-          'You may not modify, copy, distribute, transmit, display, perform, reproduce, publish, license, create derivative works from, transfer, or sell any information, software, products or services obtained from the Application.\n\n'
-          '3. Disclaimer\n'
-          'The materials on the application are provided on an "as is" basis. '
-          'We make no warranties, expressed or implied, and hereby disclaim and negate all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.\n\n'
-          '4. Limitations\n'
-          'In no event shall Flutter Prakash or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on the application.',
+      title: 'Terms & Conditions',
+      content: '''
+# Terms and Conditions
+
+**Effective Date:** January 1, 2026
+
+## 1. Acceptance of Terms
+By downloading, installing, or using this application, you agree to be bound by these Terms.
+
+## 2. License Grant
+Subject to your compliance, you are granted a limited, non-exclusive, non-transferable license.
+
+## 3. Disclaimer of Warranties
+This software is provided "AS IS", without warranty of any kind, express or implied.
+
+## 4. Changes to Terms
+We reserve the right to modify these Terms at any time.
+''',
+      lastUpdated: 'January 1, 2026',
     );
+  }
+
+  Future<bool> submitFeedback(FeedbackRequestModel request) async {
+    await Future.delayed(const Duration(milliseconds: 800));
+    return true;
   }
 }

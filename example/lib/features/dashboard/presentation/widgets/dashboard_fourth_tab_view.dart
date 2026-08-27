@@ -319,7 +319,7 @@ class DashboardFourthTabView extends StatelessWidget {
               iconColor: AppPalette.slate500,
               title: 'Report Feedback',
               subtitle: 'Help us improve the app',
-              onTap: () => context.router.push(const ReportFeedbackRoute()),
+              onTap: () => context.router.push(const FeedbackRoute()),
             ),
           ],
         ),

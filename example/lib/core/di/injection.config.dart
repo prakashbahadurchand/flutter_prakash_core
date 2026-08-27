@@ -41,6 +41,7 @@ import '../../features/common/data/datasources/common_local_data_source.dart'
     as _i137;
 import '../../features/common/data/repositories/common_repository.dart'
     as _i168;
+import '../../features/common/presentation/blocs/feedback_cubit.dart' as _i521;
 import '../../features/common/presentation/blocs/legal_cubit.dart' as _i627;
 import '../../features/dashboard/data/datasources/dashboard_local_data_source.dart'
     as _i838;
@@ -68,8 +69,6 @@ import '../../features/settings/data/datasources/settings_local_data_source.dart
     as _i599;
 import '../../features/settings/data/repositories/settings_repository.dart'
     as _i450;
-import '../../features/settings/presentation/blocs/feedback_cubit.dart'
-    as _i493;
 import '../../features/settings/presentation/blocs/settings_cubit.dart'
     as _i573;
 import '../../features/splash/data/datasources/splash_local_data_source.dart'
@@ -105,7 +104,7 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i258.DashboardRemoteDataSource(),
     );
     gh.lazySingleton<_i137.CommonLocalDataSource>(
-      () => _i137.CommonLocalDataSource(),
+      () => const _i137.CommonLocalDataSource(),
     );
     gh.lazySingleton<_i107.AuthRemoteDataSource>(
       () => const _i107.AuthRemoteDataSource(),
@@ -143,9 +142,6 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i573.SettingsCubit>(
       () => _i573.SettingsCubit(gh<_i450.SettingsRepository>())..init(),
-    );
-    gh.factory<_i493.FeedbackCubit>(
-      () => _i493.FeedbackCubit(gh<_i450.SettingsRepository>()),
     );
     gh.lazySingleton<_i952.AppEnv>(() => _i560.ProdEnv(), registerFor: {_prod});
     gh.lazySingleton<_i573.AuthRepository>(
@@ -203,6 +199,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i627.LegalCubit>(
       () => _i627.LegalCubit(gh<_i168.CommonRepository>()),
+    );
+    gh.factory<_i521.FeedbackCubit>(
+      () => _i521.FeedbackCubit(gh<_i168.CommonRepository>()),
     );
     return this;
   }

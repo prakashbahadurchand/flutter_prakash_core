@@ -2,6 +2,7 @@ import 'package:flutter_prakash_core/flutter_prakash_core.dart';
 
 class FeedbackState extends FormCubitState<bool> {
   final Field<String> feedback;
+  final Field<String> email;
 
   FeedbackState({
     super.status,
@@ -9,11 +10,19 @@ class FeedbackState extends FormCubitState<bool> {
     super.failure,
     super.result,
     Field<String>? feedback,
-  }) : feedback = feedback ??
+    Field<String>? email,
+  })  : feedback = feedback ??
             Field(
+              labelText: 'Feedback / Report',
+              hintText: 'Describe your feedback or issue...',
               value: '',
-              labelText: 'Feedback',
-              validators: Validators.required(),
+              validators: Validators.required().minLength(10),
+            ),
+        email = email ??
+            Field(
+              labelText: 'Email Address (Optional)',
+              hintText: 'Enter your email for follow-up...',
+              value: '',
             );
 
   @override
@@ -23,6 +32,7 @@ class FeedbackState extends FormCubitState<bool> {
     Failure? failure,
     bool? result,
     Field<String>? feedback,
+    Field<String>? email,
   }) {
     return FeedbackState(
       status: status ?? this.status,
@@ -30,9 +40,14 @@ class FeedbackState extends FormCubitState<bool> {
       failure: failure ?? this.failure,
       result: result ?? this.result,
       feedback: feedback ?? this.feedback,
+      email: email ?? this.email,
     );
   }
 
   @override
-  List<Object?> get props => [...super.props, feedback];
+  List<Object?> get props => [
+        ...super.props,
+        feedback,
+        email,
+      ];
 }

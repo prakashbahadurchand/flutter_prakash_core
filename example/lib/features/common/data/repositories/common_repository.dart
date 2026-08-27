@@ -1,5 +1,6 @@
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
 import 'package:flutter_prakash_core_example/features/common/data/datasources/common_local_data_source.dart';
+import 'package:flutter_prakash_core_example/features/common/data/models/feedback_request_model.dart';
 import 'package:flutter_prakash_core_example/features/common/data/models/legal_document_model.dart';
 
 @lazySingleton
@@ -9,10 +10,20 @@ class CommonRepository {
   const CommonRepository(this._localDataSource);
 
   FutureResult<LegalDocumentModel> getPrivacyPolicy() {
-    return Result.fromAsync(call: () => _localDataSource.getPrivacyPolicy());
+    return Result.fromAsync(
+      call: () => _localDataSource.getPrivacyPolicy(),
+    );
   }
 
   FutureResult<LegalDocumentModel> getTermsAndConditions() {
-    return Result.fromAsync(call: () => _localDataSource.getTermsAndConditions());
+    return Result.fromAsync(
+      call: () => _localDataSource.getTermsAndConditions(),
+    );
+  }
+
+  FutureResult<bool> submitFeedback(FeedbackRequestModel request) {
+    return Result.fromAsync(
+      call: () => _localDataSource.submitFeedback(request),
+    );
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
 import 'package:flutter_prakash_core_example/config/config.dart';
 import 'package:flutter_prakash_core_example/core/core.dart';
+import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/auth_cubit.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -20,6 +21,7 @@ class _MyAppState extends State<MyApp> {
       providers: [
         BlocProvider(create: (_) => getIt<ThemeCubit>()),
         BlocProvider(create: (_) => getIt<LocaleCubit>()),
+        BlocProvider(create: (_) => getIt<AuthCubit>()),
       ],
       child: Builder(
         builder: (context) {
@@ -46,6 +48,12 @@ class _MyAppState extends State<MyApp> {
               GlobalCupertinoLocalizations.delegate,
             ],
             routerConfig: _appRouter.config(),
+            builder: (context, child) {
+              return DevtoolsFloatingDock(
+                enabled: appEnv.isDev,
+                child: child ?? const SizedBox.shrink(),
+              );
+            },
           );
         },
       ),

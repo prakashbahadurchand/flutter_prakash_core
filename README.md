@@ -15,7 +15,7 @@
 - [🏛️ Architecture & Project Structure](#️-architecture--project-structure)
 - [🧩 Core Modules & Capabilities](#-core-modules--capabilities)
   - [⚡ 1. BLoC State Management Engine](#-1-bloc-state-management-engine)
-  - [📝 2. Reactive Forms Framework (`FormCubit`)](#-2-reactive-forms-framework-formcubit)
+  - [📝 2. Reactive Forms Framework (`BaseFormCubit` & `Field<T>`)](#-2-reactive-forms-framework-baseformcubit--fieldt)
   - [🌐 3. Networking & Error Handling (`Result<T>`)](#-3-networking--error-handling-resultt)
   - [🛠️ 4. DevTools Suite & Runtime Inspectors](#️-4-devtools-suite--runtime-inspectors)
   - [🎨 5. Design System, Tokens & Theme Builder](#-5-design-system-tokens--theme-builder)
@@ -34,7 +34,7 @@
 * 🎯 **Clean Architecture & SOLID Enforced**: Strictly concrete Data Sources and Repositories with zero unnecessary abstractions or domain pollution.
 * ⚡ **Complete BLoC State Management**: `BaseCubit`, `BaseBloc`, `BaseUiCubit`, `BasePagingCubit`, and `EnterpriseBlocObserver`.
 * 🪄 **One-Shot UI Side-Effects Stream**: Dispatches Toasts, Navigations, and Dialogs cleanly without polluting state trees via `PrakashEffectListener`.
-* 📝 **Declarative Reactive Forms**: Type-safe validation chains (`Field<T>`, `Validators`, `ReactiveTextField`, `ReactiveDropdown`, `ReactiveCheckbox`, `ReactiveFormButton`, `ReactiveFormListener`).
+* 📝 **Declarative Reactive Forms**: Type-safe validation chains (`Field<T>`, `Validators`, `ReactiveTextField`, `ReactivePinCodeField`, `ReactiveDropdown`, `ReactiveCheckbox`, `ReactiveSwitch`, `ReactiveFormButton`).
 * 🛡️ **Type-Safe Sealed `Result<T>`**: Full failure/exception encapsulation for seamless asynchronous network and storage handling.
 * 🎛️ **Built-in DevTools Floating Dock**: Live inspection of HTTP traffic, GraphQL calls, `SharedPreferences`, logs, app storage, and custom overrides.
 * 💰 **Comprehensive AdMob & Offline Ad Fallbacks**: Google AdMob Banner, Adaptive Banner, Native templates, App Open, Interstitial, and Rewarded Ads with offline cross-promotions.
@@ -51,7 +51,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_prakash_core:
-    path: ../flutter_prakash_core # Or git reference
+    path: ../flutter_prakash_core # Or pub version
 ```
 
 Run pub get:
@@ -63,13 +63,13 @@ flutter pub get
 
 ## 🏛️ Architecture & Project Structure
 
-`flutter_prakash_core` provides clean, granular exports under `lib/src/`:
+`flutter_prakash_core` provides clean, modular components under `lib/src/`:
 
 ```
 lib/
  └── src/
       ├── admob/       💰 AdMob Services, Banners, Native Widgets, Offline Ad Pool
-      ├── base/        🏛️ Base Repository, Base DataSource, Model, UseCase
+      ├── base/        🏛️ Base Repository, Base DataSource, Model, Storage
       ├── blocs/       ⚡ Base BLoC/Cubit, Paging, Theme, Locale, AppEvent
       ├── devtools/    🛠️ DevTools Dialog, Floating Dock, Network/Storage Inspectors
       ├── di/          💉 GetIt & Injectable DI Helpers
@@ -93,9 +93,9 @@ lib/
 
 ### ⚡ 1. BLoC State Management Engine
 
-`flutter_prakash_core` eliminates state boilerplate with lifecycle-safe lifecycle methods and side-effect streams.
+`flutter_prakash_core` eliminates state boilerplate with lifecycle-safe methods and side-effect streams.
 
-#### 🔄 BaseUiCubit & UiStateBuilder
+#### 🔄 BaseUiCubit & UiState
 Encapsulates async operations (`initial`, `loading`, `success`, `failure`) into a unified UI builder:
 
 ```dart
@@ -113,127 +113,117 @@ class UserProfileCubit extends BaseUiCubit<UserProfile> {
   }
 }
 
-// 2. Consume in UI
-UiStateBuilder<UserProfileCubit, UserProfile>(
-  bloc: getIt<UserProfileCubit>(),
-  onSuccess: (context, profile) => ProfileCard(user: profile),
-  onLoading: (context, progress, message) => const ShimmerBox(height: 120),
-  onError: (context, failure) => ErrorRetryWidget(message: failure.message),
+// 2. Consume in UI with Pattern Matching
+BlocBuilder<UserProfileCubit, UiState<UserProfile>>(
+  builder: (context, state) => switch (state) {
+    UiInitial() || UiLoading() => const Center(child: CircularProgressIndicator()),
+    UiFailure(:final message) => ErrorRetryWidget(message: message),
+    UiSuccess(:final data) => ProfileCard(user: data),
+  },
 );
 ```
 
 #### 🚀 Single-Shot UI Effects (`PrakashEffectListener`)
-Dispatches one-time events (snackbars, navigation routes, alerts) without polluting the state stream:
+Dispatches one-time events (toasts, navigation routes, alerts) without polluting the state stream:
 
 ```dart
 PrakashEffectListener.fromCubit(
-  cubit: context.read<DashboardCubit>(),
+  cubit: context.read<LoginCubit>(),
   onEffect: (context, effect) {
     if (effect is NavigateEffect) {
       context.router.pushNamed(effect.route);
     }
   },
-  child: const DashboardView(),
+  child: const LoginFormView(),
 );
 ```
 
 #### 📜 BasePagingCubit & PagingListView
-Built-in infinite pagination with automated pull-to-refresh and pagination error recovery:
+Built-in infinite pagination with automated pull-to-refresh and error handling:
 
 ```dart
-PagingListView<UserPagingCubit, User>(
-  cubit: getIt<UserPagingCubit>(),
-  itemBuilder: (context, user, index) => ListTile(
-    leading: CircleAvatar(child: Text('${index + 1}')),
-    title: Text(user.name),
-    subtitle: Text(user.email),
-  ),
-);
+@injectable
+class UserPagingCubit extends BasePagingCubit<User> {
+  UserPagingCubit(this._repo);
+  final UserRepository _repo;
+
+  @override
+  Future<Result<List<User>>> fetchPage(int page, int pageSize) {
+    return _repo.getUsers(page: page, limit: pageSize);
+  }
+}
 ```
 
 ---
 
-### 📝 2. Reactive Forms Framework (`FormCubit`)
+### 📝 2. Reactive Forms Framework (`BaseFormCubit` & `Field<T>`)
 
 Declarative, type-safe reactive forms with auto-inferred labels, hints, validation, and submission states.
 
 ```dart
-// 1. Define State with FormMixin
-@freezed
-abstract class LoginFormState with _$LoginFormState, FormMixin implements FormState {
-  const LoginFormState._();
-  const factory LoginFormState({
-    required Field<String> email,
-    required Field<String> password,
-    @Default(BlocStatus.initial()) BlocStatus status,
-  }) = _LoginFormState;
+// 1. Define State
+class LoginFormState extends FormCubitState {
+  final Field<String> email;
+  final Field<String> password;
 
-  factory LoginFormState.initial() => LoginFormState(
-    email: Field(
-      labelText: 'Email Address',
-      value: '',
-      validators: Validators.required().email(),
-    ),
-    password: Field(
-      labelText: 'Password',
-      value: '',
-      validators: Validators.required().minLength(8),
-    ),
-  );
-
-  @override
-  List<Field<dynamic>> get formFields => [email, password];
+  LoginFormState({
+    Field<String>? email,
+    Field<String>? password,
+    super.status = FormStatus.initial,
+  })  : email = email ??
+            Field(
+              labelText: 'Email Address',
+              value: '',
+              validators: Validators.required().email(),
+            ),
+        password = password ??
+            Field(
+              labelText: 'Password',
+              value: '',
+              validators: Validators.required().minLength(6),
+            );
 
   @override
-  LoginFormState copyWithStatus(BlocStatus status) => copyWith(status: status);
+  List<Field<dynamic>> get fields => [email, password];
+
+  LoginFormState copyWith({
+    Field<String>? email,
+    Field<String>? password,
+    FormStatus? status,
+  }) {
+    return LoginFormState(
+      email: email ?? this.email,
+      password: password ?? this.password,
+      status: status ?? this.status,
+    );
+  }
 }
 
 // 2. Define Cubit
 @injectable
-class LoginCubit extends FormCubit<LoginFormState> {
-  LoginCubit(this._authRepo) : super(LoginFormState.initial());
+class LoginCubit extends BaseFormCubit<LoginFormState, UserProfile> {
+  LoginCubit(this._authRepo) : super(LoginFormState());
   final AuthRepository _authRepo;
 
-  void onEmailChanged(String val) => emit(state.copyWith(email: state.email(val)));
-  void onPasswordChanged(String val) => emit(state.copyWith(password: state.password(val)));
+  void emailChanged(String val) => emit(state.copyWith(email: state.email(val)));
+  void passwordChanged(String val) => emit(state.copyWith(password: state.password(val)));
 
-  @override
-  Future<Result<dynamic>> performSubmit() => _authRepo.login(state.email.value, state.password.value);
+  Future<void> login() async {
+    await submitForm(
+      call: () => _authRepo.login(state.email.value, state.password.value),
+      onSuccess: (user) => emitEffect(ShowToastEffect('Welcome back, ${user.name}!')),
+    );
+  }
 }
-
-// 3. Declarative UI
-ReactiveFormListener<LoginCubit, LoginFormState>(
-  successMessage: 'Welcome back!',
-  onSuccess: (context, state) => context.router.replace(const DashboardRoute()),
-  child: Column(
-    children: [
-      ReactiveTextField(
-        field: state.email,
-        onChanged: cubit.onEmailChanged,
-        prefixIcon: const Icon(Icons.email_outlined),
-      ),
-      ReactiveTextField(
-        field: state.password,
-        onChanged: cubit.onPasswordChanged,
-        obscureText: true,
-        prefixIcon: const Icon(Icons.lock_outline),
-      ),
-      ReactiveFormButton<LoginCubit, LoginFormState>(
-        label: 'Sign In',
-        icon: Icons.login_rounded,
-      ),
-    ],
-  ),
-);
 ```
 
-Available Reactive Components:
+Available Reactive Form Components:
 * 🔤 `ReactiveTextField`
+* 🔢 `ReactivePinCodeField` (OTP codes)
 * 🔘 `ReactiveCheckbox`
 * 🎚️ `ReactiveSwitch`
 * 📋 `ReactiveDropdown<T>`
 * 📑 `ReactiveSegmentedButton<T>`
-* 🔢 `ReactivePinCodeField`
 * 🎚️ `ReactiveSlider`
 * 📅 `ReactiveDatePicker` & ⏰ `ReactiveTimePicker`
 * 🔘 `ReactiveRadioGroup<T>`
@@ -248,19 +238,27 @@ Encapsulate async computations into clean, type-safe sealed `Result<T>` values:
 ```dart
 @lazySingleton
 class AuthRepository {
-  final AuthDataSource _dataSource;
-  AuthRepository(this._dataSource);
+  final AuthRemoteDataSource _remoteSource;
+  final AuthLocalDataSource _localSource;
 
-  FutureResult<UserModel> login(LoginRequestDto dto) {
-    return Result.fromAsync(call: () => _dataSource.login(dto));
+  AuthRepository(this._remoteSource, this._localSource);
+
+  FutureResult<AuthUserModel> login(LoginRequestModel request) {
+    return Result.fromAsync(
+      call: () async {
+        final result = await _remoteSource.login(request);
+        await _localSource.saveSession(token: result.token, user: result.user);
+        return result.user;
+      },
+    );
   }
 }
 
 // Handling in Cubit / Service:
-final result = await authRepo.login(dto);
+final result = await authRepo.login(request);
 result.when(
   success: (user) => print('Logged in as ${user.name}'),
-  failure: (failure) => print('Error [${failure.statusCode}]: ${failure.message}'),
+  error: (failure) => print('Error: ${failure.errorMessage}'),
 );
 ```
 
@@ -271,19 +269,14 @@ result.when(
 Embed a draggable floating inspection dock into your debug builds with a single widget:
 
 ```dart
-DevtoolsFloatingDock(
-  child: Scaffold(
-    appBar: AppBar(
-      title: const Text('My App'),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.bug_report_rounded),
-          onPressed: () => DevToolsDialog.show(context),
-        ),
-      ],
-    ),
-    body: const AppBody(),
-  ),
+MaterialApp.router(
+  builder: (context, child) {
+    return DevtoolsFloatingDock(
+      enabled: appEnv.isDev,
+      child: child ?? const SizedBox.shrink(),
+    );
+  },
+  routerConfig: _appRouter.config(),
 );
 ```
 
@@ -339,14 +332,6 @@ await AdMobService.initialize(
     interstitialAndroidId: 'ca-app-pub-xxx',
     rewardedAndroidId: 'ca-app-pub-xxx',
     isTesting: kDebugMode,
-    customAds: [
-      CustomAdModel(
-        appName: 'Hamro Maya App',
-        appPackageName: 'com.princethakuri.hamromaya',
-        appMessage: 'Best collection of Nepali Shayari & Quotes.',
-        appIconPath: 'assets/icons/app_icon.png',
-      ),
-    ],
   ),
   autoShowAppOpen: true,
 );
@@ -358,12 +343,9 @@ const AdMobAdaptiveBannerWidget();
 // 3. Drop-in Native Ads
 const AdMobNativeWidget(templateType: TemplateType.medium);
 
-// 4. One-Line Interstitials & Rewarded Video
+// 4. Interstitials & Rewarded Video
 AdMobService.showInterstitial(onCompleted: () => navigateNext());
 AdMobService.showRewarded(onUserEarnedReward: (reward) => giveReward());
-
-// 5. Global Ad-Free Mode
-AdMobService.setAdFree(true);
 ```
 
 ---
@@ -392,12 +374,6 @@ FirebaseAppDistributionManager.checkForUpdate();
 Display notifications anywhere without a direct `BuildContext`:
 
 ```dart
-// Setup in MaterialApp.router:
-MaterialApp.router(
-  scaffoldMessengerKey: Toast.scaffoldMessengerKey,
-  ...
-);
-
 // Call anywhere:
 Toast.success('Profile updated successfully!');
 Toast.error('Failed to sync changes.');
@@ -479,11 +455,11 @@ DateTime.now().isToday; // true
 
 ## 📱 Example Application
 
-A complete enterprise-grade sample application demonstrating all patterns can be found in the [`example/`](file:///Users/prakashbahadurchand/Prakash_Bahadur_Chand/My_Projects/flutter_prakash_core/example) directory:
+A complete enterprise-grade sample application demonstrating all patterns can be found in the [`example/`](example/) directory:
 
 ```bash
 cd example
-flutter run
+flutter run -t lib/main_dev.dart
 ```
 
 ---
@@ -493,7 +469,7 @@ flutter run
 ```bash
 flutter analyze
 flutter test
-cd example && flutter run
+cd example && flutter analyze
 ```
 
 ---

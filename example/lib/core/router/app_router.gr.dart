@@ -96,6 +96,22 @@ class EmailVerificationRouteArgs {
 }
 
 /// generated route for
+/// [FeedbackPage]
+class FeedbackRoute extends PageRouteInfo<void> {
+  const FeedbackRoute({List<PageRouteInfo>? children})
+    : super(FeedbackRoute.name, initialChildren: children);
+
+  static const String name = 'FeedbackRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const FeedbackPage();
+    },
+  );
+}
+
+/// generated route for
 /// [FilePreviewPage]
 class FilePreviewRoute extends PageRouteInfo<FilePreviewRouteArgs> {
   FilePreviewRoute({
@@ -288,22 +304,6 @@ class RegisterRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [ReportFeedbackPage]
-class ReportFeedbackRoute extends PageRouteInfo<void> {
-  const ReportFeedbackRoute({List<PageRouteInfo>? children})
-    : super(ReportFeedbackRoute.name, initialChildren: children);
-
-  static const String name = 'ReportFeedbackRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const ReportFeedbackPage();
-    },
-  );
-}
-
-/// generated route for
 /// [ResetPasswordPage]
 class ResetPasswordRoute extends PageRouteInfo<ResetPasswordRouteArgs> {
   ResetPasswordRoute({
@@ -341,6 +341,22 @@ class ResetPasswordRouteArgs {
   String toString() {
     return 'ResetPasswordRouteArgs{key: $key, email: $email, otp: $otp}';
   }
+}
+
+/// generated route for
+/// [SettingsPage]
+class SettingsRoute extends PageRouteInfo<void> {
+  const SettingsRoute({List<PageRouteInfo>? children})
+    : super(SettingsRoute.name, initialChildren: children);
+
+  static const String name = 'SettingsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SettingsPage();
+    },
+  );
 }
 
 /// generated route for
