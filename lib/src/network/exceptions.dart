@@ -120,7 +120,9 @@ class AppTimeoutException extends AppException {
 }
 
 /// Backwards compatibility alias for [AppTimeoutException].
-@Deprecated('Use AppTimeoutException to avoid collision with dart:async.TimeoutException')
+@Deprecated(
+  'Use AppTimeoutException to avoid collision with dart:async.TimeoutException',
+)
 typedef TimeoutException = AppTimeoutException;
 
 /// Thrown when an asynchronous operation is explicitly cancelled by user or system.

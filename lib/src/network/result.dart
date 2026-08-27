@@ -60,7 +60,9 @@ sealed class Result<T> {
         return Result.error(TimeoutFailure(error.message));
       } else if (error is async.TimeoutException) {
         return Result.error(
-          TimeoutFailure(error.message ?? 'Request timed out. Please try again.'),
+          TimeoutFailure(
+            error.message ?? 'Request timed out. Please try again.',
+          ),
         );
       } else if (error is CancellationException) {
         return Result.error(CancelledFailure(error.message));

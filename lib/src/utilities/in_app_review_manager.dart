@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_prakash_core/src/loggers/flutter_logger.dart';
+import '../loggers/flutter_logger.dart';
 import 'package:in_app_review/in_app_review.dart';
 
 /// Manager for handling native In-App Reviews and Store Listings.

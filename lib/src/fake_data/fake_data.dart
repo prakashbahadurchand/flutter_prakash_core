@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 ///
 /// Usage Example:
 /// ```dart
-/// import 'package:flutter_prakash_core/src/core/fake_data/fake_data.dart';
+/// import 'package:flutter_prakash_core/flutter_prakash_core.dart';
 ///
 /// // 1. Mock User Data & Profiles
 /// final name = Fake.fullName;
@@ -248,6 +248,9 @@ class Fake {
     final days = _faker.randomGenerator.integer(maxDaysAhead);
     return DateTime.now().add(Duration(days: days));
   }
+
+  /// Generates a random boolean.
+  static bool get boolean => _faker.randomGenerator.boolean();
 
   // ===========================================================================
   // 7. COLLECTIONS & UTILITIES

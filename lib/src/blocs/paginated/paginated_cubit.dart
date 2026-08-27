@@ -176,7 +176,8 @@ abstract class PaginatedCubit<T, F> extends Cubit<PaginatedState<T, F>> {
 
         // Let PagingController manage its own pages/keys internally.
         // We only update our BLoC state for UI tracking purposes.
-        final currentTotal = (pagingController.value.items?.length ?? 0) + items.length;
+        final currentTotal =
+            (pagingController.value.items?.length ?? 0) + items.length;
 
         if (!isClosed) {
           emit(

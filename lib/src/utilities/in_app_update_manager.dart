@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_prakash_core/src/loggers/flutter_logger.dart';
+import '../loggers/flutter_logger.dart';
 import 'package:in_app_update/in_app_update.dart';
 
 /// App update info summary for immediate handling by host apps.

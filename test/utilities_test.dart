@@ -1,0 +1,134 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_prakash_core/src/di/di_manager.dart';
+import 'package:flutter_prakash_core/src/fake_data/fake_data.dart';
+import 'package:flutter_prakash_core/src/utilities/color_utilities.dart';
+import 'package:flutter_prakash_core/src/utilities/debouncer.dart';
+import 'package:flutter_test/flutter_test.dart' hide Fake;
+
+class ServiceA {
+  final String name;
+  ServiceA([this.name = 'ServiceA']);
+}
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  group('Debouncer Utility', () {
+    test('Debouncer defers execution until delay passes', () async {
+      var callCount = 0;
+      final debouncer = Debouncer(
+        duration: const Duration(milliseconds: 50),
+        action: () => callCount++,
+      );
+
+      debouncer();
+      debouncer();
+      debouncer();
+
+      expect(callCount, equals(0));
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+      expect(callCount, equals(1));
+    });
+
+    test('Debouncer cancel aborts pending execution', () async {
+      var callCount = 0;
+      final debouncer = Debouncer(
+        duration: const Duration(milliseconds: 50),
+        action: () => callCount++,
+      );
+
+      debouncer();
+      debouncer.cancel();
+
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+      expect(callCount, equals(0));
+    });
+  });
+
+  group('ColorUtilities', () {
+    test('generateColorFromString produces stable non-null color', () {
+      final c1 = generateColorFromString('Test User');
+      final c2 = generateColorFromString('Test User');
+      final c3 = generateColorFromString('Another String');
+
+      expect(c1, equals(c2));
+      expect(c1, isA<Color>());
+      expect(c3, isA<Color>());
+    });
+
+    test('generateColorFromStringFull produces stable Color', () {
+      final c1 = generateColorFromStringFull('Softix Info');
+      final c2 = generateColorFromStringFull('Softix Info');
+
+      expect(c1, equals(c2));
+      expect(c1, isA<Color>());
+    });
+
+    test('generateShadeVariant adjusts color factor properly', () {
+      const base = Colors.blue;
+      final shade = generateShadeVariant(base, 0.5);
+      expect(shade, isA<Color>());
+    });
+  });
+
+  group('Fake Data Generator', () {
+    test('Fake data mocks generate valid strings, numbers and collections', () {
+      expect(Fake.fullName, isNotEmpty);
+      expect(Fake.firstName, isNotEmpty);
+      expect(Fake.lastName, isNotEmpty);
+      expect(Fake.email, contains('@'));
+      expect(Fake.phoneNumber, isNotEmpty);
+      expect(Fake.jobTitle, isNotEmpty);
+      expect(Fake.city, isNotEmpty);
+      expect(Fake.country, isNotEmpty);
+      expect(Fake.address, isNotEmpty);
+      expect(Fake.id, isNotEmpty);
+      expect(Fake.sentence, isNotEmpty);
+      expect(Fake.paragraph, isNotEmpty);
+      expect(Fake.boolean, isA<bool>());
+      expect(Fake.integer(min: 1, max: 10), inInclusiveRange(1, 10));
+      expect(Fake.price(min: 10, max: 100), isA<double>());
+      expect(Fake.transparentImageMemory(), isNotEmpty);
+
+      final list = Fake.list((i) => 'Item $i', count: 5);
+      expect(list.length, equals(5));
+      expect(list.first, equals('Item 0'));
+    });
+  });
+
+  group('PrakashDI Dependency Injection Container', () {
+    tearDown(() async {
+      await PrakashDI.reset();
+    });
+
+    test(
+      'PrakashDI registers and injects singletons, factories and instances',
+      () async {
+        expect(PrakashDI.isRegistered<ServiceA>(), isFalse);
+
+        // Lazy singleton
+        PrakashDI.registerLazySingleton<ServiceA>(() => ServiceA('Lazy'));
+        expect(PrakashDI.isRegistered<ServiceA>(), isTrue);
+        expect(inject<ServiceA>().name, equals('Lazy'));
+
+        await PrakashDI.reset();
+        expect(PrakashDI.isRegistered<ServiceA>(), isFalse);
+
+        // Factory
+        var count = 0;
+        PrakashDI.registerFactory<ServiceA>(
+          () => ServiceA('Factory ${++count}'),
+        );
+        expect(inject<ServiceA>().name, equals('Factory 1'));
+        expect(inject<ServiceA>().name, equals('Factory 2'));
+
+        await PrakashDI.reset();
+
+        // Ready singleton instance
+        final instance = ServiceA('Singleton');
+        PrakashDI.registerSingleton<ServiceA>(instance);
+        expect(inject<ServiceA>(), same(instance));
+      },
+    );
+  });
+}

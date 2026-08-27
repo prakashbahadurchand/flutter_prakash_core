@@ -1,6 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_prakash_core/src/loggers/flutter_logger.dart';
+import '../../loggers/flutter_logger.dart';
 
 /// Firebase Crashlytics manager for automated Flutter exception capturing,
 /// custom key-value logging, non-fatal errors, and crash collection controls.

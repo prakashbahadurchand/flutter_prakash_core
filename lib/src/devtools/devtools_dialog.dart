@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_prakash_core/src/devtools/devtools_appdata_storage_tabview.dart';
-import 'package:flutter_prakash_core/src/devtools/devtools_custom_options_tabview.dart';
-import 'package:flutter_prakash_core/src/devtools/devtools_graphql_inspector_tabview.dart';
-import 'package:flutter_prakash_core/src/devtools/devtools_logger_tabview.dart';
-import 'package:flutter_prakash_core/src/devtools/devtools_networking_inspector_tabview.dart';
-import 'package:flutter_prakash_core/src/devtools/devtools_preferences_tabview.dart';
+import 'devtools_appdata_storage_tabview.dart';
+import 'devtools_custom_options_tabview.dart';
+import 'devtools_graphql_inspector_tabview.dart';
+import 'devtools_logger_tabview.dart';
+import 'devtools_networking_inspector_tabview.dart';
+import 'devtools_preferences_tabview.dart';
 
 /// Production-ready DevTools Dialog for inspecting REST APIs, GraphQL, Loggers, SharedPreferences/SecureStorage, and AppData files.
 class DevToolsDialog extends StatefulWidget {

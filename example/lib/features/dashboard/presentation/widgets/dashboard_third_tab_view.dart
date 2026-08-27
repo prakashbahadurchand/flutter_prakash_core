@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_prakash_ads/flutter_prakash_ads.dart';
-import 'package:flutter_prakash_core/flutter_prakash_core.dart'
-    hide SmartNativeAdView, SmartBannerAdView;
+import 'package:flutter_prakash_core/flutter_prakash_core.dart';
 import 'package:flutter_prakash_core_example/core/router/app_router.dart';
 
 class DashboardThirdTabView extends StatelessWidget {
@@ -187,9 +186,14 @@ class DashboardThirdTabView extends StatelessWidget {
         const SizedBox(height: 12),
         Card(
           child: ListTile(
-            leading: const Icon(Icons.monetization_on_rounded, color: Colors.amber),
+            leading: const Icon(
+              Icons.monetization_on_rounded,
+              color: Colors.amber,
+            ),
             title: const Text('Open AdMob Showcase'),
-            subtitle: const Text('Banners, Native Ads, Interstitials, Rewarded Video & ILRD Telemetry'),
+            subtitle: const Text(
+              'Banners, Native Ads, Interstitials, Rewarded Video & ILRD Telemetry',
+            ),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
               context.router.push(const AdMobShowcaseRoute());

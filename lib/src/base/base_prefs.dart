@@ -200,10 +200,7 @@ abstract class BasePrefs {
       } else if (value is bool) {
         await prefs.setBool(key, value);
       } else if (value is List) {
-        await prefs.setStringList(
-          key,
-          value.map((e) => e.toString()).toList(),
-        );
+        await prefs.setStringList(key, value.map((e) => e.toString()).toList());
       }
     }
   }

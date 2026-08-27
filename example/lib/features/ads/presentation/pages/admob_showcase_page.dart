@@ -2,8 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_prakash_ads/flutter_prakash_ads.dart';
-import 'package:flutter_prakash_core/flutter_prakash_core.dart'
-    hide SmartBannerAdView, SmartNativeAdView, AppOpenAdManager;
+import 'package:flutter_prakash_core/flutter_prakash_core.dart';
 import 'package:flutter_prakash_core_example/core/themes/app_colors.dart';
 
 @RoutePage()
@@ -31,7 +30,8 @@ class _AdMobShowcasePageState extends State<AdMobShowcasePage> {
       if (!mounted) return;
       setState(() {
         final timestamp = DateTime.now().toIso8601String().substring(11, 19);
-        final log = '[$timestamp] ${event.type.name.toUpperCase()} • ${event.format.name}'
+        final log =
+            '[$timestamp] ${event.type.name.toUpperCase()} • ${event.format.name}'
             '${event.isPaid ? ' (Earned: ${event.revenueValue} ${event.currencyCode})' : ''}';
         _eventLogs.insert(0, log);
         if (_eventLogs.length > 20) {
@@ -57,7 +57,11 @@ class _AdMobShowcasePageState extends State<AdMobShowcasePage> {
       _adsEnabled = value;
     });
     AdManager.setAdsEnabled(value);
-    Toast.info(value ? 'Ads Enabled (Standard Mode)' : 'Ad-Free Mode Activated (All Ads Hidden)');
+    Toast.info(
+      value
+          ? 'Ads Enabled (Standard Mode)'
+          : 'Ad-Free Mode Activated (All Ads Hidden)',
+    );
   }
 
   @override
@@ -108,7 +112,11 @@ class _AdMobShowcasePageState extends State<AdMobShowcasePage> {
           const SizedBox(height: 8),
           const Text(
             'Small Native Template (90px) — Ideal for feeds & list tiles:',
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.grey),
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: Colors.grey,
+            ),
           ),
           const SizedBox(height: 8),
           const SmartNativeAdView(
@@ -118,7 +126,11 @@ class _AdMobShowcasePageState extends State<AdMobShowcasePage> {
           const SizedBox(height: 16),
           const Text(
             'Medium Native Template (350px) — Rich media with policy badge & CTA:',
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.grey),
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: Colors.grey,
+            ),
           ),
           const SizedBox(height: 8),
           const SmartNativeAdView(
@@ -138,7 +150,11 @@ class _AdMobShowcasePageState extends State<AdMobShowcasePage> {
         child: Container(
           decoration: BoxDecoration(
             color: isDark ? Colors.grey.shade900 : Colors.white,
-            border: Border(top: BorderSide(color: isDark ? Colors.grey.shade800 : Colors.grey.shade200)),
+            border: Border(
+              top: BorderSide(
+                color: isDark ? Colors.grey.shade800 : Colors.grey.shade200,
+              ),
+            ),
           ),
           child: const Column(
             mainAxisSize: MainAxisSize.min,
@@ -194,27 +210,46 @@ class _AdMobShowcasePageState extends State<AdMobShowcasePage> {
             children: [
               const Row(
                 children: [
-                  Icon(Icons.monetization_on_rounded, color: Colors.amber, size: 28),
+                  Icon(
+                    Icons.monetization_on_rounded,
+                    color: Colors.amber,
+                    size: 28,
+                  ),
                   SizedBox(width: 10),
                   Text(
                     'flutter_prakash_ads',
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
                   ),
                 ],
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.stars_rounded, color: Colors.amber, size: 16),
+                    const Icon(
+                      Icons.stars_rounded,
+                      color: Colors.amber,
+                      size: 16,
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       '$_rewardPoints Coins',
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
                     ),
                   ],
                 ),
@@ -239,7 +274,9 @@ class _AdMobShowcasePageState extends State<AdMobShowcasePage> {
       color: AppPalette.surface(isDark),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: isDark ? Colors.grey.shade800 : Colors.grey.shade200),
+        side: BorderSide(
+          color: isDark ? Colors.grey.shade800 : Colors.grey.shade200,
+        ),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -249,7 +286,9 @@ class _AdMobShowcasePageState extends State<AdMobShowcasePage> {
               contentPadding: EdgeInsets.zero,
               title: const Text('Show Ads (IAP Ad-Free Mode)'),
               subtitle: Text(
-                _adsEnabled ? 'Ads are enabled across the app tree' : 'Ad-free mode active — All banners & native ads hidden',
+                _adsEnabled
+                    ? 'Ads are enabled across the app tree'
+                    : 'Ad-free mode active — All banners & native ads hidden',
                 style: const TextStyle(fontSize: 12),
               ),
               value: _adsEnabled,
@@ -258,9 +297,15 @@ class _AdMobShowcasePageState extends State<AdMobShowcasePage> {
             const Divider(height: 1),
             ListTile(
               contentPadding: EdgeInsets.zero,
-              leading: const Icon(Icons.privacy_tip_outlined, color: Colors.indigo),
+              leading: const Icon(
+                Icons.privacy_tip_outlined,
+                color: Colors.indigo,
+              ),
               title: const Text('GDPR / UMP Privacy Form'),
-              subtitle: const Text('Revoke or update EU/EEA consent preferences', style: TextStyle(fontSize: 12)),
+              subtitle: const Text(
+                'Revoke or update EU/EEA consent preferences',
+                style: TextStyle(fontSize: 12),
+              ),
               trailing: const Icon(Icons.chevron_right),
               onTap: () async {
                 final formError = await AdManager.showPrivacyOptionsForm();
@@ -285,7 +330,9 @@ class _AdMobShowcasePageState extends State<AdMobShowcasePage> {
       color: AppPalette.surface(isDark),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: isDark ? Colors.grey.shade800 : Colors.grey.shade200),
+        side: BorderSide(
+          color: isDark ? Colors.grey.shade800 : Colors.grey.shade200,
+        ),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -330,7 +377,9 @@ class _AdMobShowcasePageState extends State<AdMobShowcasePage> {
                           setState(() {
                             _rewardPoints += reward.amount.toInt();
                           });
-                          Toast.success('Reward Unlocked! +${reward.amount} ${reward.type}');
+                          Toast.success(
+                            'Reward Unlocked! +${reward.amount} ${reward.type}',
+                          );
                         },
                         onAdFailedToShowFullScreenContent: (error) {
                           Toast.warning('Rewarded: ${error.message}');
@@ -357,10 +406,14 @@ class _AdMobShowcasePageState extends State<AdMobShowcasePage> {
                           setState(() {
                             _rewardPoints += reward.amount.toInt();
                           });
-                          Toast.success('Reward Unlocked! +${reward.amount} ${reward.type}');
+                          Toast.success(
+                            'Reward Unlocked! +${reward.amount} ${reward.type}',
+                          );
                         },
                         onAdFailedToShowFullScreenContent: (error) {
-                          Toast.warning('Rewarded Interstitial: ${error.message}');
+                          Toast.warning(
+                            'Rewarded Interstitial: ${error.message}',
+                          );
                         },
                       );
                     },
@@ -396,7 +449,9 @@ class _AdMobShowcasePageState extends State<AdMobShowcasePage> {
       decoration: BoxDecoration(
         color: isDark ? Colors.black45 : Colors.grey.shade100,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: isDark ? Colors.grey.shade800 : Colors.grey.shade300),
+        border: Border.all(
+          color: isDark ? Colors.grey.shade800 : Colors.grey.shade300,
+        ),
       ),
       child: _eventLogs.isEmpty
           ? const Center(

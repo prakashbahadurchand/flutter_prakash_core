@@ -366,6 +366,10 @@ class DevtoolsNetEntry {
 /*                                    UI                                      */
 /* -------------------------------------------------------------------------- */
 
+/// Semantic alias for [DevtoolsRetrofitNetworkingInspectorTabView].
+typedef DevtoolsNetworkingInspectorTabView =
+    DevtoolsRetrofitNetworkingInspectorTabView;
+
 class DevtoolsRetrofitNetworkingInspectorTabView extends StatefulWidget {
   const DevtoolsRetrofitNetworkingInspectorTabView({
     super.key,

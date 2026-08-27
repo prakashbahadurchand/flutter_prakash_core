@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_prakash_core/src/loggers/flutter_logger.dart';
+import '../../loggers/flutter_logger.dart';
 
 /// Background message handler callback for FCM. Must be a top-level function.
 @pragma('vm:entry-point')
@@ -35,7 +35,9 @@ class FirebaseCloudMessagingManager {
     _messageOpenedAppSubscription?.cancel();
 
     // Listen to foreground messages
-    _foregroundMessageSubscription = FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    _foregroundMessageSubscription = FirebaseMessaging.onMessage.listen((
+      RemoteMessage message,
+    ) {
       FlutterLogger.info(
         'Foreground FCM message received: ${message.notification?.title}',
         tag: 'MESSAGING',
@@ -44,13 +46,15 @@ class FirebaseCloudMessagingManager {
     });
 
     // Listen to messages opened when app is in background/terminated
-    _messageOpenedAppSubscription = FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      FlutterLogger.info(
-        'App opened via FCM notification: ${message.notification?.title}',
-        tag: 'MESSAGING',
-      );
-      onMessageOpenedApp?.call(message);
-    });
+    _messageOpenedAppSubscription = FirebaseMessaging.onMessageOpenedApp.listen(
+      (RemoteMessage message) {
+        FlutterLogger.info(
+          'App opened via FCM notification: ${message.notification?.title}',
+          tag: 'MESSAGING',
+        );
+        onMessageOpenedApp?.call(message);
+      },
+    );
 
     return settings;
   }

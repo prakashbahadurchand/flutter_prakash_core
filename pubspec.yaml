@@ -51,9 +51,6 @@ dependencies:
   firebase_crashlytics: ^5.2.4
   firebase_analytics: ^12.4.5
 
-  # AdMob Monetization
-  google_mobile_ads: ^9.1.0
-
   # Media, PDF & Web
   audioplayers: ^6.0.0
   file_picker: ^12.1.0

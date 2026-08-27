@@ -1,5 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_prakash_core/src/loggers/flutter_logger.dart';
+import '../loggers/flutter_logger.dart';
 
 import 'analytics/firebase_analytics_manager.dart';
 import 'cloud_messaging/firebase_cloud_messaging_manager.dart';
