@@ -7,151 +7,162 @@ import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/em
 import 'package:flutter_prakash_core_example/features/auth/presentation/widgets/auth_header.dart';
 
 @RoutePage()
-class EmailVerificationPage extends StatefulWidget {
+class EmailVerificationPage extends StatelessWidget {
   final String email;
 
   const EmailVerificationPage({super.key, required this.email});
 
   @override
-  State<EmailVerificationPage> createState() => _EmailVerificationPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => getIt<EmailVerificationCubit>()..init(email),
+      child: _EmailVerificationForm(email: email),
+    );
+  }
 }
 
-class _EmailVerificationPageState extends State<EmailVerificationPage> {
-  late final EmailVerificationCubit _cubit;
+class _EmailVerificationForm extends StatelessWidget {
+  final String email;
 
-  @override
-  void initState() {
-    super.initState();
-    _cubit = getIt<EmailVerificationCubit>();
-    _cubit.init(widget.email);
-  }
-
-  @override
-  void dispose() {
-    _cubit.close();
-    super.dispose();
-  }
+  const _EmailVerificationForm({required this.email});
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cubit = context.read<EmailVerificationCubit>();
 
     return Scaffold(
       appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
       body: SafeArea(
-        child: BlocProvider.value(
-          value: _cubit,
-          child: ReactiveFormListener<EmailVerificationCubit,
-              EmailVerificationState>(
-            successMessage: 'Email successfully verified!',
-            onSuccess: (context, state) {
-              context.router.replaceAll([const DashboardRoute()]);
-            },
-            child: BlocBuilder<EmailVerificationCubit, EmailVerificationState>(
-              builder: (context, state) {
-                return Center(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24.0,
-                      vertical: 20.0,
+        child: ReactiveFormListener<EmailVerificationCubit,
+            EmailVerificationState>(
+          successMessage: 'Email successfully verified!',
+          onSuccess: (context, state) {
+            context.router.replaceAll([const DashboardRoute()]);
+          },
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24.0,
+                vertical: 20.0,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  AuthHeader(
+                    title: 'Verify Your Email',
+                    subtitle:
+                        'We have sent a 6-digit verification code to\n$email',
+                    icon: Icons.verified_user_outlined,
+                  ),
+                  const SizedBox(height: 32),
+                  Container(
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: AppPalette.surface(isDark),
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(
+                        color: isDark
+                            ? Colors.grey.shade800
+                            : Colors.grey.shade200,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.04),
+                          blurRadius: 16,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
                     ),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        AuthHeader(
-                          title: 'Verify Your Email',
-                          subtitle:
-                              'We have sent a 6-digit verification code to\n${widget.email}',
-                          icon: Icons.verified_user_outlined,
+                        // OTP Code Field (Rebuilds ONLY on otpCode changes)
+                        BlocSelector<EmailVerificationCubit,
+                            EmailVerificationState, Field<String>>(
+                          selector: (state) => state.otpCode,
+                          builder: (context, otpCode) {
+                            return ReactivePinCodeField(
+                              field: otpCode,
+                              onChanged: cubit.onOtpChanged,
+                              length: 6,
+                            );
+                          },
                         ),
-                        const SizedBox(height: 32),
-                        Container(
-                          padding: const EdgeInsets.all(24),
-                          decoration: BoxDecoration(
-                            color: AppPalette.surface(isDark),
-                            borderRadius: BorderRadius.circular(24),
-                            border: Border.all(
-                              color: isDark
-                                  ? Colors.grey.shade800
-                                  : Colors.grey.shade200,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.04),
-                                blurRadius: 16,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              ReactivePinCodeField(
-                                field: state.otpCode,
-                                onChanged: _cubit.onOtpChanged,
-                                length: 6,
-                              ),
-                              const SizedBox(height: 24),
-                              ElevatedButton(
-                                onPressed: state.status.isLoading
-                                    ? null
-                                    : () => _cubit.submit(),
-                                style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 14,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(14),
-                                  ),
+                        const SizedBox(height: 24),
+
+                        // Submit Button (Rebuilds ONLY on loading status change)
+                        BlocSelector<EmailVerificationCubit,
+                            EmailVerificationState, bool>(
+                          selector: (state) => state.status.isLoading,
+                          builder: (context, isLoading) {
+                            return ElevatedButton(
+                              onPressed: isLoading ? null : cubit.submit,
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
                                 ),
-                                child: state.status.isLoading
-                                    ? const SizedBox(
-                                        height: 20,
-                                        width: 20,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          color: Colors.white,
-                                        ),
-                                      )
-                                    : const Text(
-                                        'Verify & Continue',
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                              ),
+                              child: isLoading
+                                  ? const SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  : const Text(
+                                      'Verify & Continue',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 20),
+
+                        // Resend Countdown Timer (Rebuilds ONLY on resend state change)
+                        BlocSelector<EmailVerificationCubit,
+                            EmailVerificationState, (bool, int)>(
+                          selector: (state) =>
+                              (state.canResend, state.resendCountdown),
+                          builder: (context, resendData) {
+                            final (canResend, countdown) = resendData;
+                            return Center(
+                              child: canResend
+                                  ? TextButton(
+                                      onPressed: cubit.resendCode,
+                                      child: const Text(
+                                        'Resend Code',
                                         style: TextStyle(
-                                          fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                              ),
-                              const SizedBox(height: 20),
-                              Center(
-                                child: state.canResend
-                                    ? TextButton(
-                                        onPressed: () => _cubit.resendCode(),
-                                        child: const Text(
-                                          'Resend Code',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      )
-                                    : Text(
-                                        'Resend code in ${state.resendCountdown}s',
-                                        style: TextStyle(
-                                          color: isDark
-                                              ? Colors.grey.shade400
-                                              : Colors.grey.shade600,
-                                          fontSize: 13,
-                                        ),
+                                    )
+                                  : Text(
+                                      'Resend code in ${countdown}s',
+                                      style: TextStyle(
+                                        color: isDark
+                                            ? Colors.grey.shade400
+                                            : Colors.grey.shade600,
+                                        fontSize: 13,
                                       ),
-                              ),
-                            ],
-                          ),
+                                    ),
+                            );
+                          },
                         ),
                       ],
                     ),
                   ),
-                );
-              },
+                ],
+              ),
             ),
           ),
         ),
