@@ -1,7 +1,12 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core_example/config/config.dart';
+import 'package:flutter_prakash_core_example/core/di/injection.dart';
 import 'package:flutter_prakash_core_example/core/router/app_router.dart';
-import 'package:flutter_prakash_core_example/core/themes/app_colors.dart';
+import 'package:flutter_prakash_core_example/features/splash/presentation/blocs/splash_cubit.dart';
+import 'package:flutter_prakash_core_example/features/splash/presentation/blocs/splash_state.dart';
+import 'package:flutter_prakash_core_example/features/splash/presentation/widgets/splash_brand_logo.dart';
+import 'package:flutter_prakash_core_example/features/splash/presentation/widgets/splash_loading_bar.dart';
 
 @RoutePage()
 class SplashPage extends StatefulWidget {
@@ -13,16 +18,19 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
-  late Animation<double> _fadeAnimation;
+  late final SplashCubit _cubit;
+  late final AnimationController _controller;
+  late final Animation<double> _scaleAnimation;
+  late final Animation<double> _fadeAnimation;
 
   @override
   void initState() {
     super.initState();
+    _cubit = getIt<SplashCubit>();
+
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 1000),
     );
 
     _scaleAnimation = CurvedAnimation(
@@ -30,132 +38,85 @@ class _SplashPageState extends State<SplashPage>
       curve: Curves.easeOutBack,
     );
 
-    _fadeAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
+    _fadeAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeIn,
+    );
 
     _controller.forward();
-    _navigateToNext();
+    _cubit.initialize();
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _cubit.close();
     super.dispose();
   }
 
-  Future<void> _navigateToNext() async {
-    await Future.delayed(const Duration(milliseconds: 2500));
-    if (mounted) {
-      context.router.replace(const OnboardingRoute());
+  void _onStateChange(BuildContext context, SplashState state) {
+    if (state is SplashSuccess) {
+      if (state.initModel.isAuthenticated) {
+        context.router.replace(const DashboardRoute());
+      } else if (state.initModel.isOnboardingCompleted) {
+        context.router.replace(const LoginRoute());
+      } else {
+        context.router.replace(const OnboardingRoute());
+      }
+    } else if (state is SplashFailure) {
+      Toast.error(state.message);
+      context.router.replace(const LoginRoute());
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: isDark
-                ? [
-                    AppPalette.slate900,
-                    AppPalette.slate800,
-                    AppPalette.slate900,
-                  ]
-                : [
-                    AppPalette.primaryBgLight,
-                    AppPalette.primaryBgHover,
-                    AppPalette.primaryLight,
-                  ],
-          ),
-        ),
-        child: Center(
-          child: AnimatedBuilder(
-            animation: _controller,
-            builder: (context, child) {
-              return FadeTransition(
-                opacity: _fadeAnimation,
-                child: ScaleTransition(
-                  scale: _scaleAnimation,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(28),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: const LinearGradient(
-                            colors: [
-                              AppPalette.primary,
-                              AppPalette.primaryDark,
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppPalette.primary.withValues(alpha: 0.4),
-                              blurRadius: 30,
-                              spreadRadius: 10,
-                            ),
-                          ],
-                        ),
-                        child: const Icon(
-                          Icons.rocket_launch_rounded,
-                          size: 64,
-                          color: Colors.white,
-                        ),
+      body: BlocProvider.value(
+        value: _cubit,
+        child: BlocListener<SplashCubit, SplashState>(
+          listener: _onStateChange,
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: isDark
+                    ? [
+                        AppPalette.slate900,
+                        AppPalette.slate800,
+                        AppPalette.slate900,
+                      ]
+                    : [
+                        AppPalette.primaryBgLight,
+                        AppPalette.primaryBgHover,
+                        AppPalette.primaryLight,
+                      ],
+              ),
+            ),
+            child: Center(
+              child: AnimatedBuilder(
+                animation: _controller,
+                builder: (context, child) {
+                  return FadeTransition(
+                    opacity: _fadeAnimation,
+                    child: ScaleTransition(
+                      scale: _scaleAnimation,
+                      child: const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SplashBrandLogo(),
+                          SizedBox(height: 48),
+                          SplashLoadingBar(),
+                        ],
                       ),
-                      const SizedBox(height: 32),
-                      ShaderMask(
-                        shaderCallback: (bounds) => const LinearGradient(
-                          colors: [AppPalette.primaryDark, AppPalette.purple],
-                        ).createShader(bounds),
-                        child: Text(
-                          'Flutter Prakash',
-                          style: theme.textTheme.headlineLarge?.copyWith(
-                            fontWeight: FontWeight.w800,
-                            color: Colors.white,
-                            letterSpacing: 0.8,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Enterprise Multi-App Core Engine',
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          color: isDark
-                              ? AppPalette.slate300
-                              : AppPalette.slate600,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                      const SizedBox(height: 48),
-                      SizedBox(
-                        width: 140,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: LinearProgressIndicator(
-                            minHeight: 4,
-                            backgroundColor:
-                                (isDark ? Colors.white : AppPalette.primaryDark)
-                                    .withValues(alpha: 0.15),
-                            valueColor: const AlwaysStoppedAnimation<Color>(
-                              AppPalette.primary,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
+                    ),
+                  );
+                },
+              ),
+            ),
           ),
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_prakash_core_example/config/config.dart';
 
 class DashboardBottomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -14,187 +15,108 @@ class DashboardBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       decoration: BoxDecoration(
-        color: scheme.surface,
-        border: Border(
-          top: BorderSide(
-            color: scheme.outlineVariant.withValues(alpha: 0.25),
-            width: 0.5,
-          ),
-        ),
+        color: AppPalette.surface(isDark),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: Colors.black.withValues(alpha: 0.06),
             blurRadius: 20,
             offset: const Offset(0, -4),
           ),
         ],
+        border: Border(
+          top: BorderSide(
+            color: isDark ? Colors.grey.shade800 : Colors.grey.shade200,
+            width: 1,
+          ),
+        ),
       ),
       child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: 72,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Expanded(
-                child: _NavItem(
-                  icon: Icons.auto_stories_outlined,
-                  selectedIcon: Icons.auto_stories_rounded,
-                  label: 'First',
-                  selected: currentIndex == 0,
-                  onTap: () => onSelect(0),
-                ),
+              _buildNavItem(0, Icons.dashboard_rounded, 'Dashboard', isDark),
+              _buildNavItem(1, Icons.bolt_rounded, 'BLoC Engine', isDark),
+              _buildCenterButton(),
+              _buildNavItem(
+                2,
+                Icons.build_circle_rounded,
+                'Utilities',
+                isDark,
               ),
-              Expanded(
-                child: _NavItem(
-                  icon: Icons.favorite_outline_rounded,
-                  selectedIcon: Icons.favorite_rounded,
-                  label: 'Second',
-                  selected: currentIndex == 1,
-                  onTap: () => onSelect(1),
-                ),
-              ),
-              _CreateNavItem(onTap: onCreateTap),
-              Expanded(
-                child: _NavItem(
-                  icon: Icons.mark_email_read_outlined,
-                  selectedIcon: Icons.mark_email_read_rounded,
-                  label: 'Fourth',
-                  selected: currentIndex == 2,
-                  onTap: () => onSelect(2),
-                ),
-              ),
-              Expanded(
-                child: _NavItem(
-                  icon: Icons.tune_rounded,
-                  selectedIcon: Icons.settings_rounded,
-                  label: 'Settings',
-                  selected: currentIndex == 3,
-                  onTap: () => onSelect(3),
-                ),
-              ),
+              _buildNavItem(3, Icons.settings_rounded, 'Settings', isDark),
             ],
           ),
         ),
       ),
     );
   }
-}
 
-class _NavItem extends StatelessWidget {
-  final IconData icon;
-  final IconData selectedIcon;
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  const _NavItem({
-    required this.icon,
-    required this.selectedIcon,
-    required this.label,
-    required this.selected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final activeColor = scheme.primary;
-    final inactiveColor = scheme.onSurfaceVariant.withValues(alpha: 0.65);
+  Widget _buildNavItem(
+    int index,
+    IconData icon,
+    String label,
+    bool isDark,
+  ) {
+    final isSelected = currentIndex == index;
+    final color = isSelected
+        ? AppPalette.primary
+        : (isDark ? Colors.grey.shade500 : Colors.grey.shade400);
 
     return InkWell(
-      onTap: onTap,
-      splashColor: scheme.primary.withValues(alpha: 0.1),
-      highlightColor: Colors.transparent,
-      borderRadius: BorderRadius.circular(16),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 250),
-            curve: Curves.easeOutCubic,
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-            decoration: BoxDecoration(
-              color: selected
-                  ? scheme.primaryContainer.withValues(alpha: 0.45)
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
-              transitionBuilder: (child, animation) =>
-                  ScaleTransition(scale: animation, child: child),
-              child: Icon(
-                selected ? selectedIcon : icon,
-                key: ValueKey(selected),
-                color: selected ? activeColor : inactiveColor,
-                size: 23,
-              ),
-            ),
-          ),
-          const SizedBox(height: 2),
-          AnimatedDefaultTextStyle(
-            duration: const Duration(milliseconds: 200),
-            style: TextStyle(
-              fontSize: 11,
-              color: selected ? activeColor : inactiveColor,
-              fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-              letterSpacing: selected ? -0.1 : 0,
-            ),
-            child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _CreateNavItem extends StatelessWidget {
-  final VoidCallback onTap;
-
-  const _CreateNavItem({required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-
-    return InkWell(
-      onTap: onTap,
-      splashColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      borderRadius: BorderRadius.circular(28),
+      onTap: () => onSelect(index),
+      borderRadius: BorderRadius.circular(12),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [scheme.primary, scheme.secondary],
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: scheme.primary.withValues(alpha: 0.35),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: const Icon(
-                Icons.edit_note_rounded,
-                color: Colors.white,
-                size: 26,
+            Icon(icon, color: color, size: 24),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                color: color,
+                fontSize: 11,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCenterButton() {
+    return GestureDetector(
+      onTap: onCreateTap,
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: const LinearGradient(
+            colors: [AppPalette.primary, AppPalette.primaryDark],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: AppPalette.primary.withValues(alpha: 0.4),
+              blurRadius: 10,
+              spreadRadius: 2,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: const Icon(
+          Icons.add_rounded,
+          color: Colors.white,
+          size: 26,
         ),
       ),
     );

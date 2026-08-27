@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
-import 'package:flutter_prakash_core_example/core/router/app_router.dart';
+import 'package:flutter_prakash_core_example/config/config.dart';
+import 'package:flutter_prakash_core_example/core/core.dart';
+import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/auth_cubit.dart';
 import 'package:flutter_prakash_core_example/features/dashboard/presentation/blocs/dashboard_cubit.dart';
 import 'package:flutter_prakash_core_example/features/dashboard/presentation/blocs/dashboard_state.dart';
-import 'package:flutter_prakash_core_example/core/themes/app_colors.dart';
 
 class DashboardFourthTabView extends StatelessWidget {
   final DashboardState state;
@@ -14,7 +15,6 @@ class DashboardFourthTabView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
-    final isDark = theme.brightness == Brightness.dark;
     final cubit = context.read<DashboardCubit>();
 
     return ListView(
@@ -40,13 +40,25 @@ class DashboardFourthTabView extends StatelessWidget {
           ),
           child: Row(
             children: [
-              CircleAvatar(
-                radius: 32,
-                backgroundColor: Colors.white.withValues(alpha: 0.2),
+              Container(
+                width: 64,
+                height: 64,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                  border: Border.all(color: Colors.white, width: 3),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.15),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
                 child: const Icon(
                   Icons.person_rounded,
-                  size: 36,
-                  color: Colors.white,
+                  size: 38,
+                  color: AppPalette.primary,
                 ),
               ),
               const SizedBox(width: 16),
@@ -54,11 +66,9 @@ class DashboardFourthTabView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      Fake.fullName,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
+                    const Text(
+                      'Prakash B. Chand',
+                      style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -66,7 +76,7 @@ class DashboardFourthTabView extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'developer@prakash.dev',
+                      'prakash@chand.dev',
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.85),
                         fontSize: 13,
@@ -79,16 +89,15 @@ class DashboardFourthTabView extends StatelessWidget {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.25),
-                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.white.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(6),
                       ),
                       child: const Text(
-                        'PRO ACCOUNT',
+                        'Verified Developer',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
-                          letterSpacing: 0.5,
                         ),
                       ),
                     ),
@@ -100,7 +109,7 @@ class DashboardFourthTabView extends StatelessWidget {
         ),
         const SizedBox(height: 24),
 
-        // Section 1: Appearance & Localization
+        // Section 1: Appearance & Theme
         _buildSectionHeader(context, 'Appearance & Localization'),
         const SizedBox(height: 10),
         _SettingsCard(
@@ -108,33 +117,34 @@ class DashboardFourthTabView extends StatelessWidget {
             _SettingsTile(
               icon: Icons.palette_outlined,
               iconColor: AppPalette.primary,
-              title: 'App Theme',
-              subtitle: 'Select system, light, or dark mode',
+              title: 'Theme Mode',
+              subtitle: 'System, Light or Dark Mode',
               trailing: BlocBuilder<ThemeCubit, ThemeMode>(
-                builder: (context, themeMode) {
-                  return DropdownButtonHideUnderline(
-                    child: DropdownButton<ThemeMode>(
-                      value: themeMode,
-                      borderRadius: BorderRadius.circular(16),
-                      items: const [
-                        DropdownMenuItem(
-                          value: ThemeMode.system,
-                          child: Text('System'),
-                        ),
-                        DropdownMenuItem(
-                          value: ThemeMode.light,
-                          child: Text('Light'),
-                        ),
-                        DropdownMenuItem(
-                          value: ThemeMode.dark,
-                          child: Text('Dark'),
-                        ),
-                      ],
-                      onChanged: (mode) {
-                        if (mode != null) {
-                          context.read<ThemeCubit>().setThemeMode(mode);
-                        }
-                      },
+                builder: (context, currentMode) {
+                  return SegmentedButton<ThemeMode>(
+                    segments: const [
+                      ButtonSegment(
+                        value: ThemeMode.system,
+                        icon: Icon(Icons.brightness_auto, size: 16),
+                      ),
+                      ButtonSegment(
+                        value: ThemeMode.light,
+                        icon: Icon(Icons.light_mode, size: 16),
+                      ),
+                      ButtonSegment(
+                        value: ThemeMode.dark,
+                        icon: Icon(Icons.dark_mode, size: 16),
+                      ),
+                    ],
+                    selected: {currentMode},
+                    onSelectionChanged: (Set<ThemeMode> newSelection) {
+                      context.read<ThemeCubit>().setThemeMode(
+                            newSelection.first,
+                          );
+                    },
+                    style: const ButtonStyle(
+                      visualDensity: VisualDensity.compact,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                   );
                 },
@@ -143,9 +153,9 @@ class DashboardFourthTabView extends StatelessWidget {
             const Divider(height: 1),
             _SettingsTile(
               icon: Icons.language_rounded,
-              iconColor: AppPalette.success,
+              iconColor: AppPalette.primary,
               title: 'Language',
-              subtitle: 'Select your preferred language',
+              subtitle: 'App translation and locale',
               trailing: BlocBuilder<LocaleCubit, Locale>(
                 builder: (context, currentLocale) {
                   final supportedLocales = const [
@@ -191,11 +201,19 @@ class DashboardFourthTabView extends StatelessWidget {
         ),
         const SizedBox(height: 24),
 
-        // Section 2: Preferences & Security (Cubit Switched)
+        // Section 2: Preferences & Security
         _buildSectionHeader(context, 'Security & Privacy'),
         const SizedBox(height: 10),
         _SettingsCard(
           children: [
+            _SettingsTile(
+              icon: Icons.lock_reset_rounded,
+              iconColor: AppPalette.primary,
+              title: 'Change Password',
+              subtitle: 'Update your account security password',
+              onTap: () => context.router.push(const ChangePasswordRoute()),
+            ),
+            const Divider(height: 1),
             _SettingsTile(
               icon: Icons.fingerprint_rounded,
               iconColor: AppPalette.secondary,
@@ -243,7 +261,7 @@ class DashboardFourthTabView extends StatelessWidget {
         ),
         const SizedBox(height: 24),
 
-        // Section 3: Engine Utilities
+        // Section 3: Engine Maintenance
         _buildSectionHeader(context, 'Storage & Maintenance'),
         const SizedBox(height: 10),
         _SettingsCard(
@@ -272,11 +290,12 @@ class DashboardFourthTabView extends StatelessWidget {
         const SizedBox(height: 10),
         _SettingsCard(
           children: [
-            const _SettingsTile(
+            _SettingsTile(
               icon: Icons.info_outline_rounded,
               iconColor: AppPalette.slate500,
               title: 'Engine Version',
-              subtitle: '1.0.2 (Build 1) • Stable Engine Core',
+              subtitle:
+                  '${AppConstants.appVersion} (Build ${AppConstants.appBuildNumber}) • Clean Core',
             ),
             const Divider(height: 1),
             _SettingsTile(
@@ -292,7 +311,7 @@ class DashboardFourthTabView extends StatelessWidget {
               iconColor: AppPalette.slate500,
               title: 'Terms of Service',
               subtitle: 'Enterprise terms & licensing agreement',
-              onTap: () => context.router.push(const TermsConditionsRoute()),
+              onTap: () => context.router.push(const TermsAndConditionsRoute()),
             ),
             const Divider(height: 1),
             _SettingsTile(
@@ -309,52 +328,40 @@ class DashboardFourthTabView extends StatelessWidget {
         // Sign Out Button
         ElevatedButton.icon(
           style: ElevatedButton.styleFrom(
-            backgroundColor: isDark
-                ? AppPalette.error.withValues(alpha: 0.15)
-                : AppPalette.errorBg,
-            foregroundColor: AppPalette.error,
-            elevation: 0,
-            padding: const EdgeInsets.symmetric(vertical: 16),
+            backgroundColor: Colors.red.shade600,
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(vertical: 14),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
-              side: BorderSide(color: AppPalette.error.withValues(alpha: 0.3)),
             ),
           ),
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (ctx) => AlertDialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                title: const Text('Confirm Logout'),
-                content: const Text(
-                  'Are you sure you want to sign out of this account?',
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(ctx),
-                    child: const Text('Cancel'),
-                  ),
-                  FilledButton(
-                    style: FilledButton.styleFrom(
-                      backgroundColor: AppPalette.error,
-                    ),
-                    onPressed: () {
-                      Navigator.pop(ctx);
-                      context.router.replace(const LoginRoute());
-                    },
-                    child: const Text('Sign Out'),
-                  ),
-                ],
-              ),
-            );
+          onPressed: () async {
+            await getIt<AuthCubit>().logout();
+            if (context.mounted) {
+              context.router.replaceAll([const LoginRoute()]);
+            }
           },
           icon: const Icon(Icons.logout_rounded),
           label: const Text(
             'Sign Out',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
+        ),
+        const SizedBox(height: 12),
+
+        // Preview Onboarding Button for testing
+        OutlinedButton.icon(
+          style: OutlinedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 14),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+          ),
+          onPressed: () {
+            context.router.replace(const OnboardingRoute());
+          },
+          icon: const Icon(Icons.restart_alt_rounded),
+          label: const Text('Preview Onboarding Slides'),
         ),
         const SizedBox(height: 30),
       ],

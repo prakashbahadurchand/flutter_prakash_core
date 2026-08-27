@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
-import 'package:flutter_prakash_core_example/core/themes/app_colors.dart';
+import 'package:flutter_prakash_core_example/config/config.dart';
 
 class DashboardFirstTabView extends StatelessWidget {
   const DashboardFirstTabView({super.key});
@@ -104,17 +104,17 @@ class DashboardFirstTabView extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                'Enterprise Multi-App Core Platform',
+                AppConstants.appTagline,
                 style: theme.textTheme.titleMedium?.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 4),
-              Text(
+              const Text(
                 'State-driven dashboard powered by DashboardCubit and Clean Architecture.',
                 style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.85),
+                  color: Colors.white70,
                   fontSize: 13,
                   height: 1.4,
                 ),
@@ -129,7 +129,7 @@ class DashboardFirstTabView extends StatelessWidget {
               child: _buildStatCard(
                 context,
                 title: 'Architecture',
-                value: 'Feature-First',
+                value: 'Clean Core',
                 icon: Icons.architecture_rounded,
                 color: AppPalette.blue,
               ),
@@ -307,5 +307,3 @@ class DashboardFirstTabView extends StatelessWidget {
     );
   }
 }
-
-/// Tab 2: BLoC Engine Interactive Tab

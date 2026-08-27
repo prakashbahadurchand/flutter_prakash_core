@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
-import 'package:flutter_prakash_core_example/core/router/app_router.dart';
-import 'package:flutter_prakash_core_example/core/di/injection.dart';
-import 'package:flutter_prakash_core_example/core/themes/app_colors.dart';
+import 'package:flutter_prakash_core_example/config/config.dart';
+import 'package:flutter_prakash_core_example/core/core.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/login/login_cubit.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/login/login_state.dart';
+import 'package:flutter_prakash_core_example/features/auth/presentation/widgets/auth_divider.dart';
+import 'package:flutter_prakash_core_example/features/auth/presentation/widgets/auth_footer.dart';
+import 'package:flutter_prakash_core_example/features/auth/presentation/widgets/auth_header.dart';
+import 'package:flutter_prakash_core_example/features/auth/presentation/widgets/auth_social_buttons.dart';
 
 @RoutePage()
 class LoginPage extends StatefulWidget {
@@ -15,208 +18,205 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late final LoginCubit _loginCubit;
+  late final LoginCubit _cubit;
   bool _obscurePassword = true;
-
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _loginCubit = getIt<LoginCubit>();
+    _cubit = getIt<LoginCubit>();
   }
 
   @override
   void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    _loginCubit.close();
+    _cubit.close();
     super.dispose();
-  }
-
-  void _fillDemoCredentials() {
-    _emailController.text = 'demo@prakash.dev';
-    _passwordController.text = 'Secret123!';
-    _loginCubit.onEmailChanged('demo@prakash.dev');
-    _loginCubit.onPasswordChanged('Secret123!');
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = context.theme;
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sign In'),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-      ),
-      body: BlocProvider.value(
-        value: _loginCubit,
-        child: ReactiveFormListener<LoginCubit, LoginState>(
-          successMessage: 'Welcome back!',
-          onSuccess: (context, state) {
-            context.router.replace(const DashboardRoute());
-          },
-          child: BlocBuilder<LoginCubit, LoginState>(
-            builder: (context, state) {
-              return SafeArea(
-                child: Center(
+      body: SafeArea(
+        child: BlocProvider.value(
+          value: _cubit,
+          child: PrakashEffectListener.fromCubit(
+            cubit: _cubit,
+            child: BlocConsumer<LoginCubit, LoginState>(
+              listener: (context, state) {
+                if (state.isSuccess) {
+                  context.router.replaceAll([const DashboardRoute()]);
+                }
+              },
+              builder: (context, state) {
+                return Center(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 24.0,
-                      vertical: 16.0,
+                      vertical: 20.0,
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Center(
-                          child: Container(
-                            padding: const EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: const LinearGradient(
-                                colors: [
-                                  AppPalette.primary,
-                                  AppPalette.primaryDark,
-                                ],
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppPalette.primary.withValues(
-                                    alpha: 0.3,
-                                  ),
-                                  blurRadius: 20,
-                                  spreadRadius: 4,
-                                ),
-                              ],
-                            ),
-                            child: const Icon(
-                              Icons.lock_person_rounded,
-                              size: 48,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                        Text(
-                          'Welcome Back',
-                          style: theme.textTheme.headlineMedium?.copyWith(
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: -0.5,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Sign in to access your enterprise dashboard',
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: isDark
-                                ? Colors.grey.shade400
-                                : Colors.grey.shade600,
-                          ),
-                          textAlign: TextAlign.center,
+                        const AuthHeader(
+                          title: 'Welcome Back',
+                          subtitle: 'Sign in to access your account & dashboard',
+                          icon: Icons.lock_outline_rounded,
                         ),
                         const SizedBox(height: 32),
 
-                        // Reactive Email Field (Infers hint, helper, validation automatically)
-                        ReactiveTextField(
-                          field: state.email,
-                          onChanged: _loginCubit.onEmailChanged,
-                          keyboardType: TextInputType.emailAddress,
-                          prefixIcon: const Icon(Icons.email_outlined),
-                          helperText:
-                              'Tip: Enter "fail" to test error response handling',
-                        ),
-                        const SizedBox(height: 16),
-
-                        // Reactive Password Field
-                        ReactiveTextField(
-                          field: state.password,
-                          onChanged: _loginCubit.onPasswordChanged,
-                          obscureText: _obscurePassword,
-                          prefixIcon: const Icon(Icons.lock_outline),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _obscurePassword
-                                  ? Icons.visibility_outlined
-                                  : Icons.visibility_off_outlined,
+                        // Form container
+                        Container(
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            color: AppPalette.surface(isDark),
+                            borderRadius: BorderRadius.circular(24),
+                            border: Border.all(
+                              color: isDark
+                                  ? Colors.grey.shade800
+                                  : Colors.grey.shade200,
                             ),
-                            onPressed: () {
-                              setState(() {
-                                _obscurePassword = !_obscurePassword;
-                              });
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-
-                        // Quick Demo Fill
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton.icon(
-                            onPressed: _fillDemoCredentials,
-                            icon: const Icon(Icons.auto_fix_high, size: 16),
-                            label: const Text('Fill Demo Credentials'),
-                            style: TextButton.styleFrom(
-                              foregroundColor: AppPalette.primary,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-
-                        // Submit Button
-                        ReactiveFormButton<LoginCubit, LoginState>(
-                          label: 'Sign In',
-                          icon: Icons.login_rounded,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppPalette.primary,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 18),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            elevation: 4,
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-
-                        // Register Link
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Don't have an account? ",
-                              style: TextStyle(
-                                color: isDark
-                                    ? Colors.grey.shade400
-                                    : Colors.grey.shade600,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.04),
+                                blurRadius: 16,
+                                offset: const Offset(0, 4),
                               ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                context.router.push(const RegisterRoute());
-                              },
-                              child: const Text(
-                                'Register',
-                                style: TextStyle(
-                                  color: AppPalette.primary,
-                                  fontWeight: FontWeight.bold,
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              ReactiveTextField(
+                                field: state.email,
+                                onChanged: _cubit.emailChanged,
+                                keyboardType: TextInputType.emailAddress,
+                                prefixIcon: const Icon(Icons.email_outlined),
+                              ),
+                              const SizedBox(height: 16),
+                              ReactiveTextField(
+                                field: state.password,
+                                onChanged: _cubit.passwordChanged,
+                                obscureText: _obscurePassword,
+                                prefixIcon: const Icon(Icons.lock_outline),
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    _obscurePassword
+                                        ? Icons.visibility_outlined
+                                        : Icons.visibility_off_outlined,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _obscurePassword = !_obscurePassword;
+                                    });
+                                  },
                                 ),
                               ),
-                            ),
-                          ],
+                              const SizedBox(height: 8),
+
+                              // Remember Me & Forgot Password
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      SizedBox(
+                                        height: 24,
+                                        width: 24,
+                                        child: Checkbox(
+                                          value: state.rememberMe,
+                                          onChanged: (v) =>
+                                              _cubit.rememberMeChanged(
+                                                v ?? false,
+                                              ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      const Text(
+                                        'Remember me',
+                                        style: TextStyle(fontSize: 13),
+                                      ),
+                                    ],
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      context.router.push(
+                                        const ForgotPasswordRoute(),
+                                      );
+                                    },
+                                    child: const Text(
+                                      'Forgot Password?',
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 20),
+
+                              // Submit Button
+                              ElevatedButton(
+                                onPressed: state.isInProgress
+                                    ? null
+                                    : () => _cubit.login(),
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 14,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(14),
+                                  ),
+                                ),
+                                child: state.isInProgress
+                                    ? const SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : const Text(
+                                        'Sign In',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 24),
+                        const AuthDivider(),
+                        const SizedBox(height: 20),
+                        const AuthSocialButtons(),
+                        const SizedBox(height: 32),
+
+                        AuthFooter(
+                          prompt: "Don't have an account?",
+                          actionLabel: 'Sign Up',
+                          onAction: () {
+                            context.router.push(const RegisterRoute());
+                          },
                         ),
                       ],
                     ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
       ),

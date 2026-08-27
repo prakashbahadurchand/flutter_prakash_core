@@ -80,15 +80,16 @@ class DashboardThirdTabView extends StatelessWidget {
           child: ListTile(
             leading: const Icon(Icons.image_outlined, color: Colors.blue),
             title: const Text('Image Preview (Interactive Zoom)'),
-            subtitle: const Text('Opens FilePreviewContainer with pan & zoom'),
+            subtitle: const Text('Navigates to FilePreviewPage in image mode'),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
-              FilePreviewContainer.show(
-                context,
-                filePath: 'https://picsum.photos/800/1200',
-                fileType: FileType.image,
-                sourceType: FileSourceType.network,
-                title: 'Sample Image Preview',
+              context.router.push(
+                FilePreviewRoute(
+                  filePath: 'https://picsum.photos/800/1200',
+                  fileType: FileType.image,
+                  sourceType: FileSourceType.network,
+                  title: 'Sample Image Preview',
+                ),
               );
             },
           ),
@@ -101,16 +102,17 @@ class DashboardThirdTabView extends StatelessWidget {
               color: Colors.red,
             ),
             title: const Text('PDF Document Viewer'),
-            subtitle: const Text('Opens FilePreviewContainer in PDF mode'),
+            subtitle: const Text('Navigates to FilePreviewPage in PDF mode'),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
-              FilePreviewContainer.show(
-                context,
-                filePath:
-                    'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-                fileType: FileType.pdf,
-                sourceType: FileSourceType.network,
-                title: 'Sample PDF Document',
+              context.router.push(
+                FilePreviewRoute(
+                  filePath:
+                      'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+                  fileType: FileType.pdf,
+                  sourceType: FileSourceType.network,
+                  title: 'Sample PDF Document',
+                ),
               );
             },
           ),
@@ -121,67 +123,23 @@ class DashboardThirdTabView extends StatelessWidget {
             leading: const Icon(Icons.public, color: Colors.indigo),
             title: const Text('In-App Web View'),
             subtitle: const Text(
-              'Opens InAppWebViewContainer with progress & controls',
+              'Opens InAppWebViewPage with progress & controls',
             ),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
-              InAppWebViewContainer.show(
-                context,
-                initialUrl: 'https://flutter.dev',
-                title: 'Flutter Official Website',
-                progressBarColor: Colors.indigoAccent,
+              context.router.push(
+                InAppWebViewRoute(
+                  initialUrl: 'https://flutter.dev',
+                  title: 'Flutter Official Website',
+                ),
               );
             },
           ),
         ),
         const SizedBox(height: 24),
         const Text(
-          'Network & Analytics Engines',
+          'Monetization Showcase',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-        ),
-        const SizedBox(height: 12),
-        Card(
-          child: ListTile(
-            leading: const Icon(Icons.bolt, color: Colors.teal),
-            title: const Text('Supabase Engine Status'),
-            subtitle: const Text('Configured for Auth, Realtime DB & Storage'),
-            onTap: () {
-              Toast.info('Supabase Engine is active & ready');
-            },
-          ),
-        ),
-        const SizedBox(height: 8),
-        Card(
-          child: ListTile(
-            leading: const Icon(Icons.analytics, color: Colors.blue),
-            title: const Text('Firebase Analytics Log'),
-            subtitle: const Text('Tap to send custom event: test_button_click'),
-            onTap: () {
-              FirebaseAnalyticsManager.logEvent(
-                name: 'test_button_click',
-                parameters: {'screen': 'dashboard_network'},
-              );
-              Toast.info('Logged Analytics Event');
-            },
-          ),
-        ),
-        const SizedBox(height: 8),
-        Card(
-          child: ListTile(
-            leading: const Icon(Icons.bug_report, color: Colors.red),
-            title: const Text('Record Non-Fatal Crashlytics Error'),
-            subtitle: const Text(
-              'Captures error report via FirebaseCrashlyticsManager',
-            ),
-            onTap: () {
-              FirebaseCrashlyticsManager.recordError(
-                Exception('Test non-fatal exception'),
-                StackTrace.current,
-                reason: 'Dashboard manual test',
-              );
-              Toast.error('Recorded Crashlytics Error');
-            },
-          ),
         ),
         const SizedBox(height: 12),
         Card(

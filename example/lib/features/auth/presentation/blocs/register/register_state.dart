@@ -1,88 +1,80 @@
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:flutter_prakash_core_example/features/auth/data/models/auth_user_model.dart';
 
-import '../../../data/models/register_request_dto.dart';
+class RegisterState extends FormCubitState<AuthUserModel> {
+  final Field<String> fullName;
+  final Field<String> email;
+  final Field<String> password;
+  final Field<String> confirmPassword;
+  final bool agreeToTerms;
 
-part 'register_state.freezed.dart';
-
-@freezed
-abstract class RegisterState
-    with _$RegisterState, FormMixin
-    implements FormState {
-  const RegisterState._();
-
-  const factory RegisterState({
-    required Field<String> fullName,
-    required Field<String> email,
-    required Field<String> password,
-    required Field<String> confirmPassword,
-    required Field<String> role,
-    required Field<bool> acceptTerms,
-    @Default(true) bool isPasswordObscured,
-    @Default(true) bool isConfirmPasswordObscured,
-    @Default(BlocStatus.initial()) BlocStatus status,
-  }) = _RegisterState;
-
-  factory RegisterState.initial() => RegisterState(
-    fullName: Field(
-      labelText: 'Full name',
-      value: '',
-      validators: Validators.required().minLength(2),
-    ),
-    email: Field(
-      labelText: 'Corporate email',
-      value: '',
-      validators: Validators.required().email(),
-    ),
-    password: Field(
-      labelText: 'Password',
-      value: '',
-      validators: Validators.required().minLength(8),
-    ),
-    confirmPassword: Field(
-      labelText: 'Confirm password',
-      value: '',
-      validators: Validators.required(),
-    ),
-    role: const Field(
-      labelText: 'Primary role',
-      value: 'Engineer',
-      validators: [],
-    ),
-    acceptTerms: Field(
-      labelText: 'Terms of service',
-      value: false,
-      validators: Validators.mustBeTrue(),
-    ),
-  );
+  RegisterState({
+    super.status,
+    super.isValid,
+    super.failure,
+    super.result,
+    Field<String>? fullName,
+    Field<String>? email,
+    Field<String>? password,
+    Field<String>? confirmPassword,
+    this.agreeToTerms = false,
+  })  : fullName = fullName ??
+            Field(
+              value: '',
+              labelText: 'Full Name',
+              validators: Validators.required(),
+            ),
+        email = email ??
+            Field(
+              value: '',
+              labelText: 'Email Address',
+              validators: Validators.required().email(),
+            ),
+        password = password ??
+            Field(
+              value: '',
+              labelText: 'Password',
+              validators: Validators.required().minLength(6),
+            ),
+        confirmPassword = confirmPassword ??
+            Field(
+              value: '',
+              labelText: 'Confirm Password',
+              validators: Validators.required(),
+            );
 
   @override
-  List<Field<dynamic>> get formFields => [
+  RegisterState copyWith({
+    FormStatus? status,
+    bool? isValid,
+    Failure? failure,
+    AuthUserModel? result,
+    Field<String>? fullName,
+    Field<String>? email,
+    Field<String>? password,
+    Field<String>? confirmPassword,
+    bool? agreeToTerms,
+  }) {
+    return RegisterState(
+      status: status ?? this.status,
+      isValid: isValid ?? this.isValid,
+      failure: failure ?? this.failure,
+      result: result ?? this.result,
+      fullName: fullName ?? this.fullName,
+      email: email ?? this.email,
+      password: password ?? this.password,
+      confirmPassword: confirmPassword ?? this.confirmPassword,
+      agreeToTerms: agreeToTerms ?? this.agreeToTerms,
+    );
+  }
+
+  @override
+  List<Object?> get props => [
+    ...super.props,
     fullName,
     email,
     password,
     confirmPassword,
-    role,
-    acceptTerms,
+    agreeToTerms,
   ];
-
-  @override
-  RegisterState copyWithStatus(BlocStatus status) => copyWith(status: status);
-
-  @override
-  RegisterState makeAllDirty() => copyWith(
-    fullName: fullName.makeDirty(),
-    email: email.makeDirty(),
-    password: password.makeDirty(),
-    confirmPassword: confirmPassword.makeDirty(),
-    acceptTerms: acceptTerms.makeDirty(),
-  );
-
-  RegisterRequestDto toDto() => RegisterRequestDto(
-    fullName: fullName.value.trim(),
-    email: email.value.trim(),
-    password: password.value,
-    role: role.value,
-    acceptTerms: acceptTerms.value,
-  );
 }

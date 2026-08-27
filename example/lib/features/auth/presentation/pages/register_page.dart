@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
-import 'package:flutter_prakash_core_example/core/di/injection.dart';
-import 'package:flutter_prakash_core_example/core/router/app_router.dart';
-import 'package:flutter_prakash_core_example/core/themes/app_colors.dart';
+import 'package:flutter_prakash_core_example/config/config.dart';
+import 'package:flutter_prakash_core_example/core/core.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/register/register_cubit.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/register/register_state.dart';
+import 'package:flutter_prakash_core_example/features/auth/presentation/widgets/auth_divider.dart';
+import 'package:flutter_prakash_core_example/features/auth/presentation/widgets/auth_footer.dart';
+import 'package:flutter_prakash_core_example/features/auth/presentation/widgets/auth_header.dart';
+import 'package:flutter_prakash_core_example/features/auth/presentation/widgets/auth_social_buttons.dart';
 
 @RoutePage()
 class RegisterPage extends StatefulWidget {
@@ -15,206 +18,252 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  late final RegisterCubit _registerCubit;
+  late final RegisterCubit _cubit;
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
 
   @override
   void initState() {
     super.initState();
-    _registerCubit = getIt<RegisterCubit>();
+    _cubit = getIt<RegisterCubit>();
   }
 
   @override
   void dispose() {
-    _registerCubit.close();
+    _cubit.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = context.theme;
-    final isDark = context.isDarkMode;
+    final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create Account'),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-      ),
-      body: BlocProvider.value(
-        value: _registerCubit,
-        child: ReactiveFormListener<RegisterCubit, RegisterState>(
-          successMessage: 'Account created successfully! Welcome aboard.',
-          onSuccess: (context, state) {
-            context.router.replace(const DashboardRoute());
-          },
-          child: BlocBuilder<RegisterCubit, RegisterState>(
-            builder: (context, state) {
-              return SafeArea(
-                child: Center(
+      appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
+      body: SafeArea(
+        child: BlocProvider.value(
+          value: _cubit,
+          child: PrakashEffectListener.fromCubit(
+            cubit: _cubit,
+            child: BlocConsumer<RegisterCubit, RegisterState>(
+              listener: (context, state) {
+                if (state.isSuccess) {
+                  context.router.push(
+                    EmailVerificationRoute(email: state.email.value),
+                  );
+                }
+              },
+              builder: (context, state) {
+                return Center(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 24.0,
-                      vertical: 16.0,
+                      vertical: 10.0,
                     ),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Center(
-                          child: Container(
-                            padding: const EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: const LinearGradient(
-                                colors: [
-                                  AppPalette.primary,
-                                  AppPalette.primaryDark,
+                        const AuthHeader(
+                          title: 'Create Account',
+                          subtitle: 'Join us and start building enterprise apps',
+                          icon: Icons.person_add_outlined,
+                        ),
+                        const SizedBox(height: 28),
+
+                        // Registration form card
+                        Container(
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            color: AppPalette.surface(isDark),
+                            borderRadius: BorderRadius.circular(24),
+                            border: Border.all(
+                              color: isDark
+                                  ? Colors.grey.shade800
+                                  : Colors.grey.shade200,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.04),
+                                blurRadius: 16,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              ReactiveTextField(
+                                field: state.fullName,
+                                onChanged: _cubit.fullNameChanged,
+                                prefixIcon: const Icon(Icons.person_outline),
+                              ),
+                              const SizedBox(height: 14),
+                              ReactiveTextField(
+                                field: state.email,
+                                onChanged: _cubit.emailChanged,
+                                keyboardType: TextInputType.emailAddress,
+                                prefixIcon: const Icon(Icons.email_outlined),
+                              ),
+                              const SizedBox(height: 14),
+                              ReactiveTextField(
+                                field: state.password,
+                                onChanged: _cubit.passwordChanged,
+                                obscureText: _obscurePassword,
+                                prefixIcon: const Icon(Icons.lock_outline),
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    _obscurePassword
+                                        ? Icons.visibility_outlined
+                                        : Icons.visibility_off_outlined,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _obscurePassword = !_obscurePassword;
+                                    });
+                                  },
+                                ),
+                              ),
+                              const SizedBox(height: 14),
+                              ReactiveTextField(
+                                field: state.confirmPassword,
+                                onChanged: _cubit.confirmPasswordChanged,
+                                obscureText: _obscureConfirmPassword,
+                                prefixIcon:
+                                    const Icon(Icons.lock_reset_outlined),
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    _obscureConfirmPassword
+                                        ? Icons.visibility_outlined
+                                        : Icons.visibility_off_outlined,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _obscureConfirmPassword =
+                                          !_obscureConfirmPassword;
+                                    });
+                                  },
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+
+                              // Agree to Terms
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    height: 24,
+                                    width: 24,
+                                    child: Checkbox(
+                                      value: state.agreeToTerms,
+                                      onChanged: (v) =>
+                                          _cubit.agreeToTermsChanged(
+                                            v ?? false,
+                                          ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Wrap(
+                                      crossAxisAlignment:
+                                          WrapCrossAlignment.center,
+                                      children: [
+                                        const Text(
+                                          'I agree to the ',
+                                          style: TextStyle(fontSize: 13),
+                                        ),
+                                        InkWell(
+                                          onTap: () => context.router.push(
+                                            const TermsAndConditionsRoute(),
+                                          ),
+                                          child: const Text(
+                                            'Terms',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              color: AppPalette.primary,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                        const Text(
+                                          ' & ',
+                                          style: TextStyle(fontSize: 13),
+                                        ),
+                                        InkWell(
+                                          onTap: () => context.router.push(
+                                            const PrivacyPolicyRoute(),
+                                          ),
+                                          child: const Text(
+                                            'Privacy Policy',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              color: AppPalette.primary,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppPalette.primary.withValues(
-                                    alpha: 0.3,
+                              const SizedBox(height: 20),
+
+                              // Submit Button
+                              ElevatedButton(
+                                onPressed: state.isInProgress
+                                    ? null
+                                    : () => _cubit.register(),
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 14,
                                   ),
-                                  blurRadius: 20,
-                                  spreadRadius: 4,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(14),
+                                  ),
                                 ),
-                              ],
-                            ),
-                            child: const Icon(
-                              Icons.person_add_rounded,
-                              size: 44,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                        Text(
-                          'Join Flutter Prakash',
-                          style: theme.textTheme.headlineMedium?.copyWith(
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: -0.5,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Enterprise Clean Architecture & BLoC Engine',
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: isDark
-                                ? Colors.grey.shade400
-                                : Colors.grey.shade600,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 32),
-
-                        // Full Name Reactive Input
-                        ReactiveTextField(
-                          field: state.fullName,
-                          onChanged: _registerCubit.onFullNameChanged,
-                          prefixIcon: const Icon(Icons.person_outline),
-                        ),
-                        const SizedBox(height: 16),
-
-                        // Corporate Email Reactive Input
-                        ReactiveTextField(
-                          field: state.email,
-                          onChanged: _registerCubit.onEmailChanged,
-                          keyboardType: TextInputType.emailAddress,
-                          prefixIcon: const Icon(Icons.email_outlined),
-                        ),
-                        const SizedBox(height: 16),
-
-                        // Password Reactive Input
-                        ReactiveTextField(
-                          field: state.password,
-                          onChanged: _registerCubit.onPasswordChanged,
-                          obscureText: state.isPasswordObscured,
-                          prefixIcon: const Icon(Icons.lock_outline),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              state.isPasswordObscured
-                                  ? Icons.visibility_outlined
-                                  : Icons.visibility_off_outlined,
-                            ),
-                            onPressed: _registerCubit.togglePasswordVisibility,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-
-                        // Confirm Password Reactive Input
-                        ReactiveTextField(
-                          field: state.confirmPassword,
-                          onChanged: _registerCubit.onConfirmPasswordChanged,
-                          obscureText: state.isConfirmPasswordObscured,
-                          prefixIcon: const Icon(Icons.lock_clock_outlined),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              state.isConfirmPasswordObscured
-                                  ? Icons.visibility_outlined
-                                  : Icons.visibility_off_outlined,
-                            ),
-                            onPressed:
-                                _registerCubit.toggleConfirmPasswordVisibility,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-
-                        // Terms & Conditions Reactive Checkbox
-                        ReactiveCheckbox(
-                          field: state.acceptTerms,
-                          title: 'I agree to the Terms of Service & Privacy',
-                          onChanged: _registerCubit.onAcceptTermsChanged,
-                        ),
-                        const SizedBox(height: 24),
-
-                        // Reactive Submission Button
-                        ReactiveFormButton<RegisterCubit, RegisterState>(
-                          label: 'Create Account',
-                          icon: Icons.arrow_forward_rounded,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppPalette.primary,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 18),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            elevation: 4,
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-
-                        // Already have account
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Already have an account? ',
-                              style: TextStyle(
-                                color: isDark
-                                    ? Colors.grey.shade400
-                                    : Colors.grey.shade600,
+                                child: state.isInProgress
+                                    ? const SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : const Text(
+                                        'Create Account',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                               ),
-                            ),
-                            GestureDetector(
-                              onTap: () => context.router.maybePop(),
-                              child: const Text(
-                                'Sign In',
-                                style: TextStyle(
-                                  color: AppPalette.primary,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 20),
+                        const AuthDivider(),
+                        const SizedBox(height: 16),
+                        const AuthSocialButtons(),
+                        const SizedBox(height: 24),
+
+                        AuthFooter(
+                          prompt: 'Already have an account?',
+                          actionLabel: 'Sign In',
+                          onAction: () => context.router.maybePop(),
                         ),
                       ],
                     ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
       ),

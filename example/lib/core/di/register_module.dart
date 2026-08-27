@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core_example/config/config.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../envs/envs.dart';
 
 @module
 abstract class RegisterModule {
@@ -16,6 +16,7 @@ abstract class RegisterModule {
       headers: {'Accept': 'application/json'},
     ),
   );
+
   @preResolve
   Future<SharedPreferences> get sharedPreferences =>
       SharedPreferences.getInstance();

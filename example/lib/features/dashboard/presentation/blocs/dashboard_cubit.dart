@@ -1,9 +1,12 @@
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core_example/features/dashboard/data/repositories/dashboard_repository.dart';
 import 'package:flutter_prakash_core_example/features/dashboard/presentation/blocs/dashboard_state.dart';
 
 @injectable
 class DashboardCubit extends BaseCubit<DashboardState> {
-  DashboardCubit() : super(const DashboardState());
+  final DashboardRepository _repository;
+
+  DashboardCubit(this._repository) : super(const DashboardState());
 
   void selectTab(int index) {
     if (state.tabIndex != index) {
@@ -52,6 +55,7 @@ class DashboardCubit extends BaseCubit<DashboardState> {
   }
 
   Future<void> clearCache() async {
+    await _repository.clearCache();
     emitEffect(const ShowToastEffect('Cache cleared successfully!'));
   }
 }

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
 import 'package:flutter_prakash_core_example/core/di/injection.dart';
-import 'package:flutter_prakash_core_example/features/demo/presentation/blocs/sample_fetch_cubit.dart';
-import 'package:flutter_prakash_core_example/features/demo/presentation/blocs/sample_form_cubit.dart';
-import 'package:flutter_prakash_core_example/features/demo/presentation/blocs/sample_paging_cubit.dart';
-import 'package:flutter_prakash_core_example/features/demo/presentation/blocs/sample_search_bloc.dart';
+import 'package:flutter_prakash_core_example/features/dashboard/data/models/sample_user_model.dart';
+import 'package:flutter_prakash_core_example/features/dashboard/presentation/blocs/sample_fetch_cubit.dart';
+import 'package:flutter_prakash_core_example/features/dashboard/presentation/blocs/sample_form_cubit.dart';
+import 'package:flutter_prakash_core_example/features/dashboard/presentation/blocs/sample_paging_cubit.dart';
+import 'package:flutter_prakash_core_example/features/dashboard/presentation/blocs/sample_search_bloc.dart';
 
 class DashboardSecondTabView extends StatefulWidget {
   const DashboardSecondTabView({super.key});
@@ -71,31 +72,40 @@ class _DashboardSecondTabViewState extends State<DashboardSecondTabView>
   }
 
   Widget _buildFetchDemo() {
-    return UiStateBuilder<SampleFetchCubit, List<String>>(
+    return BlocBuilder<SampleFetchCubit, UiState<List<String>>>(
       bloc: _fetchCubit,
-      onSuccess: (context, features) {
-        return ListView.builder(
-          padding: const EdgeInsets.all(16),
-          itemCount: features.length,
-          itemBuilder: (context, index) {
-            return Card(
-              margin: const EdgeInsets.only(bottom: 8),
-              child: ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: Colors.blue,
-                  child: Text(
-                    '${index + 1}',
-                    style: const TextStyle(color: Colors.white, fontSize: 12),
+      builder: (context, state) {
+        return switch (state) {
+          UiInitial() || UiLoading() => const Center(
+              child: CircularProgressIndicator(),
+            ),
+          UiFailure(:final message) => Center(
+              child: Text(message, style: const TextStyle(color: Colors.red)),
+            ),
+          UiSuccess(:final data) => ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  margin: const EdgeInsets.only(bottom: 8),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.blue,
+                      child: Text(
+                        '${index + 1}',
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 12),
+                      ),
+                    ),
+                    title: Text(
+                      data[index],
+                      style: const TextStyle(fontSize: 14),
+                    ),
                   ),
-                ),
-                title: Text(
-                  features[index],
-                  style: const TextStyle(fontSize: 14),
-                ),
-              ),
-            );
-          },
-        );
+                );
+              },
+            ),
+        };
       },
     );
   }
@@ -132,7 +142,6 @@ class _DashboardSecondTabViewState extends State<DashboardSecondTabView>
                   onChanged: _formCubit.emailChanged,
                   keyboardType: TextInputType.emailAddress,
                   prefixIcon: const Icon(Icons.email_outlined),
-                  helperText: 'Type "error" in email to trigger domain failure',
                 ),
                 const SizedBox(height: 12),
                 ReactiveTextField(
@@ -166,21 +175,52 @@ class _DashboardSecondTabViewState extends State<DashboardSecondTabView>
   }
 
   Widget _buildPagingDemo() {
-    return PagingListView<SamplePagingCubit, SampleUser>(
-      cubit: _pagingCubit,
-      padding: const EdgeInsets.all(16),
-      itemBuilder: (context, user, index) {
-        return Card(
-          margin: const EdgeInsets.only(bottom: 8),
-          child: ListTile(
-            leading: CircleAvatar(child: Text('${index + 1}')),
-            title: Text(user.name),
-            subtitle: Text(user.email),
-            trailing: IconButton(
-              icon: const Icon(Icons.delete_outline, color: Colors.red),
-              onPressed: () => _pagingCubit.removeItem((u) => u.id == user.id),
+    return BlocBuilder<SamplePagingCubit, BasePagingState<SampleUser>>(
+      bloc: _pagingCubit,
+      builder: (context, state) {
+        if (state.items.isEmpty && state.status.isLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (state.items.isEmpty) {
+          return Center(
+            child: ElevatedButton.icon(
+              onPressed: () => _pagingCubit.loadNextPage(),
+              icon: const Icon(Icons.download_rounded),
+              label: const Text('Load Users'),
             ),
-          ),
+          );
+        }
+
+        return ListView.builder(
+          padding: const EdgeInsets.all(16),
+          itemCount: state.items.length + (state.isLastPage ? 0 : 1),
+          itemBuilder: (context, index) {
+            if (index == state.items.length) {
+              _pagingCubit.loadNextPage();
+              return const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+
+            final user = state.items[index];
+            return Card(
+              margin: const EdgeInsets.only(bottom: 8),
+              child: ListTile(
+                leading: CircleAvatar(child: Text('${index + 1}')),
+                title: Text(user.name),
+                subtitle: Text(user.email),
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete_outline, color: Colors.red),
+                  onPressed: () =>
+                      _pagingCubit.removeItem((u) => u.id == user.id),
+                ),
+              ),
+            );
+          },
         );
       },
     );
@@ -208,29 +248,29 @@ class _DashboardSecondTabViewState extends State<DashboardSecondTabView>
             child: BlocBuilder<SampleSearchBloc, SearchState>(
               bloc: _searchBloc,
               builder: (context, state) {
-                return state.resultState.when(
-                  initial: () =>
-                      const Center(child: Text('Type something to search...')),
-                  loading: () =>
-                      const Center(child: CircularProgressIndicator()),
-                  failure: (msg) => Center(
-                    child: Text(msg, style: const TextStyle(color: Colors.red)),
-                  ),
-                  success: (items) {
-                    if (items.isEmpty) {
-                      return const Center(child: Text('No results found'));
-                    }
-                    return ListView.builder(
-                      itemCount: items.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          leading: const Icon(Icons.search_rounded),
-                          title: Text(items[index]),
-                        );
-                      },
-                    );
-                  },
-                );
+                return switch (state.uiState) {
+                  UiInitial() => const Center(
+                      child: Text('Type something to search...'),
+                    ),
+                  UiLoading() => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  UiFailure(:final message) => Center(
+                      child: Text(message,
+                          style: const TextStyle(color: Colors.red)),
+                    ),
+                  UiSuccess(:final data) => data.isEmpty
+                      ? const Center(child: Text('No results found'))
+                      : ListView.builder(
+                          itemCount: data.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              leading: const Icon(Icons.search_rounded),
+                              title: Text(data[index]),
+                            );
+                          },
+                        ),
+                };
               },
             ),
           ),
@@ -239,5 +279,3 @@ class _DashboardSecondTabViewState extends State<DashboardSecondTabView>
     );
   }
 }
-
-/// Tab 3: Core Utilities & Network Actions

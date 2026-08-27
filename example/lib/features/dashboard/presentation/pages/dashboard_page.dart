@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core_example/config/config.dart';
 import 'package:flutter_prakash_core_example/core/di/injection.dart';
 import 'package:flutter_prakash_core_example/features/dashboard/presentation/blocs/dashboard_cubit.dart';
 import 'package:flutter_prakash_core_example/features/dashboard/presentation/blocs/dashboard_state.dart';
 import 'package:flutter_prakash_core_example/features/dashboard/presentation/widgets/dashboard_bottom_nav_bar.dart';
-
 import 'package:flutter_prakash_core_example/features/dashboard/presentation/widgets/dashboard_first_tab_view.dart';
+import 'package:flutter_prakash_core_example/features/dashboard/presentation/widgets/dashboard_fourth_tab_view.dart';
 import 'package:flutter_prakash_core_example/features/dashboard/presentation/widgets/dashboard_second_tab_view.dart';
 import 'package:flutter_prakash_core_example/features/dashboard/presentation/widgets/dashboard_third_tab_view.dart';
-import 'package:flutter_prakash_core_example/features/dashboard/presentation/widgets/dashboard_fourth_tab_view.dart';
 import 'package:flutter_prakash_core_example/features/dashboard/presentation/widgets/quick_action_button.dart';
-import 'package:flutter_prakash_core_example/core/themes/app_colors.dart';
 
 @RoutePage()
 class DashboardPage extends StatelessWidget {

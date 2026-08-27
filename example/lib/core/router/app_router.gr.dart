@@ -27,6 +27,22 @@ class AdMobShowcaseRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [ChangePasswordPage]
+class ChangePasswordRoute extends PageRouteInfo<void> {
+  const ChangePasswordRoute({List<PageRouteInfo>? children})
+    : super(ChangePasswordRoute.name, initialChildren: children);
+
+  static const String name = 'ChangePasswordRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ChangePasswordPage();
+    },
+  );
+}
+
+/// generated route for
 /// [DashboardPage]
 class DashboardRoute extends PageRouteInfo<void> {
   const DashboardRoute({List<PageRouteInfo>? children})
@@ -40,6 +56,171 @@ class DashboardRoute extends PageRouteInfo<void> {
       return const DashboardPage();
     },
   );
+}
+
+/// generated route for
+/// [EmailVerificationPage]
+class EmailVerificationRoute extends PageRouteInfo<EmailVerificationRouteArgs> {
+  EmailVerificationRoute({
+    Key? key,
+    required String email,
+    List<PageRouteInfo>? children,
+  }) : super(
+         EmailVerificationRoute.name,
+         args: EmailVerificationRouteArgs(key: key, email: email),
+         initialChildren: children,
+       );
+
+  static const String name = 'EmailVerificationRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<EmailVerificationRouteArgs>();
+      return EmailVerificationPage(key: args.key, email: args.email);
+    },
+  );
+}
+
+class EmailVerificationRouteArgs {
+  const EmailVerificationRouteArgs({this.key, required this.email});
+
+  final Key? key;
+
+  final String email;
+
+  @override
+  String toString() {
+    return 'EmailVerificationRouteArgs{key: $key, email: $email}';
+  }
+}
+
+/// generated route for
+/// [FilePreviewPage]
+class FilePreviewRoute extends PageRouteInfo<FilePreviewRouteArgs> {
+  FilePreviewRoute({
+    Key? key,
+    required String filePath,
+    required FileType fileType,
+    FileSourceType sourceType = FileSourceType.network,
+    String? title,
+    List<PageRouteInfo>? children,
+  }) : super(
+         FilePreviewRoute.name,
+         args: FilePreviewRouteArgs(
+           key: key,
+           filePath: filePath,
+           fileType: fileType,
+           sourceType: sourceType,
+           title: title,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'FilePreviewRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<FilePreviewRouteArgs>();
+      return FilePreviewPage(
+        key: args.key,
+        filePath: args.filePath,
+        fileType: args.fileType,
+        sourceType: args.sourceType,
+        title: args.title,
+      );
+    },
+  );
+}
+
+class FilePreviewRouteArgs {
+  const FilePreviewRouteArgs({
+    this.key,
+    required this.filePath,
+    required this.fileType,
+    this.sourceType = FileSourceType.network,
+    this.title,
+  });
+
+  final Key? key;
+
+  final String filePath;
+
+  final FileType fileType;
+
+  final FileSourceType sourceType;
+
+  final String? title;
+
+  @override
+  String toString() {
+    return 'FilePreviewRouteArgs{key: $key, filePath: $filePath, fileType: $fileType, sourceType: $sourceType, title: $title}';
+  }
+}
+
+/// generated route for
+/// [ForgotPasswordPage]
+class ForgotPasswordRoute extends PageRouteInfo<void> {
+  const ForgotPasswordRoute({List<PageRouteInfo>? children})
+    : super(ForgotPasswordRoute.name, initialChildren: children);
+
+  static const String name = 'ForgotPasswordRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ForgotPasswordPage();
+    },
+  );
+}
+
+/// generated route for
+/// [InAppWebViewPage]
+class InAppWebViewRoute extends PageRouteInfo<InAppWebViewRouteArgs> {
+  InAppWebViewRoute({
+    Key? key,
+    required String initialUrl,
+    String? title,
+    List<PageRouteInfo>? children,
+  }) : super(
+         InAppWebViewRoute.name,
+         args: InAppWebViewRouteArgs(
+           key: key,
+           initialUrl: initialUrl,
+           title: title,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'InAppWebViewRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<InAppWebViewRouteArgs>();
+      return InAppWebViewPage(
+        key: args.key,
+        initialUrl: args.initialUrl,
+        title: args.title,
+      );
+    },
+  );
+}
+
+class InAppWebViewRouteArgs {
+  const InAppWebViewRouteArgs({this.key, required this.initialUrl, this.title});
+
+  final Key? key;
+
+  final String initialUrl;
+
+  final String? title;
+
+  @override
+  String toString() {
+    return 'InAppWebViewRouteArgs{key: $key, initialUrl: $initialUrl, title: $title}';
+  }
 }
 
 /// generated route for
@@ -123,6 +304,46 @@ class ReportFeedbackRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [ResetPasswordPage]
+class ResetPasswordRoute extends PageRouteInfo<ResetPasswordRouteArgs> {
+  ResetPasswordRoute({
+    Key? key,
+    required String email,
+    String? otp,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ResetPasswordRoute.name,
+         args: ResetPasswordRouteArgs(key: key, email: email, otp: otp),
+         initialChildren: children,
+       );
+
+  static const String name = 'ResetPasswordRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ResetPasswordRouteArgs>();
+      return ResetPasswordPage(key: args.key, email: args.email, otp: args.otp);
+    },
+  );
+}
+
+class ResetPasswordRouteArgs {
+  const ResetPasswordRouteArgs({this.key, required this.email, this.otp});
+
+  final Key? key;
+
+  final String email;
+
+  final String? otp;
+
+  @override
+  String toString() {
+    return 'ResetPasswordRouteArgs{key: $key, email: $email, otp: $otp}';
+  }
+}
+
+/// generated route for
 /// [SplashPage]
 class SplashRoute extends PageRouteInfo<void> {
   const SplashRoute({List<PageRouteInfo>? children})
@@ -139,17 +360,17 @@ class SplashRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [TermsConditionsPage]
-class TermsConditionsRoute extends PageRouteInfo<void> {
-  const TermsConditionsRoute({List<PageRouteInfo>? children})
-    : super(TermsConditionsRoute.name, initialChildren: children);
+/// [TermsAndConditionsPage]
+class TermsAndConditionsRoute extends PageRouteInfo<void> {
+  const TermsAndConditionsRoute({List<PageRouteInfo>? children})
+    : super(TermsAndConditionsRoute.name, initialChildren: children);
 
-  static const String name = 'TermsConditionsRoute';
+  static const String name = 'TermsAndConditionsRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const TermsConditionsPage();
+      return const TermsAndConditionsPage();
     },
   );
 }

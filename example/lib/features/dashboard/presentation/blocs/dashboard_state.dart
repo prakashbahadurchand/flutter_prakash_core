@@ -1,19 +1,15 @@
-import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
-
 enum DashboardTab {
-  home('Home', Icons.auto_stories_rounded),
-  blocDemo('BLoC Engine', Icons.favorite_rounded),
-  coreUtils('Core & Network', Icons.mark_email_read_rounded),
-  settings('Settings', Icons.tune_rounded);
+  overview(0, 'Dashboard'),
+  blocs(1, 'BLoC Engine'),
+  utilities(2, 'Core Utilities'),
+  settings(3, 'Preferences');
 
+  final int tabNumber;
   final String title;
-  final IconData icon;
-
-  const DashboardTab(this.title, this.icon);
+  const DashboardTab(this.tabNumber, this.title);
 }
 
-class DashboardState extends Equatable {
+class DashboardState {
   final int tabIndex;
   final bool notificationsEnabled;
   final bool crashlyticsEnabled;
@@ -29,7 +25,8 @@ class DashboardState extends Equatable {
   });
 
   DashboardTab get currentTab =>
-      DashboardTab.values.elementAtOrNull(tabIndex) ?? DashboardTab.home;
+      DashboardTab.values.firstWhere((t) => t.tabNumber == tabIndex,
+          orElse: () => DashboardTab.overview);
 
   DashboardState copyWith({
     int? tabIndex,
@@ -40,19 +37,11 @@ class DashboardState extends Equatable {
   }) {
     return DashboardState(
       tabIndex: tabIndex ?? this.tabIndex,
-      notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
+      notificationsEnabled:
+          notificationsEnabled ?? this.notificationsEnabled,
       crashlyticsEnabled: crashlyticsEnabled ?? this.crashlyticsEnabled,
       analyticsEnabled: analyticsEnabled ?? this.analyticsEnabled,
       biometricsEnabled: biometricsEnabled ?? this.biometricsEnabled,
     );
   }
-
-  @override
-  List<Object?> get props => [
-    tabIndex,
-    notificationsEnabled,
-    crashlyticsEnabled,
-    analyticsEnabled,
-    biometricsEnabled,
-  ];
 }
