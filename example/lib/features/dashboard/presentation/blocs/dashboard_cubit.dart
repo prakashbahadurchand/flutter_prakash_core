@@ -1,20 +1,42 @@
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
 import 'package:flutter_prakash_core_example/features/dashboard/data/repositories/dashboard_repository.dart';
 import 'package:flutter_prakash_core_example/features/dashboard/presentation/blocs/dashboard_state.dart';
+import 'package:flutter_prakash_core_example/features/settings/data/repositories/settings_repository.dart';
 
 @injectable
 class DashboardCubit extends BaseCubit<DashboardState> {
   final DashboardRepository _repository;
+  final SettingsRepository _settingsRepository;
 
-  DashboardCubit(this._repository) : super(const DashboardState());
+  DashboardCubit(this._repository, this._settingsRepository)
+    : super(const DashboardState());
+
+  @postConstruct
+  void init() => _loadPreferences();
 
   void selectTab(int index) {
     if (state.tabIndex != index) {
+      if (index == DashboardTab.settings.tabNumber) {
+        _loadPreferences();
+      }
       safeEmit(state.copyWith(tabIndex: index));
     }
   }
 
-  void toggleNotifications(bool value) {
+  void _loadPreferences() {
+    final preferences = _settingsRepository.getPreferences();
+    safeEmit(
+      state.copyWith(
+        notificationsEnabled: preferences.notificationsEnabled,
+        crashlyticsEnabled: preferences.crashlyticsEnabled,
+        analyticsEnabled: preferences.analyticsEnabled,
+        biometricsEnabled: preferences.biometricsEnabled,
+      ),
+    );
+  }
+
+  Future<void> toggleNotifications(bool value) async {
+    await _settingsRepository.setNotifications(value);
     safeEmit(state.copyWith(notificationsEnabled: value));
     emitEffect(
       ShowToastEffect(
@@ -23,7 +45,8 @@ class DashboardCubit extends BaseCubit<DashboardState> {
     );
   }
 
-  void toggleCrashlytics(bool value) {
+  Future<void> toggleCrashlytics(bool value) async {
+    await _settingsRepository.setCrashlytics(value);
     safeEmit(state.copyWith(crashlyticsEnabled: value));
     emitEffect(
       ShowToastEffect(
@@ -34,7 +57,8 @@ class DashboardCubit extends BaseCubit<DashboardState> {
     );
   }
 
-  void toggleAnalytics(bool value) {
+  Future<void> toggleAnalytics(bool value) async {
+    await _settingsRepository.setAnalytics(value);
     safeEmit(state.copyWith(analyticsEnabled: value));
     emitEffect(
       ShowToastEffect(
@@ -43,7 +67,8 @@ class DashboardCubit extends BaseCubit<DashboardState> {
     );
   }
 
-  void toggleBiometrics(bool value) {
+  Future<void> toggleBiometrics(bool value) async {
+    await _settingsRepository.setBiometrics(value);
     safeEmit(state.copyWith(biometricsEnabled: value));
     emitEffect(
       ShowToastEffect(

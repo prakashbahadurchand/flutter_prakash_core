@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
-import 'package:flutter_prakash_core_example/config/config.dart';
 import 'package:flutter_prakash_core_example/core/core.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/email_verification/email_verification_cubit.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/email_verification/email_verification_state.dart';
+import 'package:flutter_prakash_core_example/features/common/presentation/widgets/common_form_card.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/widgets/auth_header.dart';
+import 'package:flutter_prakash_core_example/features/common/presentation/widgets/common_submit_button.dart';
 
 @RoutePage()
 class EmailVerificationPage extends StatelessWidget {
@@ -34,8 +35,7 @@ class _EmailVerificationForm extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
       body: SafeArea(
-        child: ReactiveFormListener<EmailVerificationCubit,
-            EmailVerificationState>(
+        child: ReactiveFormListener<EmailVerificationCubit, EmailVerificationState>(
           successMessage: 'Email successfully verified!',
           onSuccess: (context, state) {
             context.router.replaceAll([const DashboardRoute()]);
@@ -57,30 +57,16 @@ class _EmailVerificationForm extends StatelessWidget {
                     icon: Icons.verified_user_outlined,
                   ),
                   const SizedBox(height: 32),
-                  Container(
-                    padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      color: AppPalette.surface(isDark),
-                      borderRadius: BorderRadius.circular(24),
-                      border: Border.all(
-                        color: isDark
-                            ? Colors.grey.shade800
-                            : Colors.grey.shade200,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.04),
-                          blurRadius: 16,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
+                  CommonFormCard(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         // OTP Code Field (Rebuilds ONLY on otpCode changes)
-                        BlocSelector<EmailVerificationCubit,
-                            EmailVerificationState, Field<String>>(
+                        BlocSelector<
+                          EmailVerificationCubit,
+                          EmailVerificationState,
+                          Field<String>
+                        >(
                           selector: (state) => state.otpCode,
                           builder: (context, otpCode) {
                             return ReactivePinCodeField(
@@ -93,44 +79,28 @@ class _EmailVerificationForm extends StatelessWidget {
                         const SizedBox(height: 24),
 
                         // Submit Button (Rebuilds ONLY on loading status change)
-                        BlocSelector<EmailVerificationCubit,
-                            EmailVerificationState, bool>(
+                        BlocSelector<
+                          EmailVerificationCubit,
+                          EmailVerificationState,
+                          bool
+                        >(
                           selector: (state) => state.status.isLoading,
                           builder: (context, isLoading) {
-                            return ElevatedButton(
-                              onPressed: isLoading ? null : cubit.submit,
-                              style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 14,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(14),
-                                ),
-                              ),
-                              child: isLoading
-                                  ? const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        color: Colors.white,
-                                      ),
-                                    )
-                                  : const Text(
-                                      'Verify & Continue',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                            return CommonSubmitButton(
+                              isLoading: isLoading,
+                              onPressed: cubit.submit,
+                              label: 'Verify & Continue',
                             );
                           },
                         ),
                         const SizedBox(height: 20),
 
                         // Resend Countdown Timer (Rebuilds ONLY on resend state change)
-                        BlocSelector<EmailVerificationCubit,
-                            EmailVerificationState, (bool, int)>(
+                        BlocSelector<
+                          EmailVerificationCubit,
+                          EmailVerificationState,
+                          (bool, int)
+                        >(
                           selector: (state) =>
                               (state.canResend, state.resendCountdown),
                           builder: (context, resendData) {

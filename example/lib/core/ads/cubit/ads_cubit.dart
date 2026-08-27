@@ -29,7 +29,9 @@ class AdsCubit extends Cubit<AdsState> {
 
   /// 🔄 Preload all ad formats at once
   void loadAllAds() {
-    _safeEmit(state.copyWith(statusMessage: 'Loading all ads in background...'));
+    _safeEmit(
+      state.copyWith(statusMessage: 'Loading all ads in background...'),
+    );
 
     adsService.loadInterstitialAd(
       onLoaded: () => updateAdStatus('Interstitial Ad Ready'),
@@ -77,7 +79,7 @@ class AdsCubit extends Cubit<AdsState> {
       adsService.loadInterstitialAd(
         onLoaded: () => updateAdStatus('Interstitial Ad Ready'),
         onFailedToLoad: (error) =>
-          updateAdStatus('Interstitial Failed: ${error.message}'),
+            updateAdStatus('Interstitial Failed: ${error.message}'),
       );
     }
   }

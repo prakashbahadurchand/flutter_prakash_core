@@ -10,9 +10,7 @@ import 'package:flutter_prakash_core_example/features/settings/presentation/widg
 import 'package:flutter_prakash_core_example/features/settings/presentation/widgets/settings_tile.dart';
 
 class DashboardFourthTabView extends StatelessWidget {
-  final DashboardState state;
-
-  const DashboardFourthTabView({super.key, required this.state});
+  const DashboardFourthTabView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -152,8 +150,8 @@ class DashboardFourthTabView extends StatelessWidget {
                     selected: {currentMode},
                     onSelectionChanged: (Set<ThemeMode> newSelection) {
                       context.read<ThemeCubit>().setThemeMode(
-                            newSelection.first,
-                          );
+                        newSelection.first,
+                      );
                     },
                     style: const ButtonStyle(
                       visualDensity: VisualDensity.compact,

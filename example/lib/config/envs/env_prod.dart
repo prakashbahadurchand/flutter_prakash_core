@@ -14,15 +14,15 @@ final class ProdEnv implements AppEnv {
   @override
   @EnviedField(
     varName: 'APP_NAME',
-    defaultValue: 'Enterprise Production App',
+    defaultValue: 'Flutter Prakash (Prod)',
     obfuscate: true,
   )
   final String appName = _EnvProd.appName;
 
   @override
   @EnviedField(
-    varName: 'API_BASE_URL',
-    defaultValue: 'https://api.enterprise.production.com',
+    varName: 'BASE_URL',
+    defaultValue: 'https://api.prakash.dev',
     obfuscate: true,
   )
   final String apiBaseUrl = _EnvProd.apiBaseUrl;

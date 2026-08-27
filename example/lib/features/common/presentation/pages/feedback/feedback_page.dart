@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
-import 'package:flutter_prakash_core_example/config/config.dart';
 import 'package:flutter_prakash_core_example/core/di/injection.dart';
 import 'package:flutter_prakash_core_example/features/common/presentation/blocs/feedback_cubit.dart';
 import 'package:flutter_prakash_core_example/features/common/presentation/blocs/feedback_state.dart';
+import 'package:flutter_prakash_core_example/features/common/presentation/widgets/common_form_card.dart';
+import 'package:flutter_prakash_core_example/features/common/presentation/widgets/common_submit_button.dart';
 
 @RoutePage()
 class FeedbackPage extends StatelessWidget {
@@ -55,17 +56,9 @@ class _FeedbackForm extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 24),
-                Container(
+                CommonFormCard(
                   padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: AppPalette.surface(isDark),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: isDark
-                          ? Colors.grey.shade800
-                          : Colors.grey.shade200,
-                    ),
-                  ),
+                  radius: 20,
                   child: Column(
                     children: [
                       // Email Field (Rebuilds ONLY on email change)
@@ -103,30 +96,12 @@ class _FeedbackForm extends StatelessWidget {
                 BlocSelector<FeedbackCubit, FeedbackState, bool>(
                   selector: (state) => state.status.isLoading,
                   builder: (context, isLoading) {
-                    return ElevatedButton(
-                      onPressed: isLoading ? null : cubit.submit,
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                      ),
-                      child: isLoading
-                          ? const SizedBox(
-                              height: 22,
-                              width: 22,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white,
-                              ),
-                            )
-                          : const Text(
-                              'Submit Feedback',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                    return CommonSubmitButton(
+                      isLoading: isLoading,
+                      onPressed: cubit.submit,
+                      label: 'Submit Feedback',
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      radius: 16,
                     );
                   },
                 ),

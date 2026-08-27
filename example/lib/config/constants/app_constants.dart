@@ -20,5 +20,5 @@ abstract final class AppConstants {
   static const int receiveTimeoutSeconds = 15;
 
   // Asset Paths
-  static const String logoAsset = 'assets/images/app-icon/icon.png';
+  static const String logoAsset = 'assets/images/app-icon/icon-dev.png';
 }

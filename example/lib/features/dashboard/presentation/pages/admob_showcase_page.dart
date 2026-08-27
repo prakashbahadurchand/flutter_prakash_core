@@ -460,9 +460,7 @@ class _AdMobShowcasePageState extends State<AdMobShowcasePage> {
                               ? Icons.check_circle_outline_rounded
                               : Icons.launch_rounded,
                         ),
-                        label: Text(
-                          isLoaded ? 'Show App Open' : 'App Open Ad',
-                        ),
+                        label: Text(isLoaded ? 'Show App Open' : 'App Open Ad'),
                         onPressed: () => cubit.showAppOpenAd(),
                       );
                     },

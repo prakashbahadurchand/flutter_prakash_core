@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
-import 'package:flutter_prakash_core_example/config/config.dart';
 import 'package:flutter_prakash_core_example/core/core.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/forgot_password/forgot_password_cubit.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/forgot_password/forgot_password_state.dart';
+import 'package:flutter_prakash_core_example/features/common/presentation/widgets/common_form_card.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/widgets/auth_header.dart';
+import 'package:flutter_prakash_core_example/features/common/presentation/widgets/common_submit_button.dart';
 
 @RoutePage()
 class ForgotPasswordPage extends StatelessWidget {
@@ -24,7 +25,6 @@ class _ForgotPasswordForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final cubit = context.read<ForgotPasswordCubit>();
 
     return Scaffold(
@@ -33,9 +33,7 @@ class _ForgotPasswordForm extends StatelessWidget {
         child: ReactiveFormListener<ForgotPasswordCubit, ForgotPasswordState>(
           successMessage: 'Reset code sent to your email!',
           onSuccess: (context, state) {
-            context.router.push(
-              ResetPasswordRoute(email: state.email.value),
-            );
+            context.router.push(ResetPasswordRoute(email: state.email.value));
           },
           child: Center(
             child: SingleChildScrollView(
@@ -54,30 +52,16 @@ class _ForgotPasswordForm extends StatelessWidget {
                     icon: Icons.mark_email_read_outlined,
                   ),
                   const SizedBox(height: 32),
-                  Container(
-                    padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      color: AppPalette.surface(isDark),
-                      borderRadius: BorderRadius.circular(24),
-                      border: Border.all(
-                        color: isDark
-                            ? Colors.grey.shade800
-                            : Colors.grey.shade200,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.04),
-                          blurRadius: 16,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
+                  CommonFormCard(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         // Email Field (Rebuilds ONLY on email change)
-                        BlocSelector<ForgotPasswordCubit, ForgotPasswordState,
-                            Field<String>>(
+                        BlocSelector<
+                          ForgotPasswordCubit,
+                          ForgotPasswordState,
+                          Field<String>
+                        >(
                           selector: (state) => state.email,
                           builder: (context, email) {
                             return ReactiveTextField(
@@ -91,36 +75,17 @@ class _ForgotPasswordForm extends StatelessWidget {
                         const SizedBox(height: 24),
 
                         // Submit Button (Rebuilds ONLY on loading status change)
-                        BlocSelector<ForgotPasswordCubit, ForgotPasswordState,
-                            bool>(
+                        BlocSelector<
+                          ForgotPasswordCubit,
+                          ForgotPasswordState,
+                          bool
+                        >(
                           selector: (state) => state.status.isLoading,
                           builder: (context, isLoading) {
-                            return ElevatedButton(
-                              onPressed: isLoading ? null : cubit.submit,
-                              style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 14,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(14),
-                                ),
-                              ),
-                              child: isLoading
-                                  ? const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        color: Colors.white,
-                                      ),
-                                    )
-                                  : const Text(
-                                      'Send Verification Code',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                            return CommonSubmitButton(
+                              isLoading: isLoading,
+                              onPressed: cubit.submit,
+                              label: 'Send Verification Code',
                             );
                           },
                         ),

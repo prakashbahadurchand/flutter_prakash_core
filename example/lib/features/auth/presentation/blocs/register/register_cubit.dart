@@ -31,10 +31,8 @@ class RegisterCubit extends FormCubit<RegisterState> {
       emit(state.copyWith(isPasswordObscured: !state.isPasswordObscured));
 
   void toggleConfirmPasswordVisibility() => emit(
-        state.copyWith(
-          isConfirmPasswordObscured: !state.isConfirmPasswordObscured,
-        ),
-      );
+    state.copyWith(isConfirmPasswordObscured: !state.isConfirmPasswordObscured),
+  );
 
   void reset() => emit(RegisterState.initial());
 
@@ -42,17 +40,13 @@ class RegisterCubit extends FormCubit<RegisterState> {
   Future<Result<dynamic>> performSubmit() {
     if (state.password.value != state.confirmPassword.value) {
       return Future.value(
-        const Result.error(
-          ValidationFailure('Passwords do not match'),
-        ),
+        const Result.error(ValidationFailure('Passwords do not match')),
       );
     }
     if (!state.agreeToTerms.value) {
       return Future.value(
         const Result.error(
-          ValidationFailure(
-            'You must agree to the Terms and Privacy Policy',
-          ),
+          ValidationFailure('You must agree to the Terms and Privacy Policy'),
         ),
       );
     }

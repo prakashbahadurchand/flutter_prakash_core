@@ -10,9 +10,6 @@ class SamplePagingCubit extends BasePagingCubit<SampleUser> {
 
   @override
   Future<Result<List<SampleUser>>> fetchPage(int page, int pageSize) {
-    return _repository.fetchUsersPage(
-      page: page,
-      pageSize: pageSize,
-    );
+    return _repository.fetchUsersPage(page: page, pageSize: pageSize);
   }
 }

@@ -63,8 +63,8 @@ class _SettingsView extends StatelessWidget {
                         selected: {currentMode},
                         onSelectionChanged: (Set<ThemeMode> newSelection) {
                           context.read<ThemeCubit>().setThemeMode(
-                                newSelection.first,
-                              );
+                            newSelection.first,
+                          );
                         },
                         style: const ButtonStyle(
                           visualDensity: VisualDensity.compact,
@@ -165,9 +165,7 @@ class _SettingsView extends StatelessWidget {
                   iconColor: AppPalette.slate500,
                   title: 'Privacy Policy',
                   subtitle: 'Read our client privacy terms',
-                  onTap: () => context.router.push(
-                    const PrivacyPolicyRoute(),
-                  ),
+                  onTap: () => context.router.push(const PrivacyPolicyRoute()),
                 ),
                 const Divider(height: 1),
                 SettingsTile(
@@ -175,9 +173,8 @@ class _SettingsView extends StatelessWidget {
                   iconColor: AppPalette.slate500,
                   title: 'Terms of Service',
                   subtitle: 'Enterprise terms & licensing agreement',
-                  onTap: () => context.router.push(
-                    const TermsAndConditionsRoute(),
-                  ),
+                  onTap: () =>
+                      context.router.push(const TermsAndConditionsRoute()),
                 ),
                 const Divider(height: 1),
                 SettingsTile(
@@ -185,9 +182,7 @@ class _SettingsView extends StatelessWidget {
                   iconColor: AppPalette.slate500,
                   title: 'Send Feedback',
                   subtitle: 'Help us improve the engine',
-                  onTap: () => context.router.push(
-                    const FeedbackRoute(),
-                  ),
+                  onTap: () => context.router.push(const FeedbackRoute()),
                 ),
               ],
             ),

@@ -17,15 +17,9 @@ class SearchState {
   final String query;
   final UiState<List<String>> uiState;
 
-  const SearchState({
-    this.query = '',
-    this.uiState = const UiState.initial(),
-  });
+  const SearchState({this.query = '', this.uiState = const UiState.initial()});
 
-  SearchState copyWith({
-    String? query,
-    UiState<List<String>>? uiState,
-  }) {
+  SearchState copyWith({String? query, UiState<List<String>>? uiState}) {
     return SearchState(
       query: query ?? this.query,
       uiState: uiState ?? this.uiState,

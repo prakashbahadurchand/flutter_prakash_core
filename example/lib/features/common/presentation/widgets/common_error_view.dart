@@ -4,11 +4,7 @@ class CommonErrorView extends StatelessWidget {
   final String message;
   final VoidCallback? onRetry;
 
-  const CommonErrorView({
-    super.key,
-    required this.message,
-    this.onRetry,
-  });
+  const CommonErrorView({super.key, required this.message, this.onRetry});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +14,11 @@ class CommonErrorView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline_rounded, size: 64, color: Colors.red),
+            const Icon(
+              Icons.error_outline_rounded,
+              size: 64,
+              color: Colors.red,
+            ),
             const SizedBox(height: 16),
             const Text(
               'Something went wrong',

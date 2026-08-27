@@ -10,9 +10,7 @@ class CommonRepository {
   const CommonRepository(this._localDataSource);
 
   FutureResult<LegalDocumentModel> getPrivacyPolicy() {
-    return Result.fromAsync(
-      call: () => _localDataSource.getPrivacyPolicy(),
-    );
+    return Result.fromAsync(call: () => _localDataSource.getPrivacyPolicy());
   }
 
   FutureResult<LegalDocumentModel> getTermsAndConditions() {

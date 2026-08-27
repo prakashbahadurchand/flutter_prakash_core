@@ -34,11 +34,7 @@ class OnboardingSlideWidget extends StatelessWidget {
                 ),
               ],
             ),
-            child: Icon(
-              item.icon,
-              size: 80,
-              color: Colors.white,
-            ),
+            child: Icon(item.icon, size: 80, color: Colors.white),
           ),
           const SizedBox(height: 40),
           Container(

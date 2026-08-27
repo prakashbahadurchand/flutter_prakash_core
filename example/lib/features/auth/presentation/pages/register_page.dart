@@ -6,8 +6,10 @@ import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/re
 import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/register/register_state.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/widgets/auth_divider.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/widgets/auth_footer.dart';
+import 'package:flutter_prakash_core_example/features/common/presentation/widgets/common_form_card.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/widgets/auth_header.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/widgets/auth_social_buttons.dart';
+import 'package:flutter_prakash_core_example/features/common/presentation/widgets/common_submit_button.dart';
 
 @RoutePage()
 class RegisterPage extends StatelessWidget {
@@ -27,7 +29,6 @@ class _RegisterForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final cubit = context.read<RegisterCubit>();
 
     return Scaffold(
@@ -58,30 +59,16 @@ class _RegisterForm extends StatelessWidget {
                   const SizedBox(height: 28),
 
                   // Registration Form Card
-                  Container(
-                    padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      color: AppPalette.surface(isDark),
-                      borderRadius: BorderRadius.circular(24),
-                      border: Border.all(
-                        color: isDark
-                            ? Colors.grey.shade800
-                            : Colors.grey.shade200,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.04),
-                          blurRadius: 16,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
+                  CommonFormCard(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         // Full Name Field (Rebuilds ONLY on fullName change)
-                        BlocSelector<RegisterCubit, RegisterState,
-                            Field<String>>(
+                        BlocSelector<
+                          RegisterCubit,
+                          RegisterState,
+                          Field<String>
+                        >(
                           selector: (state) => state.fullName,
                           builder: (context, fullName) {
                             return ReactiveTextField(
@@ -94,8 +81,11 @@ class _RegisterForm extends StatelessWidget {
                         const SizedBox(height: 14),
 
                         // Email Field (Rebuilds ONLY on email change)
-                        BlocSelector<RegisterCubit, RegisterState,
-                            Field<String>>(
+                        BlocSelector<
+                          RegisterCubit,
+                          RegisterState,
+                          Field<String>
+                        >(
                           selector: (state) => state.email,
                           builder: (context, email) {
                             return ReactiveTextField(
@@ -109,8 +99,11 @@ class _RegisterForm extends StatelessWidget {
                         const SizedBox(height: 14),
 
                         // Password Field (Rebuilds ONLY on password/obscure change)
-                        BlocSelector<RegisterCubit, RegisterState,
-                            (Field<String>, bool)>(
+                        BlocSelector<
+                          RegisterCubit,
+                          RegisterState,
+                          (Field<String>, bool)
+                        >(
                           selector: (state) =>
                               (state.password, state.isPasswordObscured),
                           builder: (context, data) {
@@ -134,11 +127,14 @@ class _RegisterForm extends StatelessWidget {
                         const SizedBox(height: 14),
 
                         // Confirm Password Field (Rebuilds ONLY on confirmPassword/obscure change)
-                        BlocSelector<RegisterCubit, RegisterState,
-                            (Field<String>, bool)>(
+                        BlocSelector<
+                          RegisterCubit,
+                          RegisterState,
+                          (Field<String>, bool)
+                        >(
                           selector: (state) => (
                             state.confirmPassword,
-                            state.isConfirmPasswordObscured
+                            state.isConfirmPasswordObscured,
                           ),
                           builder: (context, data) {
                             final (confirmPassword, isObscured) = data;
@@ -146,8 +142,7 @@ class _RegisterForm extends StatelessWidget {
                               field: confirmPassword,
                               onChanged: cubit.onConfirmPasswordChanged,
                               obscureText: isObscured,
-                              prefixIcon:
-                                  const Icon(Icons.lock_reset_outlined),
+                              prefixIcon: const Icon(Icons.lock_reset_outlined),
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   isObscured
@@ -233,32 +228,10 @@ class _RegisterForm extends StatelessWidget {
                         BlocSelector<RegisterCubit, RegisterState, bool>(
                           selector: (state) => state.status.isLoading,
                           builder: (context, isLoading) {
-                            return ElevatedButton(
-                              onPressed: isLoading ? null : cubit.submit,
-                              style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 14,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(14),
-                                ),
-                              ),
-                              child: isLoading
-                                  ? const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        color: Colors.white,
-                                      ),
-                                    )
-                                  : const Text(
-                                      'Create Account',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                            return CommonSubmitButton(
+                              isLoading: isLoading,
+                              onPressed: cubit.submit,
+                              label: 'Create Account',
                             );
                           },
                         ),

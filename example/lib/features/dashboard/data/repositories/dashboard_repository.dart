@@ -22,7 +22,9 @@ class DashboardRepository {
   }
 
   FutureResult<List<String>> fetchFeatures() {
-    return Result.fromAsync(call: () => _remoteDataSource.fetchSampleFeatures());
+    return Result.fromAsync(
+      call: () => _remoteDataSource.fetchSampleFeatures(),
+    );
   }
 
   FutureResult<List<SampleUser>> fetchUsersPage({
@@ -30,7 +32,8 @@ class DashboardRepository {
     int pageSize = 10,
   }) {
     return Result.fromAsync(
-      call: () => _remoteDataSource.fetchUsersPage(page: page, pageSize: pageSize),
+      call: () =>
+          _remoteDataSource.fetchUsersPage(page: page, pageSize: pageSize),
     );
   }
 
@@ -39,7 +42,8 @@ class DashboardRepository {
     required String description,
   }) {
     return Result.fromAsync(
-      call: () => _remoteDataSource.submitForm(title: title, description: description),
+      call: () =>
+          _remoteDataSource.submitForm(title: title, description: description),
     );
   }
 

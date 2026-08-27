@@ -61,10 +61,10 @@ dart run build_runner build --delete-conflicting-outputs
 ### 3. Launch App (Flavours)
 ```bash
 # Run Development Flavour
-flutter run -t lib/main_dev.dart
+flutter run -t lib/main_dev.dart --flavor dev --dart-define-from-file=.env.dev
 
 # Run Production Flavour
-flutter run -t lib/main_prod.dart
+flutter run -t lib/main_prod.dart --flavor prod --dart-define-from-file=.env.prod
 ```
 
 ---
@@ -84,7 +84,7 @@ example/lib/
 │   ├── themes/ (app_colors.dart, app_theme.dart)
 │   └── config.dart                        # Barrel file
 ├── core/                                  # Common utilities & system singletons
-│   ├── ads/app_ads_helper.dart            # Bridge to flutter_prakash_ads
+│   ├── ads/ (ads.dart, my_ad_service.dart, cubit/ads_cubit.dart)
 │   ├── di/ (injection.dart, register_module.dart)
 │   ├── l10n/ (l10n.dart)
 │   ├── router/ (app_router.dart, app_router.gr.dart, guards/auth_guard.dart)

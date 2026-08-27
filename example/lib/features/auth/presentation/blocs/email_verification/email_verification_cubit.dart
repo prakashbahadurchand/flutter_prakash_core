@@ -10,7 +10,7 @@ class EmailVerificationCubit extends FormCubit<EmailVerificationState> {
   Timer? _timer;
 
   EmailVerificationCubit(this._authRepository)
-      : super(EmailVerificationState.initial());
+    : super(EmailVerificationState.initial());
 
   void init(String email) {
     emit(state.copyWith(email: email));

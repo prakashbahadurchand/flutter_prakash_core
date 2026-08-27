@@ -43,12 +43,7 @@ class DashboardBottomNavBar extends StatelessWidget {
               _buildNavItem(0, Icons.dashboard_rounded, 'Dashboard', isDark),
               _buildNavItem(1, Icons.bolt_rounded, 'BLoC Engine', isDark),
               _buildCenterButton(),
-              _buildNavItem(
-                2,
-                Icons.build_circle_rounded,
-                'Utilities',
-                isDark,
-              ),
+              _buildNavItem(2, Icons.build_circle_rounded, 'Utilities', isDark),
               _buildNavItem(3, Icons.settings_rounded, 'Settings', isDark),
             ],
           ),
@@ -57,12 +52,7 @@ class DashboardBottomNavBar extends StatelessWidget {
     );
   }
 
-  Widget _buildNavItem(
-    int index,
-    IconData icon,
-    String label,
-    bool isDark,
-  ) {
+  Widget _buildNavItem(int index, IconData icon, String label, bool isDark) {
     final isSelected = currentIndex == index;
     final color = isSelected
         ? AppPalette.primary
@@ -113,11 +103,7 @@ class DashboardBottomNavBar extends StatelessWidget {
             ),
           ],
         ),
-        child: const Icon(
-          Icons.add_rounded,
-          color: Colors.white,
-          size: 26,
-        ),
+        child: const Icon(Icons.add_rounded, color: Colors.white, size: 26),
       ),
     );
   }

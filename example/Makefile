@@ -13,7 +13,7 @@ RESET   := \033[0m
 help: ## Display this help menu
 	@echo ""
 	@echo "=========================================================================="
-	@echo "                   HAMRO MAYA - MAKEFILE WORKFLOW                         "
+	@echo "                   FLUTTER PRAKASH CORE - MAKEFILE WORKFLOW                "
 	@echo "=========================================================================="
 	@echo ""
 	@echo "$(YELLOW)[ 🛠️  SETUP & MAINTENANCE ]$(RESET)"

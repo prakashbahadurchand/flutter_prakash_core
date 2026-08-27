@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
-import 'package:flutter_prakash_core_example/config/config.dart';
 import 'package:flutter_prakash_core_example/core/core.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/reset_password/reset_password_cubit.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/reset_password/reset_password_state.dart';
+import 'package:flutter_prakash_core_example/features/common/presentation/widgets/common_form_card.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/widgets/auth_header.dart';
+import 'package:flutter_prakash_core_example/features/common/presentation/widgets/common_submit_button.dart';
 
 @RoutePage()
 class ResetPasswordPage extends StatelessWidget {
@@ -16,8 +17,7 @@ class ResetPasswordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) =>
-          getIt<ResetPasswordCubit>()..init(email, defaultOtp: otp),
+      create: (_) => getIt<ResetPasswordCubit>()..init(email, defaultOtp: otp),
       child: const _ResetPasswordForm(),
     );
   }
@@ -28,7 +28,6 @@ class _ResetPasswordForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final cubit = context.read<ResetPasswordCubit>();
 
     return Scaffold(
@@ -56,30 +55,16 @@ class _ResetPasswordForm extends StatelessWidget {
                     icon: Icons.vpn_key_outlined,
                   ),
                   const SizedBox(height: 32),
-                  Container(
-                    padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      color: AppPalette.surface(isDark),
-                      borderRadius: BorderRadius.circular(24),
-                      border: Border.all(
-                        color: isDark
-                            ? Colors.grey.shade800
-                            : Colors.grey.shade200,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.04),
-                          blurRadius: 16,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
+                  CommonFormCard(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         // OTP Code Field (Rebuilds ONLY on otpCode changes)
-                        BlocSelector<ResetPasswordCubit, ResetPasswordState,
-                            Field<String>>(
+                        BlocSelector<
+                          ResetPasswordCubit,
+                          ResetPasswordState,
+                          Field<String>
+                        >(
                           selector: (state) => state.otpCode,
                           builder: (context, otpCode) {
                             return ReactiveTextField(
@@ -93,12 +78,13 @@ class _ResetPasswordForm extends StatelessWidget {
                         const SizedBox(height: 16),
 
                         // New Password Field (Rebuilds ONLY on newPassword/obscure changes)
-                        BlocSelector<ResetPasswordCubit, ResetPasswordState,
-                            (Field<String>, bool)>(
-                          selector: (state) => (
-                            state.newPassword,
-                            state.isNewPasswordObscured
-                          ),
+                        BlocSelector<
+                          ResetPasswordCubit,
+                          ResetPasswordState,
+                          (Field<String>, bool)
+                        >(
+                          selector: (state) =>
+                              (state.newPassword, state.isNewPasswordObscured),
                           builder: (context, data) {
                             final (newPassword, isObscured) = data;
                             return ReactiveTextField(
@@ -112,8 +98,7 @@ class _ResetPasswordForm extends StatelessWidget {
                                       ? Icons.visibility_outlined
                                       : Icons.visibility_off_outlined,
                                 ),
-                                onPressed:
-                                    cubit.toggleNewPasswordVisibility,
+                                onPressed: cubit.toggleNewPasswordVisibility,
                               ),
                             );
                           },
@@ -121,11 +106,14 @@ class _ResetPasswordForm extends StatelessWidget {
                         const SizedBox(height: 16),
 
                         // Confirm Password Field (Rebuilds ONLY on confirmPassword/obscure changes)
-                        BlocSelector<ResetPasswordCubit, ResetPasswordState,
-                            (Field<String>, bool)>(
+                        BlocSelector<
+                          ResetPasswordCubit,
+                          ResetPasswordState,
+                          (Field<String>, bool)
+                        >(
                           selector: (state) => (
                             state.confirmPassword,
-                            state.isConfirmPasswordObscured
+                            state.isConfirmPasswordObscured,
                           ),
                           builder: (context, data) {
                             final (confirmPassword, isObscured) = data;
@@ -133,8 +121,7 @@ class _ResetPasswordForm extends StatelessWidget {
                               field: confirmPassword,
                               onChanged: cubit.onConfirmPasswordChanged,
                               obscureText: isObscured,
-                              prefixIcon:
-                                  const Icon(Icons.lock_reset_outlined),
+                              prefixIcon: const Icon(Icons.lock_reset_outlined),
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   isObscured
@@ -150,36 +137,17 @@ class _ResetPasswordForm extends StatelessWidget {
                         const SizedBox(height: 24),
 
                         // Submit Button (Rebuilds ONLY on loading status changes)
-                        BlocSelector<ResetPasswordCubit, ResetPasswordState,
-                            bool>(
+                        BlocSelector<
+                          ResetPasswordCubit,
+                          ResetPasswordState,
+                          bool
+                        >(
                           selector: (state) => state.status.isLoading,
                           builder: (context, isLoading) {
-                            return ElevatedButton(
-                              onPressed: isLoading ? null : cubit.submit,
-                              style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 14,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(14),
-                                ),
-                              ),
-                              child: isLoading
-                                  ? const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        color: Colors.white,
-                                      ),
-                                    )
-                                  : const Text(
-                                      'Reset & Sign In',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                            return CommonSubmitButton(
+                              isLoading: isLoading,
+                              onPressed: cubit.submit,
+                              label: 'Reset & Sign In',
                             );
                           },
                         ),

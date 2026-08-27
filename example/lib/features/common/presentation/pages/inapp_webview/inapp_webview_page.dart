@@ -7,23 +7,13 @@ class InAppWebViewPage extends StatelessWidget {
   final String initialUrl;
   final String? title;
 
-  const InAppWebViewPage({
-    super.key,
-    required this.initialUrl,
-    this.title,
-  });
+  const InAppWebViewPage({super.key, required this.initialUrl, this.title});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title ?? 'Web View'),
-        centerTitle: true,
-      ),
-      body: InAppWebViewContainer(
-        initialUrl: initialUrl,
-        title: title,
-      ),
+      appBar: AppBar(title: Text(title ?? 'Web View'), centerTitle: true),
+      body: InAppWebViewContainer(initialUrl: initialUrl, title: title),
     );
   }
 }

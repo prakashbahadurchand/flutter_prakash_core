@@ -10,8 +10,8 @@ class FeedbackRequestModel {
   });
 
   Map<String, dynamic> toJson() => {
-        'feedback': feedback,
-        'userEmail': userEmail,
-        'timestamp': timestamp.toIso8601String(),
-      };
+    'feedback': feedback,
+    'userEmail': userEmail,
+    'timestamp': timestamp.toIso8601String(),
+  };
 }

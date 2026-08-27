@@ -5,7 +5,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'change_password_state.freezed.dart';
 
 @freezed
-abstract class ChangePasswordState with _$ChangePasswordState, FormMixin implements FormState {
+abstract class ChangePasswordState
+    with _$ChangePasswordState, FormMixin
+    implements FormState {
   const ChangePasswordState._();
 
   const factory ChangePasswordState({
@@ -19,32 +21,32 @@ abstract class ChangePasswordState with _$ChangePasswordState, FormMixin impleme
   }) = _ChangePasswordState;
 
   factory ChangePasswordState.initial() => ChangePasswordState(
-        currentPassword: Field(
-          labelText: 'Current Password',
-          value: '',
-          validators: Validators.required(),
-        ),
-        newPassword: Field(
-          labelText: 'New Password',
-          value: '',
-          validators: Validators.required().minLength(6),
-        ),
-        confirmPassword: Field(
-          labelText: 'Confirm New Password',
-          value: '',
-          validators: Validators.required(),
-        ),
-        isCurrentPasswordObscured: true,
-        isNewPasswordObscured: true,
-        isConfirmPasswordObscured: true,
-      );
+    currentPassword: Field(
+      labelText: 'Current Password',
+      value: '',
+      validators: Validators.required(),
+    ),
+    newPassword: Field(
+      labelText: 'New Password',
+      value: '',
+      validators: Validators.required().minLength(6),
+    ),
+    confirmPassword: Field(
+      labelText: 'Confirm New Password',
+      value: '',
+      validators: Validators.required(),
+    ),
+    isCurrentPasswordObscured: true,
+    isNewPasswordObscured: true,
+    isConfirmPasswordObscured: true,
+  );
 
   @override
   List<Field<dynamic>> get formFields => [
-        currentPassword,
-        newPassword,
-        confirmPassword,
-      ];
+    currentPassword,
+    newPassword,
+    confirmPassword,
+  ];
 
   @override
   ChangePasswordState copyWithStatus(BlocStatus status) =>
@@ -52,13 +54,13 @@ abstract class ChangePasswordState with _$ChangePasswordState, FormMixin impleme
 
   @override
   ChangePasswordState makeAllDirty() => copyWith(
-        currentPassword: currentPassword.makeDirty(),
-        newPassword: newPassword.makeDirty(),
-        confirmPassword: confirmPassword.makeDirty(),
-      );
+    currentPassword: currentPassword.makeDirty(),
+    newPassword: newPassword.makeDirty(),
+    confirmPassword: confirmPassword.makeDirty(),
+  );
 
   ChangePasswordRequestModel toDto() => ChangePasswordRequestModel(
-        currentPassword: currentPassword.value,
-        newPassword: newPassword.value,
-      );
+    currentPassword: currentPassword.value,
+    newPassword: newPassword.value,
+  );
 }

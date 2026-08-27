@@ -188,7 +188,7 @@ main() {
             configure_dev "$dev_proj"
             ;;
         prod)
-            configure_prod "$dev_proj"
+            configure_prod "$prod_proj"
             ;;
         all|both)
             configure_dev "$dev_proj"

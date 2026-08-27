@@ -5,7 +5,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'reset_password_state.freezed.dart';
 
 @freezed
-abstract class ResetPasswordState with _$ResetPasswordState, FormMixin implements FormState {
+abstract class ResetPasswordState
+    with _$ResetPasswordState, FormMixin
+    implements FormState {
   const ResetPasswordState._();
 
   const factory ResetPasswordState({
@@ -19,31 +21,31 @@ abstract class ResetPasswordState with _$ResetPasswordState, FormMixin implement
   }) = _ResetPasswordState;
 
   factory ResetPasswordState.initial() => ResetPasswordState(
-        otpCode: Field(
-          labelText: '6-digit Reset Code',
-          value: '',
-          validators: Validators.required().exactLength(6),
-        ),
-        newPassword: Field(
-          labelText: 'New Password',
-          value: '',
-          validators: Validators.required().minLength(6),
-        ),
-        confirmPassword: Field(
-          labelText: 'Confirm New Password',
-          value: '',
-          validators: Validators.required(),
-        ),
-        isNewPasswordObscured: true,
-        isConfirmPasswordObscured: true,
-      );
+    otpCode: Field(
+      labelText: '6-digit Reset Code',
+      value: '',
+      validators: Validators.required().exactLength(6),
+    ),
+    newPassword: Field(
+      labelText: 'New Password',
+      value: '',
+      validators: Validators.required().minLength(6),
+    ),
+    confirmPassword: Field(
+      labelText: 'Confirm New Password',
+      value: '',
+      validators: Validators.required(),
+    ),
+    isNewPasswordObscured: true,
+    isConfirmPasswordObscured: true,
+  );
 
   @override
   List<Field<dynamic>> get formFields => [
-        otpCode,
-        newPassword,
-        confirmPassword,
-      ];
+    otpCode,
+    newPassword,
+    confirmPassword,
+  ];
 
   @override
   ResetPasswordState copyWithStatus(BlocStatus status) =>
@@ -51,14 +53,14 @@ abstract class ResetPasswordState with _$ResetPasswordState, FormMixin implement
 
   @override
   ResetPasswordState makeAllDirty() => copyWith(
-        otpCode: otpCode.makeDirty(),
-        newPassword: newPassword.makeDirty(),
-        confirmPassword: confirmPassword.makeDirty(),
-      );
+    otpCode: otpCode.makeDirty(),
+    newPassword: newPassword.makeDirty(),
+    confirmPassword: confirmPassword.makeDirty(),
+  );
 
   ResetPasswordRequestModel toDto() => ResetPasswordRequestModel(
-        email: email.trim(),
-        otpCode: otpCode.value.trim(),
-        newPassword: newPassword.value,
-      );
+    email: email.trim(),
+    otpCode: otpCode.value.trim(),
+    newPassword: newPassword.value,
+  );
 }

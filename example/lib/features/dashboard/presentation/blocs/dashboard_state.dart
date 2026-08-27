@@ -24,9 +24,10 @@ class DashboardState {
     this.biometricsEnabled = false,
   });
 
-  DashboardTab get currentTab =>
-      DashboardTab.values.firstWhere((t) => t.tabNumber == tabIndex,
-          orElse: () => DashboardTab.overview);
+  DashboardTab get currentTab => DashboardTab.values.firstWhere(
+    (t) => t.tabNumber == tabIndex,
+    orElse: () => DashboardTab.overview,
+  );
 
   DashboardState copyWith({
     int? tabIndex,
@@ -37,8 +38,7 @@ class DashboardState {
   }) {
     return DashboardState(
       tabIndex: tabIndex ?? this.tabIndex,
-      notificationsEnabled:
-          notificationsEnabled ?? this.notificationsEnabled,
+      notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
       crashlyticsEnabled: crashlyticsEnabled ?? this.crashlyticsEnabled,
       analyticsEnabled: analyticsEnabled ?? this.analyticsEnabled,
       biometricsEnabled: biometricsEnabled ?? this.biometricsEnabled,

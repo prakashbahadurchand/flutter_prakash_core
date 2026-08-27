@@ -5,7 +5,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'email_verification_state.freezed.dart';
 
 @freezed
-abstract class EmailVerificationState with _$EmailVerificationState, FormMixin implements FormState {
+abstract class EmailVerificationState
+    with _$EmailVerificationState, FormMixin
+    implements FormState {
   const EmailVerificationState._();
 
   const factory EmailVerificationState({
@@ -17,12 +19,12 @@ abstract class EmailVerificationState with _$EmailVerificationState, FormMixin i
   }) = _EmailVerificationState;
 
   factory EmailVerificationState.initial() => EmailVerificationState(
-        otpCode: Field(
-          labelText: 'Verification Code',
-          value: '',
-          validators: Validators.required().exactLength(6),
-        ),
-      );
+    otpCode: Field(
+      labelText: 'Verification Code',
+      value: '',
+      validators: Validators.required().exactLength(6),
+    ),
+  );
 
   @override
   List<Field<dynamic>> get formFields => [otpCode];
@@ -36,7 +38,7 @@ abstract class EmailVerificationState with _$EmailVerificationState, FormMixin i
       copyWith(otpCode: otpCode.makeDirty());
 
   VerifyEmailRequestModel toDto() => VerifyEmailRequestModel(
-        email: email.trim(),
-        otpCode: otpCode.value.trim(),
-      );
+    email: email.trim(),
+    otpCode: otpCode.value.trim(),
+  );
 }

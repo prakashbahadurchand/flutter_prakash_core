@@ -13,6 +13,8 @@ class OnboardingRepository {
   }
 
   FutureResult<bool> completeOnboarding() {
-    return Result.fromAsync(call: () => _localDataSource.setOnboardingCompleted());
+    return Result.fromAsync(
+      call: () => _localDataSource.setOnboardingCompleted(),
+    );
   }
 }

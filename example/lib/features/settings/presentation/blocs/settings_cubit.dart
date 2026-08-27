@@ -8,16 +8,16 @@ class SettingsCubit extends BaseCubit<SettingsState> {
   final SettingsRepository _repository;
 
   SettingsCubit(this._repository)
-      : super(
-          SettingsState(
-            preferences: const UserPreferencesModel(
-              biometricsEnabled: false,
-              notificationsEnabled: true,
-              analyticsEnabled: true,
-              crashlyticsEnabled: true,
-            ),
+    : super(
+        SettingsState(
+          preferences: const UserPreferencesModel(
+            biometricsEnabled: false,
+            notificationsEnabled: true,
+            analyticsEnabled: true,
+            crashlyticsEnabled: true,
           ),
-        );
+        ),
+      );
 
   @postConstruct
   void init() {
@@ -27,13 +27,11 @@ class SettingsCubit extends BaseCubit<SettingsState> {
 
   Future<void> toggleBiometrics(bool value) async {
     await _repository.setBiometrics(value);
-    final updated = UserPreferencesModel(
-      biometricsEnabled: value,
-      notificationsEnabled: state.preferences.notificationsEnabled,
-      analyticsEnabled: state.preferences.analyticsEnabled,
-      crashlyticsEnabled: state.preferences.crashlyticsEnabled,
+    safeEmit(
+      state.copyWith(
+        preferences: state.preferences.copyWith(biometricsEnabled: value),
+      ),
     );
-    safeEmit(state.copyWith(preferences: updated));
     emitEffect(
       ShowToastEffect(
         value ? 'Biometrics activated' : 'Biometrics deactivated',
@@ -43,34 +41,28 @@ class SettingsCubit extends BaseCubit<SettingsState> {
 
   Future<void> toggleNotifications(bool value) async {
     await _repository.setNotifications(value);
-    final updated = UserPreferencesModel(
-      biometricsEnabled: state.preferences.biometricsEnabled,
-      notificationsEnabled: value,
-      analyticsEnabled: state.preferences.analyticsEnabled,
-      crashlyticsEnabled: state.preferences.crashlyticsEnabled,
+    safeEmit(
+      state.copyWith(
+        preferences: state.preferences.copyWith(notificationsEnabled: value),
+      ),
     );
-    safeEmit(state.copyWith(preferences: updated));
   }
 
   Future<void> toggleAnalytics(bool value) async {
     await _repository.setAnalytics(value);
-    final updated = UserPreferencesModel(
-      biometricsEnabled: state.preferences.biometricsEnabled,
-      notificationsEnabled: state.preferences.notificationsEnabled,
-      analyticsEnabled: value,
-      crashlyticsEnabled: state.preferences.crashlyticsEnabled,
+    safeEmit(
+      state.copyWith(
+        preferences: state.preferences.copyWith(analyticsEnabled: value),
+      ),
     );
-    safeEmit(state.copyWith(preferences: updated));
   }
 
   Future<void> toggleCrashlytics(bool value) async {
     await _repository.setCrashlytics(value);
-    final updated = UserPreferencesModel(
-      biometricsEnabled: state.preferences.biometricsEnabled,
-      notificationsEnabled: state.preferences.notificationsEnabled,
-      analyticsEnabled: state.preferences.analyticsEnabled,
-      crashlyticsEnabled: value,
+    safeEmit(
+      state.copyWith(
+        preferences: state.preferences.copyWith(crashlyticsEnabled: value),
+      ),
     );
-    safeEmit(state.copyWith(preferences: updated));
   }
 }

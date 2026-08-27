@@ -9,6 +9,8 @@ class SplashRepository {
   const SplashRepository(this._localDataSource);
 
   FutureResult<SplashInitModel> initializeApp() {
-    return Result.fromAsync(call: () => _localDataSource.checkAppInitialization());
+    return Result.fromAsync(
+      call: () => _localDataSource.checkAppInitialization(),
+    );
   }
 }

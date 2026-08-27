@@ -13,8 +13,6 @@ class SampleFetchCubit extends BaseUiCubit<List<String>> {
   }
 
   Future<void> fetchFeatures() async {
-    await executeResult(
-      call: () => _repository.fetchFeatures(),
-    );
+    await executeResult(call: () => _repository.fetchFeatures());
   }
 }

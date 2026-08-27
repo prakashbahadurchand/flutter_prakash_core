@@ -53,9 +53,7 @@ class AuthRepository {
   }
 
   FutureResult<bool> verifyEmail(VerifyEmailRequestModel request) {
-    return Result.fromAsync(
-      call: () => _remoteDataSource.verifyEmail(request),
-    );
+    return Result.fromAsync(call: () => _remoteDataSource.verifyEmail(request));
   }
 
   FutureResult<bool> resetPassword(ResetPasswordRequestModel request) {
@@ -71,8 +69,6 @@ class AuthRepository {
   }
 
   FutureResult<void> logout() {
-    return Result.fromAsync(
-      call: () => _localDataSource.clearSession(),
-    );
+    return Result.fromAsync(call: () => _localDataSource.clearSession());
   }
 }

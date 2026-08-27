@@ -7,7 +7,7 @@ class ChangePasswordCubit extends FormCubit<ChangePasswordState> {
   final AuthRepository _authRepository;
 
   ChangePasswordCubit(this._authRepository)
-      : super(ChangePasswordState.initial());
+    : super(ChangePasswordState.initial());
 
   void onCurrentPasswordChanged(String value) =>
       emit(state.copyWith(currentPassword: state.currentPassword(value)));
@@ -19,22 +19,15 @@ class ChangePasswordCubit extends FormCubit<ChangePasswordState> {
       emit(state.copyWith(confirmPassword: state.confirmPassword(value)));
 
   void toggleCurrentPasswordVisibility() => emit(
-        state.copyWith(
-          isCurrentPasswordObscured: !state.isCurrentPasswordObscured,
-        ),
-      );
+    state.copyWith(isCurrentPasswordObscured: !state.isCurrentPasswordObscured),
+  );
 
-  void toggleNewPasswordVisibility() => emit(
-        state.copyWith(
-          isNewPasswordObscured: !state.isNewPasswordObscured,
-        ),
-      );
+  void toggleNewPasswordVisibility() =>
+      emit(state.copyWith(isNewPasswordObscured: !state.isNewPasswordObscured));
 
   void toggleConfirmPasswordVisibility() => emit(
-        state.copyWith(
-          isConfirmPasswordObscured: !state.isConfirmPasswordObscured,
-        ),
-      );
+    state.copyWith(isConfirmPasswordObscured: !state.isConfirmPasswordObscured),
+  );
 
   void reset() => emit(ChangePasswordState.initial());
 
@@ -42,9 +35,7 @@ class ChangePasswordCubit extends FormCubit<ChangePasswordState> {
   Future<Result<dynamic>> performSubmit() {
     if (state.newPassword.value != state.confirmPassword.value) {
       return Future.value(
-        const Result.error(
-          ValidationFailure('New passwords do not match'),
-        ),
+        const Result.error(ValidationFailure('New passwords do not match')),
       );
     }
     if (state.newPassword.value == state.currentPassword.value) {

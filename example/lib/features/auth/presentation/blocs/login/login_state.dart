@@ -17,23 +17,23 @@ abstract class LoginState with _$LoginState, FormMixin implements FormState {
   }) = _LoginState;
 
   factory LoginState.initial() => LoginState(
-        email: Field(
-          labelText: 'Email Address',
-          value: '',
-          validators: Validators.required().email(),
-        ),
-        password: Field(
-          labelText: 'Password',
-          value: '',
-          validators: Validators.required().minLength(6),
-        ),
-        rememberMe: const Field(
-          labelText: 'Remember this device',
-          value: false,
-          validators: [],
-        ),
-        isPasswordObscured: true,
-      );
+    email: Field(
+      labelText: 'Email Address',
+      value: '',
+      validators: Validators.required().email(),
+    ),
+    password: Field(
+      labelText: 'Password',
+      value: '',
+      validators: Validators.required().minLength(6),
+    ),
+    rememberMe: const Field(
+      labelText: 'Remember this device',
+      value: false,
+      validators: [],
+    ),
+    isPasswordObscured: true,
+  );
 
   @override
   List<Field<dynamic>> get formFields => [email, password, rememberMe];
@@ -46,8 +46,8 @@ abstract class LoginState with _$LoginState, FormMixin implements FormState {
       copyWith(email: email.makeDirty(), password: password.makeDirty());
 
   LoginRequestModel toDto() => LoginRequestModel(
-        email: email.value.trim(),
-        password: password.value,
-        rememberMe: rememberMe.value,
-      );
+    email: email.value.trim(),
+    password: password.value,
+    rememberMe: rememberMe.value,
+  );
 }

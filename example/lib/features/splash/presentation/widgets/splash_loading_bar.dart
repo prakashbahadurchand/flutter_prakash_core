@@ -16,9 +16,7 @@ class SplashLoadingBar extends StatelessWidget {
           minHeight: 4,
           backgroundColor: (isDark ? Colors.white : AppPalette.primaryDark)
               .withValues(alpha: 0.15),
-          valueColor: const AlwaysStoppedAnimation<Color>(
-            AppPalette.primary,
-          ),
+          valueColor: const AlwaysStoppedAnimation<Color>(AppPalette.primary),
         ),
       ),
     );

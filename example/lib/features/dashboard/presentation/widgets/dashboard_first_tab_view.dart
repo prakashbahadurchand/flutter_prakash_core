@@ -98,11 +98,7 @@ class DashboardFirstTabView extends StatelessWidget {
                     ),
                     child: const Row(
                       children: [
-                        Icon(
-                          Icons.circle,
-                          color: AppPalette.success,
-                          size: 8,
-                        ),
+                        Icon(Icons.circle, color: AppPalette.success, size: 8),
                         SizedBox(width: 6),
                         Text(
                           'ENGINE ONLINE',
@@ -307,10 +303,7 @@ class DashboardFirstTabView extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               title,
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-              ),
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
               textAlign: TextAlign.center,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -365,8 +358,7 @@ class DashboardFirstTabView extends StatelessWidget {
                   title,
                   style: TextStyle(
                     fontSize: 11,
-                    color:
-                        isDark ? Colors.grey.shade400 : Colors.grey.shade600,
+                    color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -436,8 +428,7 @@ class DashboardFirstTabView extends StatelessWidget {
                 Text(
                   subtitle,
                   style: TextStyle(
-                    color:
-                        isDark ? Colors.grey.shade400 : Colors.grey.shade600,
+                    color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
                     fontSize: 12,
                     height: 1.3,
                   ),

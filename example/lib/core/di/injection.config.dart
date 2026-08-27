@@ -113,6 +113,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i499.AppOpenAdManager>(
       () => registerModule.provideAppOpenAdManager(),
     );
+    gh.lazySingleton<_i107.AuthRemoteDataSource>(
+      () => const _i107.AuthRemoteDataSource(),
+    );
     gh.lazySingleton<_i838.DashboardLocalDataSource>(
       () => const _i838.DashboardLocalDataSource(),
     );
@@ -121,9 +124,6 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i137.CommonLocalDataSource>(
       () => const _i137.CommonLocalDataSource(),
-    );
-    gh.lazySingleton<_i107.AuthRemoteDataSource>(
-      () => const _i107.AuthRemoteDataSource(),
     );
     gh.lazySingleton<_i87.ThemeCubit>(
       () => registerModule.themeCubit(gh<_i460.SharedPreferences>()),
@@ -140,11 +140,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i240.SplashLocalDataSource>(
       () => _i240.SplashLocalDataSource(gh<_i460.SharedPreferences>()),
     );
-    gh.lazySingleton<_i870.OnboardingLocalDataSource>(
-      () => _i870.OnboardingLocalDataSource(gh<_i460.SharedPreferences>()),
-    );
     gh.lazySingleton<_i852.AuthLocalDataSource>(
       () => _i852.AuthLocalDataSource(gh<_i460.SharedPreferences>()),
+    );
+    gh.lazySingleton<_i870.OnboardingLocalDataSource>(
+      () => _i870.OnboardingLocalDataSource(gh<_i460.SharedPreferences>()),
     );
     gh.lazySingleton<_i75.DashboardRepository>(
       () => _i75.DashboardRepository(
@@ -173,11 +173,14 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i168.CommonRepository(gh<_i137.CommonLocalDataSource>()),
     );
     gh.lazySingleton<_i361.Dio>(() => registerModule.dio(gh<_i658.AppEnv>()));
+    gh.factory<_i726.DashboardCubit>(
+      () => _i726.DashboardCubit(
+        gh<_i75.DashboardRepository>(),
+        gh<_i450.SettingsRepository>(),
+      )..init(),
+    );
     gh.lazySingleton<_i284.OnboardingRepository>(
       () => _i284.OnboardingRepository(gh<_i870.OnboardingLocalDataSource>()),
-    );
-    gh.factory<_i726.DashboardCubit>(
-      () => _i726.DashboardCubit(gh<_i75.DashboardRepository>()),
     );
     gh.factory<_i702.SampleFormCubit>(
       () => _i702.SampleFormCubit(gh<_i75.DashboardRepository>()),
@@ -215,11 +218,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i67.AuthCubit>(
       () => _i67.AuthCubit(gh<_i573.AuthRepository>())..init(),
     );
-    gh.factory<_i627.LegalCubit>(
-      () => _i627.LegalCubit(gh<_i168.CommonRepository>()),
-    );
     gh.factory<_i521.FeedbackCubit>(
       () => _i521.FeedbackCubit(gh<_i168.CommonRepository>()),
+    );
+    gh.factory<_i627.LegalCubit>(
+      () => _i627.LegalCubit(gh<_i168.CommonRepository>()),
     );
     return this;
   }

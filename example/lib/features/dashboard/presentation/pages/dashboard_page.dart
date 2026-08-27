@@ -33,73 +33,70 @@ class DashboardView extends StatelessWidget {
 
     return PrakashEffectListener.fromCubit(
       cubit: cubit,
-      child: DevtoolsFloatingDock(
-        child: Scaffold(
-          appBar: AppBar(
-            title: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [AppPalette.primary, AppPalette.primaryDark],
+      child: Scaffold(
+        appBar: AppBar(
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [AppPalette.primary, AppPalette.primaryDark],
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(
+                  Icons.rocket_launch_rounded,
+                  size: 20,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(width: 10),
+              BlocSelector<DashboardCubit, DashboardState, String>(
+                selector: (state) => state.currentTab.title,
+                builder: (context, title) {
+                  return Text(
+                    title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
                     ),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Icon(
-                    Icons.rocket_launch_rounded,
-                    size: 20,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                BlocSelector<DashboardCubit, DashboardState, String>(
-                  selector: (state) => state.currentTab.title,
-                  builder: (context, title) {
-                    return Text(
-                      title,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.bug_report_rounded),
-                tooltip: 'DevTools',
-                onPressed: () => DevToolsDialog.show(context),
+                  );
+                },
               ),
             ],
           ),
-          body: BlocSelector<DashboardCubit, DashboardState, int>(
-            selector: (state) => state.tabIndex.clamp(0, 3),
-            builder: (context, tabIndex) {
-              return IndexedStack(
-                index: tabIndex,
-                children: const [
-                  DashboardFirstTabView(),
-                  DashboardSecondTabView(),
-                  DashboardThirdTabView(),
-                  _DashboardFourthTabContainer(),
-                ],
-              );
-            },
-          ),
-          bottomNavigationBar:
-              BlocSelector<DashboardCubit, DashboardState, int>(
-            selector: (state) => state.tabIndex.clamp(0, 3),
-            builder: (context, tabIndex) {
-              return DashboardBottomNavBar(
-                currentIndex: tabIndex,
-                onSelect: cubit.selectTab,
-                onCreateTap: () => _showQuickActionSheet(context),
-              );
-            },
-          ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.bug_report_rounded),
+              tooltip: 'DevTools',
+              onPressed: () => DevToolsDialog.show(context),
+            ),
+          ],
+        ),
+        body: BlocSelector<DashboardCubit, DashboardState, int>(
+          selector: (state) => state.tabIndex.clamp(0, 3),
+          builder: (context, tabIndex) {
+            return IndexedStack(
+              index: tabIndex,
+              children: const [
+                DashboardFirstTabView(),
+                DashboardSecondTabView(),
+                DashboardThirdTabView(),
+                DashboardFourthTabView(),
+              ],
+            );
+          },
+        ),
+        bottomNavigationBar: BlocSelector<DashboardCubit, DashboardState, int>(
+          selector: (state) => state.tabIndex.clamp(0, 3),
+          builder: (context, tabIndex) {
+            return DashboardBottomNavBar(
+              currentIndex: tabIndex,
+              onSelect: cubit.selectTab,
+              onCreateTap: () => _showQuickActionSheet(context),
+            );
+          },
         ),
       ),
     );
@@ -181,19 +178,6 @@ class DashboardView extends StatelessWidget {
             ],
           ),
         );
-      },
-    );
-  }
-}
-
-class _DashboardFourthTabContainer extends StatelessWidget {
-  const _DashboardFourthTabContainer();
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<DashboardCubit, DashboardState>(
-      builder: (context, state) {
-        return DashboardFourthTabView(state: state);
       },
     );
   }

@@ -107,23 +107,29 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 ),
               ),
               Expanded(
-                child: BlocSelector<OnboardingCubit, OnboardingState,
-                    List<OnboardingItemModel>>(
-                  selector: (state) => state.slides,
-                  builder: (context, slides) {
-                    if (slides.isEmpty) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    return PageView.builder(
-                      controller: _pageController,
-                      onPageChanged: _cubit.onPageChanged,
-                      itemCount: slides.length,
-                      itemBuilder: (context, index) {
-                        return OnboardingSlideWidget(item: slides[index]);
+                child:
+                    BlocSelector<
+                      OnboardingCubit,
+                      OnboardingState,
+                      List<OnboardingItemModel>
+                    >(
+                      selector: (state) => state.slides,
+                      builder: (context, slides) {
+                        if (slides.isEmpty) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        return PageView.builder(
+                          controller: _pageController,
+                          onPageChanged: _cubit.onPageChanged,
+                          itemCount: slides.length,
+                          itemBuilder: (context, index) {
+                            return OnboardingSlideWidget(item: slides[index]);
+                          },
+                        );
                       },
-                    );
-                  },
-                ),
+                    ),
               ),
               Padding(
                 padding: const EdgeInsets.all(28.0),
@@ -169,10 +175,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              const Icon(
-                                Icons.arrow_forward_rounded,
-                                size: 20,
-                              ),
+                              const Icon(Icons.arrow_forward_rounded, size: 20),
                             ],
                           ),
                         );

@@ -5,7 +5,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'forgot_password_state.freezed.dart';
 
 @freezed
-abstract class ForgotPasswordState with _$ForgotPasswordState, FormMixin implements FormState {
+abstract class ForgotPasswordState
+    with _$ForgotPasswordState, FormMixin
+    implements FormState {
   const ForgotPasswordState._();
 
   const factory ForgotPasswordState({
@@ -14,12 +16,12 @@ abstract class ForgotPasswordState with _$ForgotPasswordState, FormMixin impleme
   }) = _ForgotPasswordState;
 
   factory ForgotPasswordState.initial() => ForgotPasswordState(
-        email: Field(
-          labelText: 'Email Address',
-          value: '',
-          validators: Validators.required().email(),
-        ),
-      );
+    email: Field(
+      labelText: 'Email Address',
+      value: '',
+      validators: Validators.required().email(),
+    ),
+  );
 
   @override
   List<Field<dynamic>> get formFields => [email];
@@ -31,7 +33,6 @@ abstract class ForgotPasswordState with _$ForgotPasswordState, FormMixin impleme
   @override
   ForgotPasswordState makeAllDirty() => copyWith(email: email.makeDirty());
 
-  ForgotPasswordRequestModel toDto() => ForgotPasswordRequestModel(
-        email: email.value.trim(),
-      );
+  ForgotPasswordRequestModel toDto() =>
+      ForgotPasswordRequestModel(email: email.value.trim());
 }

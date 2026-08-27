@@ -110,6 +110,8 @@ dev_dependencies:
   freezed: ^2.5.8
   json_serializable: ^6.8.0
   envied_generator: ^1.1.1
+  flutter_launcher_icons: ^0.14.4
+  flutter_native_splash: ^2.4.5
 
 flutter:
   uses-material-design: true

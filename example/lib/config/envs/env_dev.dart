@@ -14,14 +14,14 @@ final class DevEnv implements AppEnv {
   @override
   @EnviedField(
     varName: 'APP_NAME',
-    defaultValue: 'Enterprise App (Dev)',
+    defaultValue: 'Flutter Prakash (Dev)',
     obfuscate: true,
   )
   final String appName = _EnvDev.appName;
 
   @override
   @EnviedField(
-    varName: 'API_BASE_URL',
+    varName: 'BASE_URL',
     defaultValue: 'http://127.0.0.1:8080',
     obfuscate: true,
   )

@@ -7,7 +7,7 @@ class ResetPasswordCubit extends FormCubit<ResetPasswordState> {
   final AuthRepository _authRepository;
 
   ResetPasswordCubit(this._authRepository)
-      : super(ResetPasswordState.initial());
+    : super(ResetPasswordState.initial());
 
   void init(String email, {String? defaultOtp}) {
     var initial = state.copyWith(email: email);
@@ -26,15 +26,12 @@ class ResetPasswordCubit extends FormCubit<ResetPasswordState> {
   void onConfirmPasswordChanged(String value) =>
       emit(state.copyWith(confirmPassword: state.confirmPassword(value)));
 
-  void toggleNewPasswordVisibility() => emit(
-        state.copyWith(isNewPasswordObscured: !state.isNewPasswordObscured),
-      );
+  void toggleNewPasswordVisibility() =>
+      emit(state.copyWith(isNewPasswordObscured: !state.isNewPasswordObscured));
 
   void toggleConfirmPasswordVisibility() => emit(
-        state.copyWith(
-          isConfirmPasswordObscured: !state.isConfirmPasswordObscured,
-        ),
-      );
+    state.copyWith(isConfirmPasswordObscured: !state.isConfirmPasswordObscured),
+  );
 
   void reset() => emit(ResetPasswordState.initial());
 
@@ -42,9 +39,7 @@ class ResetPasswordCubit extends FormCubit<ResetPasswordState> {
   Future<Result<dynamic>> performSubmit() {
     if (state.newPassword.value != state.confirmPassword.value) {
       return Future.value(
-        const Result.error(
-          ValidationFailure('Passwords do not match'),
-        ),
+        const Result.error(ValidationFailure('Passwords do not match')),
       );
     }
     return _authRepository.resetPassword(state.toDto());

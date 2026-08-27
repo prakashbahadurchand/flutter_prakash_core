@@ -5,7 +5,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'sample_form_cubit.freezed.dart';
 
 @freezed
-abstract class SampleFormState with _$SampleFormState, FormMixin implements FormState {
+abstract class SampleFormState
+    with _$SampleFormState, FormMixin
+    implements FormState {
   const SampleFormState._();
 
   const factory SampleFormState({
@@ -16,36 +18,35 @@ abstract class SampleFormState with _$SampleFormState, FormMixin implements Form
   }) = _SampleFormState;
 
   factory SampleFormState.initial() => SampleFormState(
-        fullName: Field(
-          value: '',
-          labelText: 'Full Name',
-          validators: Validators.required().minLength(2),
-        ),
-        email: Field(
-          value: '',
-          labelText: 'Email',
-          validators: Validators.required().email(),
-        ),
-        password: Field(
-          value: '',
-          labelText: 'Password',
-          validators: Validators.required().minLength(6),
-        ),
-      );
+    fullName: Field(
+      value: '',
+      labelText: 'Full Name',
+      validators: Validators.required().minLength(2),
+    ),
+    email: Field(
+      value: '',
+      labelText: 'Email',
+      validators: Validators.required().email(),
+    ),
+    password: Field(
+      value: '',
+      labelText: 'Password',
+      validators: Validators.required().minLength(6),
+    ),
+  );
 
   @override
   List<Field<dynamic>> get formFields => [fullName, email, password];
 
   @override
-  SampleFormState copyWithStatus(BlocStatus status) =>
-      copyWith(status: status);
+  SampleFormState copyWithStatus(BlocStatus status) => copyWith(status: status);
 
   @override
   SampleFormState makeAllDirty() => copyWith(
-        fullName: fullName.makeDirty(),
-        email: email.makeDirty(),
-        password: password.makeDirty(),
-      );
+    fullName: fullName.makeDirty(),
+    email: email.makeDirty(),
+    password: password.makeDirty(),
+  );
 }
 
 @injectable

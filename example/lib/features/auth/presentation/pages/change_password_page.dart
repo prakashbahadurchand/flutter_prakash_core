@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_prakash_core/flutter_prakash_core.dart';
-import 'package:flutter_prakash_core_example/config/config.dart';
 import 'package:flutter_prakash_core_example/core/core.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/change_password/change_password_cubit.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/change_password/change_password_state.dart';
+import 'package:flutter_prakash_core_example/features/common/presentation/widgets/common_form_card.dart';
+import 'package:flutter_prakash_core_example/features/common/presentation/widgets/common_submit_button.dart';
 
 @RoutePage()
 class ChangePasswordPage extends StatelessWidget {
@@ -55,25 +56,18 @@ class _ChangePasswordForm extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 24),
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: AppPalette.surface(isDark),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: isDark
-                          ? Colors.grey.shade800
-                          : Colors.grey.shade200,
-                    ),
-                  ),
+                CommonFormCard(
                   child: Column(
                     children: [
                       // Current Password (Rebuilds ONLY on currentPassword/obscure changes)
-                      BlocSelector<ChangePasswordCubit, ChangePasswordState,
-                          (Field<String>, bool)>(
+                      BlocSelector<
+                        ChangePasswordCubit,
+                        ChangePasswordState,
+                        (Field<String>, bool)
+                      >(
                         selector: (state) => (
                           state.currentPassword,
-                          state.isCurrentPasswordObscured
+                          state.isCurrentPasswordObscured,
                         ),
                         builder: (context, data) {
                           final (currentPassword, isObscured) = data;
@@ -88,8 +82,7 @@ class _ChangePasswordForm extends StatelessWidget {
                                     ? Icons.visibility_outlined
                                     : Icons.visibility_off_outlined,
                               ),
-                              onPressed:
-                                  cubit.toggleCurrentPasswordVisibility,
+                              onPressed: cubit.toggleCurrentPasswordVisibility,
                             ),
                           );
                         },
@@ -97,20 +90,20 @@ class _ChangePasswordForm extends StatelessWidget {
                       const SizedBox(height: 16),
 
                       // New Password (Rebuilds ONLY on newPassword/obscure changes)
-                      BlocSelector<ChangePasswordCubit, ChangePasswordState,
-                          (Field<String>, bool)>(
-                        selector: (state) => (
-                          state.newPassword,
-                          state.isNewPasswordObscured
-                        ),
+                      BlocSelector<
+                        ChangePasswordCubit,
+                        ChangePasswordState,
+                        (Field<String>, bool)
+                      >(
+                        selector: (state) =>
+                            (state.newPassword, state.isNewPasswordObscured),
                         builder: (context, data) {
                           final (newPassword, isObscured) = data;
                           return ReactiveTextField(
                             field: newPassword,
                             onChanged: cubit.onNewPasswordChanged,
                             obscureText: isObscured,
-                            prefixIcon:
-                                const Icon(Icons.lock_reset_outlined),
+                            prefixIcon: const Icon(Icons.lock_reset_outlined),
                             suffixIcon: IconButton(
                               icon: Icon(
                                 isObscured
@@ -125,11 +118,14 @@ class _ChangePasswordForm extends StatelessWidget {
                       const SizedBox(height: 16),
 
                       // Confirm Password (Rebuilds ONLY on confirmPassword/obscure changes)
-                      BlocSelector<ChangePasswordCubit, ChangePasswordState,
-                          (Field<String>, bool)>(
+                      BlocSelector<
+                        ChangePasswordCubit,
+                        ChangePasswordState,
+                        (Field<String>, bool)
+                      >(
                         selector: (state) => (
                           state.confirmPassword,
-                          state.isConfirmPasswordObscured
+                          state.isConfirmPasswordObscured,
                         ),
                         builder: (context, data) {
                           final (confirmPassword, isObscured) = data;
@@ -137,16 +133,14 @@ class _ChangePasswordForm extends StatelessWidget {
                             field: confirmPassword,
                             onChanged: cubit.onConfirmPasswordChanged,
                             obscureText: isObscured,
-                            prefixIcon:
-                                const Icon(Icons.check_circle_outline),
+                            prefixIcon: const Icon(Icons.check_circle_outline),
                             suffixIcon: IconButton(
                               icon: Icon(
                                 isObscured
                                     ? Icons.visibility_outlined
                                     : Icons.visibility_off_outlined,
                               ),
-                              onPressed:
-                                  cubit.toggleConfirmPasswordVisibility,
+                              onPressed: cubit.toggleConfirmPasswordVisibility,
                             ),
                           );
                         },
@@ -160,30 +154,10 @@ class _ChangePasswordForm extends StatelessWidget {
                 BlocSelector<ChangePasswordCubit, ChangePasswordState, bool>(
                   selector: (state) => state.status.isLoading,
                   builder: (context, isLoading) {
-                    return ElevatedButton(
-                      onPressed: isLoading ? null : cubit.submit,
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                      ),
-                      child: isLoading
-                          ? const SizedBox(
-                              height: 22,
-                              width: 22,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white,
-                              ),
-                            )
-                          : const Text(
-                              'Update Password',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                    return CommonSubmitButton(
+                      isLoading: isLoading,
+                      onPressed: cubit.submit,
+                      label: 'Update Password',
                     );
                   },
                 ),

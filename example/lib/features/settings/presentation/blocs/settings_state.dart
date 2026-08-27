@@ -2,20 +2,10 @@ import 'package:flutter_prakash_core_example/features/settings/data/models/user_
 
 class SettingsState {
   final UserPreferencesModel preferences;
-  final bool isSaving;
 
-  const SettingsState({
-    required this.preferences,
-    this.isSaving = false,
-  });
+  const SettingsState({required this.preferences});
 
-  SettingsState copyWith({
-    UserPreferencesModel? preferences,
-    bool? isSaving,
-  }) {
-    return SettingsState(
-      preferences: preferences ?? this.preferences,
-      isSaving: isSaving ?? this.isSaving,
-    );
+  SettingsState copyWith({UserPreferencesModel? preferences}) {
+    return SettingsState(preferences: preferences ?? this.preferences);
   }
 }

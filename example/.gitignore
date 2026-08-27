@@ -46,3 +46,7 @@ app.*.map.json
 
 # FVM Version Cache
 .fvm/
+
+# Environment files (keep .env.example tracked as the template)
+.env*
+!.env.example

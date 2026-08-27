@@ -3,9 +3,5 @@ class SampleUser {
   final String name;
   final String email;
 
-  const SampleUser({
-    required this.id,
-    required this.name,
-    required this.email,
-  });
+  const SampleUser({required this.id, required this.name, required this.email});
 }
