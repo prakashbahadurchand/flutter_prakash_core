@@ -19,19 +19,12 @@ class FilePreviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
+    return FilePreviewContainer(
+      filePath: filePath,
+      fileType: fileType,
+      sourceType: sourceType,
+      title:
           title ?? (fileType == FileType.pdf ? 'PDF Preview' : 'Image Preview'),
-        ),
-        centerTitle: true,
-      ),
-      body: FilePreviewContainer(
-        filePath: filePath,
-        fileType: fileType,
-        sourceType: sourceType,
-        title: title,
-      ),
     );
   }
 }
