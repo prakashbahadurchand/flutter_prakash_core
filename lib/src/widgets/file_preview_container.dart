@@ -359,10 +359,7 @@ class _FilePreviewContainerState extends State<FilePreviewContainer> {
     return Stack(
       children: [
         PDFView(
-          filePath: widget.sourceType == FileSourceType.file
-              ? widget.filePath
-              : null,
-          pdfData: widget.sourceType == FileSourceType.asset ? null : null,
+          filePath: widget.filePath,
           enableSwipe: true,
           swipeHorizontal: false,
           autoSpacing: true,
