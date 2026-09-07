@@ -86,7 +86,7 @@ abstract class BaseBloc<E, S> extends Bloc<E, S> implements FpEffectEmitter {
 
   @override
   Future<void> close() {
-    _effectController.close();
+    unawaited(_effectController.close());
     return super.close();
   }
 }

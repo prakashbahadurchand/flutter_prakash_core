@@ -31,12 +31,14 @@ abstract class BasePagingCubit<T> extends Cubit<BasePagingState<T>> {
 
   /// Loads the next page of data.
   Future<void> loadNextPage() async {
+    if (isClosed) return;
     if (state.isLastPage || state.status.isLoading) return;
 
     final nextPage = state.currentPage + 1;
     emit(state.copyWith(status: const BlocStatus.loading()));
 
     final result = await fetchPage(nextPage, pageSize);
+    if (isClosed) return;
     result.when(
       success: (items) {
         final allItems = [...state.items, ...items];
@@ -57,18 +59,21 @@ abstract class BasePagingCubit<T> extends Cubit<BasePagingState<T>> {
 
   /// Refreshes from page 1, clearing all existing data.
   Future<void> refresh() async {
+    if (isClosed) return;
     emit(const BasePagingState());
     await loadNextPage();
   }
 
   /// Optimistically removes items matching [test] predicate.
   void removeItem(bool Function(T item) test) {
+    if (isClosed) return;
     final updated = state.items.where((item) => !test(item)).toList();
     emit(state.copyWith(items: updated));
   }
 
   /// Inserts [item] at [index] (default at beginning).
   void insertItem(T item, [int index = 0]) {
+    if (isClosed) return;
     final updated = List<T>.from(state.items)..insert(index, item);
     emit(state.copyWith(items: updated));
   }

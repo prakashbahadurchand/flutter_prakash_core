@@ -40,13 +40,7 @@ class FlutterLogger {
     Object? error,
     StackTrace? stackTrace,
   }) {
-    log(
-      message,
-      level: LogLevel.debug,
-      tag: tag,
-      error: error,
-      stackTrace: stackTrace,
-    );
+    log(message, tag: tag, error: error, stackTrace: stackTrace);
   }
 
   /// Shorthand alias for debug.

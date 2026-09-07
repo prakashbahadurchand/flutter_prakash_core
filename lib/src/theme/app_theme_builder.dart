@@ -27,22 +27,22 @@ abstract class AppColors {
 
 /// Design System Spacing Constants.
 abstract class AppSpacing {
-  static const double xxs = 2.0;
-  static const double xs = 4.0;
-  static const double sm = 8.0;
-  static const double md = 16.0;
-  static const double lg = 24.0;
-  static const double xl = 32.0;
-  static const double xxl = 48.0;
+  static const double xxs = 2;
+  static const double xs = 4;
+  static const double sm = 8;
+  static const double md = 16;
+  static const double lg = 24;
+  static const double xl = 32;
+  static const double xxl = 48;
 }
 
 /// Design System Border Radii Constants.
 abstract class AppRadii {
-  static const double sm = 4.0;
-  static const double md = 8.0;
-  static const double lg = 16.0;
-  static const double xl = 24.0;
-  static const double circular = 999.0;
+  static const double sm = 4;
+  static const double md = 8;
+  static const double lg = 16;
+  static const double xl = 24;
+  static const double circular = 999;
 
   static const BorderRadius borderSm = BorderRadius.all(Radius.circular(sm));
   static const BorderRadius borderMd = BorderRadius.all(Radius.circular(md));
@@ -52,10 +52,10 @@ abstract class AppRadii {
 
 /// Design System Elevation Constants.
 abstract class AppElevation {
-  static const double none = 0.0;
-  static const double low = 2.0;
-  static const double md = 4.0;
-  static const double high = 8.0;
+  static const double none = 0;
+  static const double low = 2;
+  static const double md = 4;
+  static const double high = 8;
 }
 
 /// Enterprise Material 3 Theme Builder.
@@ -67,10 +67,7 @@ class AppThemeBuilder {
     Color primaryColor = AppColors.primary,
     String? fontFamily,
   }) {
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: primaryColor,
-      brightness: Brightness.light,
-    );
+    final colorScheme = ColorScheme.fromSeed(seedColor: primaryColor);
 
     return ThemeData(
       useMaterial3: true,
@@ -88,7 +85,7 @@ class AppThemeBuilder {
           fontWeight: FontWeight.bold,
         ),
       ),
-      cardTheme: CardThemeData(
+      cardTheme: const CardThemeData(
         elevation: AppElevation.low,
         shape: RoundedRectangleBorder(borderRadius: AppRadii.borderLg),
         clipBehavior: Clip.antiAlias,
@@ -112,9 +109,9 @@ class AppThemeBuilder {
           borderRadius: AppRadii.borderMd,
           borderSide: BorderSide(color: primaryColor, width: 2),
         ),
-        errorBorder: OutlineInputBorder(
+        errorBorder: const OutlineInputBorder(
           borderRadius: AppRadii.borderMd,
-          borderSide: const BorderSide(color: AppColors.error),
+          borderSide: BorderSide(color: AppColors.error),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -124,7 +121,7 @@ class AppThemeBuilder {
             horizontal: AppSpacing.lg,
             vertical: AppSpacing.md,
           ),
-          shape: RoundedRectangleBorder(borderRadius: AppRadii.borderMd),
+          shape: const RoundedRectangleBorder(borderRadius: AppRadii.borderMd),
         ),
       ),
     );
@@ -156,7 +153,7 @@ class AppThemeBuilder {
           fontWeight: FontWeight.bold,
         ),
       ),
-      cardTheme: CardThemeData(
+      cardTheme: const CardThemeData(
         elevation: AppElevation.low,
         color: AppColors.surfaceDark,
         shape: RoundedRectangleBorder(borderRadius: AppRadii.borderLg),
@@ -181,9 +178,9 @@ class AppThemeBuilder {
           borderRadius: AppRadii.borderMd,
           borderSide: BorderSide(color: primaryColor, width: 2),
         ),
-        errorBorder: OutlineInputBorder(
+        errorBorder: const OutlineInputBorder(
           borderRadius: AppRadii.borderMd,
-          borderSide: const BorderSide(color: AppColors.error),
+          borderSide: BorderSide(color: AppColors.error),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -193,7 +190,7 @@ class AppThemeBuilder {
             horizontal: AppSpacing.lg,
             vertical: AppSpacing.md,
           ),
-          shape: RoundedRectangleBorder(borderRadius: AppRadii.borderMd),
+          shape: const RoundedRectangleBorder(borderRadius: AppRadii.borderMd),
         ),
       ),
     );

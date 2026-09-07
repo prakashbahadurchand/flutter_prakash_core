@@ -18,10 +18,13 @@ abstract class FpRouteGuard extends AutoRouteGuard {
 
   /// Intercepts navigation to check permissions via [canNavigate] and delegates to [onUnauthorized] if access is denied.
   @override
-  void onNavigation(NavigationResolver resolver, StackRouter router) async {
+  Future<void> onNavigation(
+    NavigationResolver resolver,
+    StackRouter router,
+  ) async {
     final allowed = await canNavigate(resolver);
     if (allowed) {
-      resolver.next(true);
+      resolver.next();
     } else {
       FlutterLogger.w('Navigation denied for route: ${resolver.route.name}');
       onUnauthorized(resolver, router);

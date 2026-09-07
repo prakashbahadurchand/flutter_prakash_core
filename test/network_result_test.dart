@@ -84,7 +84,7 @@ void main() {
         final parsed = int.tryParse(str);
         return parsed != null
             ? Result.success(parsed)
-            : const Result.error(ValidationFailure('Not a number'));
+            : const Result<int>.error(ValidationFailure('Not a number'));
       });
       expect(chainedSuccess.dataOrNull, equals(100));
 
@@ -93,7 +93,7 @@ void main() {
         final parsed = int.tryParse(str);
         return parsed != null
             ? Result.success(parsed)
-            : const Result.error(ValidationFailure('Not a number'));
+            : const Result<int>.error(ValidationFailure('Not a number'));
       });
       expect(chainedFailure.isError, isTrue);
       expect(

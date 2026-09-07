@@ -120,7 +120,7 @@ class DebugBanner extends StatelessWidget {
             textStyle ??
             const TextStyle(
               color: Colors.white,
-              fontSize: 9.0,
+              fontSize: 9,
               fontWeight: FontWeight.bold,
               letterSpacing: 0.5,
             ),

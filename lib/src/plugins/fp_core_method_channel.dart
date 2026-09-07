@@ -7,13 +7,45 @@ import 'fp_core_platform_interface.dart';
 class MethodChannelFpCore extends FpCorePlatform {
   /// The method channel used to interact with the native platform.
   @visibleForTesting
-  final methodChannel = const MethodChannel('flutter_prakash_core');
+  static const methodChannel = MethodChannel('flutter_prakash_core');
 
   @override
   Future<String?> getPlatformVersion() async {
-    final version = await methodChannel.invokeMethod<String>(
-      'getPlatformVersion',
-    );
-    return version;
+    try {
+      final version = await methodChannel.invokeMethod<String>(
+        'getPlatformVersion',
+      );
+      return version;
+    } on MissingPluginException {
+      return null;
+    } on PlatformException {
+      return null;
+    }
+  }
+
+  @override
+  Future<String?> getDeviceModel() async {
+    try {
+      final model = await methodChannel.invokeMethod<String>('getDeviceModel');
+      return model;
+    } on MissingPluginException {
+      return null;
+    } on PlatformException {
+      return null;
+    }
+  }
+
+  @override
+  Future<String?> getCurrentLocation() async {
+    try {
+      final location = await methodChannel.invokeMethod<String>(
+        'getCurrentLocation',
+      );
+      return location;
+    } on MissingPluginException {
+      return null;
+    } on PlatformException {
+      return null;
+    }
   }
 }

@@ -47,7 +47,7 @@ abstract class BaseCubit<S> extends Cubit<S> implements FpEffectEmitter {
 
   @override
   Future<void> close() {
-    _effectController.close();
+    unawaited(_effectController.close());
     return super.close();
   }
 }

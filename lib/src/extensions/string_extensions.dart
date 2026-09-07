@@ -57,14 +57,14 @@ extension StringExtensions on String {
     try {
       log(toPrettyJson());
     } catch (e) {
-      log("$e | $this");
+      log('$e | $this');
     }
   }
 }
 
 extension StringNullExt on String? {
   /// Replace with [another] if null or empty.
-  String et({String another = ""}) {
+  String et({String another = ''}) {
     final str = this;
     return (str == null || str.isEmpty) ? another : str;
   }
@@ -98,7 +98,7 @@ extension StringNullExt on String? {
 
   String toNepaliDigits() {
     final str = this;
-    if (str == null || str.isEmpty) return "";
+    if (str == null || str.isEmpty) return '';
 
     final StringBuffer nepaliUnicodeNumber = StringBuffer();
 

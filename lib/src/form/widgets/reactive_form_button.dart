@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart' hide FormState;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../form_cubit.dart';
@@ -22,21 +24,25 @@ class ReactiveFormButton<C extends FormCubit<S>, S extends FormState>
     this.onPressed,
     this.style,
     this.requireValid = false,
-  }) : assert(label != null || child != null, 'Either label or child must be provided.');
+  }) : assert(
+         label != null || child != null,
+         'Either label or child must be provided.',
+       );
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<C, S>(
       builder: (context, state) {
         final isLoading = state.status.isLoading;
-        final isSubmittable = !isLoading && (!requireValid || state.isFormValid);
+        final isSubmittable =
+            !isLoading && (!requireValid || state.isFormValid);
 
         final submitAction = isSubmittable
             ? () {
                 if (onPressed != null) {
                   onPressed!();
                 } else {
-                  context.read<C>().submit();
+                  unawaited(context.read<C>().submit());
                 }
               }
             : null;

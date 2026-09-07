@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'base_paging_cubit.dart';
@@ -36,7 +38,7 @@ class _PagingListViewState<C extends BasePagingCubit<T>, T>
     _scrollController.addListener(_onScroll);
     final cubit = widget.cubit ?? context.read<C>();
     if (cubit.state.items.isEmpty) {
-      cubit.loadNextPage();
+      unawaited(cubit.loadNextPage());
     }
   }
 
@@ -45,7 +47,7 @@ class _PagingListViewState<C extends BasePagingCubit<T>, T>
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
       final cubit = widget.cubit ?? context.read<C>();
-      cubit.loadNextPage();
+      unawaited(cubit.loadNextPage());
     }
   }
 
@@ -99,7 +101,7 @@ class _PagingListViewState<C extends BasePagingCubit<T>, T>
               if (index >= state.items.length) {
                 return const Center(
                   child: Padding(
-                    padding: EdgeInsets.all(16.0),
+                    padding: EdgeInsets.all(16),
                     child: CircularProgressIndicator(strokeWidth: 2),
                   ),
                 );

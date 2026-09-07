@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_prakash_core/fp_core.dart'
-    hide InAppWebViewPage;
+import 'package:flutter_prakash_core/fp_core.dart' hide InAppWebViewPage;
 
 @RoutePage()
 class InAppWebViewPage extends StatelessWidget {

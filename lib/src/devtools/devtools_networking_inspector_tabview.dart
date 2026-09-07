@@ -464,7 +464,7 @@ class _DevtoolsRetrofitNetworkingInspectorTabViewState
         }
 
         return Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8),
           child: Column(
             children: [
               _Toolbar(
@@ -1655,7 +1655,7 @@ String _basicFormatJson(String s) {
     }
 
     if (inString) {
-      if (c == '\\') escaped = true;
+      if (c == r'\') escaped = true;
       out.write(c);
       continue;
     }

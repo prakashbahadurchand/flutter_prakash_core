@@ -61,7 +61,14 @@ abstract class BasePrefs {
 
   static T? _getValue<T>(String key, {T? defaultValue}) {
     final value = prefs.get(key);
-    return value != null ? value as T : defaultValue;
+    if (value == null) return defaultValue;
+    // Return the stored value only if it matches the requested type.
+    // Otherwise, return the provided default instead of throwing a TypeError.
+    try {
+      return value as T;
+    } on TypeError {
+      return defaultValue;
+    }
   }
 
   static Future<void> _setValue<T>(String key, T value) async {
@@ -188,7 +195,13 @@ abstract class BasePrefs {
 
   // Import preferences from JSON
   static Future<void> importPrefsFromJson(String jsonString) async {
-    final values = jsonDecode(jsonString) as Map<String, dynamic>;
+    final decoded = jsonDecode(jsonString);
+    if (decoded is! Map<String, dynamic>) {
+      throw const FormatException(
+        'Invalid preferences JSON: expected a JSON object.',
+      );
+    }
+    final values = decoded;
     for (final key in values.keys) {
       final value = values[key];
       if (value is String) {

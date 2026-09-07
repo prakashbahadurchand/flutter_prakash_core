@@ -61,20 +61,15 @@ class FirebaseCloudMessagingManager {
 
   /// Cancels active message stream subscriptions.
   static void dispose() {
-    _foregroundMessageSubscription?.cancel();
+    unawaited(_foregroundMessageSubscription?.cancel());
     _foregroundMessageSubscription = null;
-    _messageOpenedAppSubscription?.cancel();
+    unawaited(_messageOpenedAppSubscription?.cancel());
     _messageOpenedAppSubscription = null;
   }
 
   /// Requests notification permissions on iOS / macOS / Web / Android 13+.
   static Future<NotificationSettings> requestPermission() async {
-    final settings = await _messaging.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-      provisional: false,
-    );
+    final settings = await _messaging.requestPermission();
     FlutterLogger.info(
       'FCM Notification Permission status: ${settings.authorizationStatus}',
       tag: 'MESSAGING',
@@ -97,16 +92,37 @@ class FirebaseCloudMessagingManager {
   /// Listens to FCM token refresh events.
   static Stream<String> get onTokenRefresh => _messaging.onTokenRefresh;
 
-  /// Subscribes to a pub/sub notification topic.
-  static Future<void> subscribeToTopic(String topic) async {
-    await _messaging.subscribeToTopic(topic);
-    FlutterLogger.info('Subscribed to FCM topic: $topic', tag: 'MESSAGING');
+  /// Subscribes to a pub/sub notification topic. Returns false on failure.
+  static Future<bool> subscribeToTopic(String topic) async {
+    try {
+      await _messaging.subscribeToTopic(topic);
+      FlutterLogger.info('Subscribed to FCM topic: $topic', tag: 'MESSAGING');
+      return true;
+    } catch (e) {
+      FlutterLogger.error(
+        'Failed to subscribe to topic: $topic: $e',
+        tag: 'MESSAGING',
+      );
+      return false;
+    }
   }
 
-  /// Unsubscribes from a notification topic.
-  static Future<void> unsubscribeFromTopic(String topic) async {
-    await _messaging.unsubscribeFromTopic(topic);
-    FlutterLogger.info('Unsubscribed from FCM topic: $topic', tag: 'MESSAGING');
+  /// Unsubscribes from a notification topic. Returns false on failure.
+  static Future<bool> unsubscribeFromTopic(String topic) async {
+    try {
+      await _messaging.unsubscribeFromTopic(topic);
+      FlutterLogger.info(
+        'Unsubscribed from FCM topic: $topic',
+        tag: 'MESSAGING',
+      );
+      return true;
+    } catch (e) {
+      FlutterLogger.error(
+        'Failed to unsubscribe from topic: $topic: $e',
+        tag: 'MESSAGING',
+      );
+      return false;
+    }
   }
 
   /// Retrieves the initial message if the app was launched from a terminated state.

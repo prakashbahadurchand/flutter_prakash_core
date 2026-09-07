@@ -1,11 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 const LinearGradient _defaultShimmerGradient = LinearGradient(
   colors: [Color(0xFFEBEBF4), Color(0xFFF4F4F4), Color(0xFFEBEBF4)],
   stops: [0.1, 0.3, 0.4],
-  begin: Alignment(-1.0, -0.3),
-  end: Alignment(1.0, 0.3),
-  tileMode: TileMode.clamp,
+  begin: Alignment(-1, -0.3),
+  end: Alignment(1, 0.3),
 );
 
 class Shimmer extends StatefulWidget {
@@ -33,8 +34,14 @@ class ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    _shimmerController = AnimationController.unbounded(vsync: this)
-      ..repeat(min: -0.5, max: 1.5, period: const Duration(milliseconds: 1000));
+    _shimmerController = AnimationController.unbounded(vsync: this);
+    unawaited(
+      _shimmerController.repeat(
+        min: -0.5,
+        max: 1.5,
+        period: const Duration(milliseconds: 1000),
+      ),
+    );
   }
 
   @override
@@ -91,7 +98,7 @@ class _SlidingGradientTransform extends GradientTransform {
 
   @override
   Matrix4? transform(Rect bounds, {TextDirection? textDirection}) {
-    return Matrix4.translationValues(bounds.width * slidePercent, 0.0, 0.0);
+    return Matrix4.translationValues(bounds.width * slidePercent, 0, 0);
   }
 }
 

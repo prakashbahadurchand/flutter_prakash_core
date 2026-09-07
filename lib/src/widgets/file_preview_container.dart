@@ -360,10 +360,6 @@ class _FilePreviewContainerState extends State<FilePreviewContainer> {
       children: [
         PDFView(
           filePath: widget.filePath,
-          enableSwipe: true,
-          swipeHorizontal: false,
-          autoSpacing: true,
-          pageFling: true,
           onRender: (pages) {
             setState(() {
               _totalPages = pages ?? 0;

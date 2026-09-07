@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'devtools_dialog.dart';
 
@@ -82,7 +84,7 @@ class _DevtoolsFloatingDockState extends State<DevtoolsFloatingDock>
       CurvedAnimation(parent: _animController, curve: Curves.easeOutQuad),
     );
 
-    _animController.forward(from: 0.0);
+    unawaited(_animController.forward(from: 0));
   }
 
   @override

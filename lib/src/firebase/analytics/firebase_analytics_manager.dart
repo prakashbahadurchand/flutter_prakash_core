@@ -55,24 +55,43 @@ class FirebaseAnalyticsManager {
     required String screenName,
     String? screenClass,
   }) async {
-    await _analytics.logScreenView(
-      screenName: screenName,
-      screenClass: screenClass,
-    );
+    try {
+      await _analytics.logScreenView(
+        screenName: screenName,
+        screenClass: screenClass,
+      );
+    } catch (e) {
+      FlutterLogger.error('Failed to log screen view: $e', tag: 'ANALYTICS');
+    }
   }
 
   /// Log login event.
   static Future<void> logLogin({String loginMethod = 'email'}) async {
-    await _analytics.logLogin(loginMethod: loginMethod);
+    try {
+      await _analytics.logLogin(loginMethod: loginMethod);
+    } catch (e) {
+      FlutterLogger.error('Failed to log login event: $e', tag: 'ANALYTICS');
+    }
   }
 
   /// Log sign up event.
   static Future<void> logSignUp({required String signUpMethod}) async {
-    await _analytics.logSignUp(signUpMethod: signUpMethod);
+    try {
+      await _analytics.logSignUp(signUpMethod: signUpMethod);
+    } catch (e) {
+      FlutterLogger.error('Failed to log signup event: $e', tag: 'ANALYTICS');
+    }
   }
 
   /// Reset analytics data.
   static Future<void> resetAnalyticsData() async {
-    await _analytics.resetAnalyticsData();
+    try {
+      await _analytics.resetAnalyticsData();
+    } catch (e) {
+      FlutterLogger.error(
+        'Failed to reset analytics data: $e',
+        tag: 'ANALYTICS',
+      );
+    }
   }
 }

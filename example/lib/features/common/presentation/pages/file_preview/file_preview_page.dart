@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_prakash_core/fp_core.dart'
-    hide FilePreviewPage;
+import 'package:flutter_prakash_core/fp_core.dart' hide FilePreviewPage;
 
 @RoutePage()
 class FilePreviewPage extends StatelessWidget {

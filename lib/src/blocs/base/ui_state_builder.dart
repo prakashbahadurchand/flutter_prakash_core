@@ -49,7 +49,7 @@ class UiStateBuilder<B extends StateStreamable<UiState<T>>, T>
             onFailure?.call(context, message) ??
                 Center(
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(16),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [

@@ -16,13 +16,8 @@ abstract class PaginatedState<T, F> with _$PaginatedState<T, F> {
     @Default(false) bool isLastPage,
   }) = _PaginatedState<T, F>;
 
-  factory PaginatedState.initial({F? initialFilter}) => PaginatedState<T, F>(
-    searchQuery: '',
-    filter: initialFilter,
-    status: const BlocStatus.initial(),
-    totalLoaded: 0,
-    isLastPage: false,
-  );
+  factory PaginatedState.initial({F? initialFilter}) =>
+      PaginatedState<T, F>(filter: initialFilter);
 
   // ── State Convenience Getters ─────────────────────────────────────────────
 

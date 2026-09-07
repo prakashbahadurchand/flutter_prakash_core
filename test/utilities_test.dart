@@ -16,7 +16,7 @@ void main() {
   group('Debouncer Utility', () {
     test('Debouncer defers execution until delay passes', () async {
       var callCount = 0;
-      final debouncer = Debouncer(
+      final debouncer = Debouncer<void>(
         duration: const Duration(milliseconds: 50),
         action: () => callCount++,
       );
@@ -32,7 +32,7 @@ void main() {
 
     test('Debouncer cancel aborts pending execution', () async {
       var callCount = 0;
-      final debouncer = Debouncer(
+      final debouncer = Debouncer<void>(
         duration: const Duration(milliseconds: 50),
         action: () => callCount++,
       );
@@ -122,9 +122,7 @@ void main() {
 
         // Factory
         var count = 0;
-        FpDI.registerFactory<ServiceA>(
-          () => ServiceA('Factory ${++count}'),
-        );
+        FpDI.registerFactory<ServiceA>(() => ServiceA('Factory ${++count}'));
         expect(inject<ServiceA>().name, equals('Factory 1'));
         expect(inject<ServiceA>().name, equals('Factory 2'));
 

@@ -1,13 +1,22 @@
+import 'dart:async';
+import 'dart:ui' show ErrorCallback;
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import '../../loggers/flutter_logger.dart';
 
 /// Firebase Crashlytics manager for automated Flutter exception capturing,
 /// custom key-value logging, non-fatal errors, and crash collection controls.
+///
+/// This manager preserves the previous [FlutterError.onError] and
+/// [PlatformDispatcher.onError] handlers, chaining to them after reporting to
+/// Crashlytics, so default framework error handling is not lost.
 class FirebaseCrashlyticsManager {
   FirebaseCrashlyticsManager._();
 
   static final FirebaseCrashlytics _crashlytics = FirebaseCrashlytics.instance;
+  static FlutterExceptionHandler? _prevFlutterErrorHandler;
+  static ErrorCallback? _prevPlatformErrorHandler;
 
   /// Initializes Crashlytics exception handlers for Flutter errors and platform errors.
   static Future<void> initialize({bool enableInDev = false}) async {
@@ -15,13 +24,17 @@ class FirebaseCrashlyticsManager {
     await _crashlytics.setCrashlyticsCollectionEnabled(shouldEnable);
 
     if (shouldEnable) {
-      // Pass all uncaught Flutter errors to Crashlytics
-      FlutterError.onError = _crashlytics.recordFlutterFatalError;
+      // Preserve the previous handler so framework default logging is retained.
+      _prevFlutterErrorHandler = FlutterError.onError;
+      FlutterError.onError = (FlutterErrorDetails details) {
+        unawaited(_crashlytics.recordFlutterFatalError(details));
+        _prevFlutterErrorHandler?.call(details);
+      };
 
-      // Pass uncaught asynchronous errors to Crashlytics
+      _prevPlatformErrorHandler = PlatformDispatcher.instance.onError;
       PlatformDispatcher.instance.onError = (error, stack) {
-        _crashlytics.recordError(error, stack, fatal: true);
-        return true;
+        unawaited(_crashlytics.recordError(error, stack, fatal: true));
+        return _prevPlatformErrorHandler?.call(error, stack) ?? true;
       };
 
       FlutterLogger.info(
@@ -36,6 +49,19 @@ class FirebaseCrashlyticsManager {
     }
   }
 
+  /// Restores the previous error handlers that were in place before
+  /// [initialize] was called. Safe to call when not initialized.
+  static void dispose() {
+    if (_prevFlutterErrorHandler != null) {
+      FlutterError.onError = _prevFlutterErrorHandler;
+      _prevFlutterErrorHandler = null;
+    }
+    if (_prevPlatformErrorHandler != null) {
+      PlatformDispatcher.instance.onError = _prevPlatformErrorHandler;
+      _prevPlatformErrorHandler = null;
+    }
+  }
+
   /// Sets user identifier attached to crash logs.
   static Future<void> setUserIdentifier(String identifier) async {
     await _crashlytics.setUserIdentifier(identifier);
@@ -43,7 +69,7 @@ class FirebaseCrashlyticsManager {
 
   /// Logs a custom message string to Crashlytics breadcrumbs log.
   static void log(String message) {
-    _crashlytics.log(message);
+    unawaited(_crashlytics.log(message));
   }
 
   /// Sets custom key-value pair attributes for crash reports.

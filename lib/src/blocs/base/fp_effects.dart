@@ -49,8 +49,7 @@ abstract interface class FpEffectEmitter {
 }
 
 /// Callback signature for handling [FpEffect] instances.
-typedef EffectHandler =
-    void Function(BuildContext context, FpEffect effect);
+typedef EffectHandler = void Function(BuildContext context, FpEffect effect);
 
 /// A widget that listens to the `effectStream` of a [BaseCubit] or [BaseBloc] and fires
 /// one-shot side-effects (toasts, navigation, dialogs) without polluting BLoC state.
@@ -143,13 +142,16 @@ class _FpEffectListenerState extends State<FpEffectListener> {
         }
       } catch (e) {
         // In debug mode, surface the error so developers notice wrong cubit types.
-        assert(() {
-          debugPrint(
-            'FpEffectListener: cubit ${cubit.runtimeType} does not expose '
-            'effectStream — $e',
-          );
-          return true;
-        }());
+        assert(
+          () {
+            debugPrint(
+              'FpEffectListener: cubit ${cubit.runtimeType} does not expose '
+              'effectStream — $e',
+            );
+            return true;
+          }(),
+          'FpEffectListener received a cubit that does not expose effectStream.',
+        );
       }
     }
   }
@@ -175,14 +177,14 @@ class _FpEffectListenerState extends State<FpEffectListener> {
             ),
           );
       case NavigateEffect(:final route, :final arguments):
-        Navigator.of(context).pushNamed(route, arguments: arguments);
+        unawaited(Navigator.of(context).pushNamed(route, arguments: arguments));
       default:
         break;
     }
   }
 
   void _unsubscribe() {
-    _subscription?.cancel();
+    unawaited(_subscription?.cancel());
     _subscription = null;
   }
 

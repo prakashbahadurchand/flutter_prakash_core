@@ -25,7 +25,10 @@ abstract class RegisterState
     fullName: Fields.name(labelText: 'Full Name', minLength: 2),
     email: Fields.email(labelText: 'Email Address'),
     password: Fields.password(minLength: 6),
-    confirmPassword: Fields.text(labelText: 'Confirm Password', isRequired: true),
+    confirmPassword: Fields.text(
+      labelText: 'Confirm Password',
+      isRequired: true,
+    ),
     agreeToTerms: Fields.boolean(
       initialValue: false,
       labelText: 'Agree to Terms and Privacy Policy',

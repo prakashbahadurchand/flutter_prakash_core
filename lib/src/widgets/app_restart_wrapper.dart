@@ -39,7 +39,7 @@ class _AppRestartWrapperState extends State<AppRestartWrapper> {
       if (widget.onRestart != null) {
         await widget.onRestart!();
       }
-      await Future.delayed(const Duration(milliseconds: 300));
+      await Future<void>.delayed(const Duration(milliseconds: 300));
     } catch (_) {
       // Ignore restart callback errors gracefully
     } finally {

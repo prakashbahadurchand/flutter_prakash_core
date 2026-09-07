@@ -261,7 +261,7 @@ class _FsNodeTileState extends State<_FsNodeTile> {
 
   // for Σ computation
   bool _computing = false;
-  double _progress = 0.0;
+  double _progress = 0;
   int _visitedFiles = 0;
   int _visitedDirs = 0;
   bool _cancel = false;

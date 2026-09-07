@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -223,10 +225,15 @@ class _InAppWebViewContainerState extends State<InAppWebViewContainer> {
   @override
   void initState() {
     super.initState();
-    _controller = WebViewController()
-      ..setJavaScriptMode(widget.javascriptMode)
-      ..setBackgroundColor(widget.backgroundColor ?? Colors.transparent)
-      ..setNavigationDelegate(
+    _controller = WebViewController();
+    unawaited(_controller.setJavaScriptMode(widget.javascriptMode));
+    unawaited(
+      _controller.setBackgroundColor(
+        widget.backgroundColor ?? Colors.transparent,
+      ),
+    );
+    unawaited(
+      _controller.setNavigationDelegate(
         NavigationDelegate(
           onProgress: (int progress) {
             if (mounted) {
@@ -262,8 +269,14 @@ class _InAppWebViewContainerState extends State<InAppWebViewContainer> {
             widget.onWebResourceError?.call(error);
           },
         ),
-      )
-      ..loadRequest(Uri.parse(widget.initialUrl), headers: widget.headers);
+      ),
+    );
+    unawaited(
+      _controller.loadRequest(
+        Uri.parse(widget.initialUrl),
+        headers: widget.headers,
+      ),
+    );
   }
 
   @override
@@ -290,7 +303,7 @@ class _InAppWebViewContainerState extends State<InAppWebViewContainer> {
               children: [
                 WebViewWidget(controller: _controller),
                 if (_loadingProgress < 60 && widget.loadingWidget != null)
-                  Center(child: widget.loadingWidget!),
+                  Center(child: widget.loadingWidget),
               ],
             ),
           ),

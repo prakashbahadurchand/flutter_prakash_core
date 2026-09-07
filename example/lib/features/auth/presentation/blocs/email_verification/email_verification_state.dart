@@ -19,10 +19,7 @@ abstract class EmailVerificationState
   }) = _EmailVerificationState;
 
   factory EmailVerificationState.initial() => EmailVerificationState(
-    otpCode: Fields.otp(
-      length: 6,
-      labelText: 'Verification Code',
-    ),
+    otpCode: Fields.otp(length: 6, labelText: 'Verification Code'),
   );
 
   @override

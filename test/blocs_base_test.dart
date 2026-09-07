@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_prakash_core/src/blocs/blocs.dart';
 import 'package:flutter_prakash_core/src/network/network.dart';
@@ -164,7 +166,7 @@ void main() {
         equals('UserLoggedIn'),
       );
 
-      cubit.close();
+      unawaited(cubit.close());
     });
 
     testWidgets('AppEventListener receives events and handles callback', (

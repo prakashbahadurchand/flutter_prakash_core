@@ -127,10 +127,13 @@ sealed class Result<T> {
     Error<T>() => fallback,
   };
 
-  /// Returns data if success, or throws the underlying exception/failure.
+  /// Returns data if success, or throws the underlying failure.
+  ///
+  /// Throws [Failure] directly (not wrapped in an [Exception]) so callers can
+  /// catch and inspect the typed domain failure.
   T get dataOrThrow => switch (this) {
     Success<T>(:final data) => data,
-    Error<T>(:final failure) => throw failure,
+    Error<T>(:final failure) => throw failure, // ignore: only_throw_errors
   };
 
   /// Returns true if the result is a success.

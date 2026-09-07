@@ -46,7 +46,7 @@ class DevToolsDialog extends StatefulWidget {
         elevation: 12,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: dividerColor, width: 1),
+          side: const BorderSide(color: dividerColor),
         ),
       ),
       tabBarTheme: const TabBarThemeData(

@@ -24,15 +24,10 @@ class DevtoolsLogger {
   final ValueNotifier<List<DevtoolsLogEntry>> entries =
       ValueNotifier<List<DevtoolsLogEntry>>(<DevtoolsLogEntry>[]);
 
-  bool _paused = false;
-  bool get paused => _paused;
+  bool paused = false;
 
   // Keep bounded memory.
   int maxEntries = 1500;
-
-  void setPaused(bool value) {
-    _paused = value;
-  }
 
   void clear() {
     entries.value = <DevtoolsLogEntry>[];
@@ -45,7 +40,7 @@ class DevtoolsLogger {
     StackTrace? stackTrace,
     String? tag,
   }) {
-    if (_paused) return;
+    if (paused) return;
 
     final entry = DevtoolsLogEntry(
       time: DateTime.now(),
@@ -317,7 +312,7 @@ class _DevtoolsLoggerTabViewState extends State<DevtoolsLoggerTabView> {
             onSearchChanged: (_) => setState(() {}),
             paused: _logger.paused,
             onTogglePause: () =>
-                setState(() => _logger.setPaused(!_logger.paused)),
+                setState(() => _logger.paused = !_logger.paused),
             autoScroll: _autoScroll,
             onToggleAutoScroll: () =>
                 setState(() => _autoScroll = !_autoScroll),

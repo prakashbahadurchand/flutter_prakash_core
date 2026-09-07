@@ -151,7 +151,6 @@ class Toast {
           : null,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       content: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
             padding: const EdgeInsets.all(6),

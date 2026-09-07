@@ -99,11 +99,7 @@ class Fields {
       helperText: helperText,
       validators: [
         if (isRequired) Validators.requiredRule(requiredMessage),
-        Validators.matchRule(
-          passwordAccessor,
-          matchMessage,
-          'Password',
-        ),
+        Validators.matchRule(passwordAccessor, matchMessage, 'Password'),
         ...extraValidators,
       ],
     );
@@ -221,10 +217,7 @@ class Fields {
       value: initialValue,
       labelText: labelText,
       helperText: helperText,
-      validators: [
-        Validators.mustBeTrueRule(errorMessage),
-        ...extraValidators,
-      ],
+      validators: [Validators.mustBeTrueRule(errorMessage), ...extraValidators],
     );
   }
 

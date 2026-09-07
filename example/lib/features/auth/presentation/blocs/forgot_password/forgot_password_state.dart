@@ -15,9 +15,8 @@ abstract class ForgotPasswordState
     @Default(BlocStatus.initial()) BlocStatus status,
   }) = _ForgotPasswordState;
 
-  factory ForgotPasswordState.initial() => ForgotPasswordState(
-    email: Fields.email(labelText: 'Email Address'),
-  );
+  factory ForgotPasswordState.initial() =>
+      ForgotPasswordState(email: Fields.email(labelText: 'Email Address'));
 
   @override
   List<Field<dynamic>> get formFields => [email];

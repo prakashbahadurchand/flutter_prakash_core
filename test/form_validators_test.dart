@@ -161,8 +161,8 @@ void main() {
       expect(req(''), equals('Required'));
       expect(req('  '), equals('Required'));
       expect(req(null), equals('Required'));
-      expect(req([]), equals('Required'));
-      expect(req({}), equals('Required'));
+      expect(req(<dynamic>[]), equals('Required'));
+      expect(req(<dynamic, dynamic>{}), equals('Required'));
       expect(req(false), equals('Required'));
       expect(req('Data'), isNull);
 
@@ -266,7 +266,7 @@ void main() {
     test(
       'Validators.strongPasswordRule, creditCardRule (Luhn), cvv, iban, uuid, ip, json, slug',
       () {
-        final pass = Validators.strongPasswordRule(minLength: 8);
+        final pass = Validators.strongPasswordRule();
         expect(pass('short'), isNotNull);
         expect(pass('nouppercase1!'), isNotNull);
         expect(pass('NOLOWERCASE1!'), isNotNull);
@@ -399,7 +399,7 @@ void main() {
     });
 
     test('Field.password validates minLength and strong criteria', () {
-      final passField = Fields.password(minLength: 6);
+      final passField = Fields.password();
       expect(passField('123').isValid, isFalse);
       expect(passField('123456').isValid, isTrue);
 
@@ -441,7 +441,7 @@ void main() {
       expect(url('https://flutter.dev').isValid, isTrue);
       expect(url('invalid-url').isValid, isFalse);
 
-      final otp = Fields.otp(length: 6);
+      final otp = Fields.otp();
       expect(otp('12345').isValid, isFalse);
       expect(otp('123456').isValid, isTrue);
       expect(otp('abcdef').isValid, isFalse); // Non-integer
