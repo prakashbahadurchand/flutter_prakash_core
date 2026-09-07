@@ -12,11 +12,11 @@ T inject<T extends Object>({
   return sl.get<T>(instanceName: instanceName, param1: param1, param2: param2);
 }
 
-/// Unified Dependency Injection Manager for Flutter Prakash.
+/// Unified Dependency Injection Manager for Flutter Prakash (FP).
 ///
 /// Simplifies DI configuration, module registration, and scope resets across apps.
-class PrakashDI {
-  PrakashDI._();
+class FpDI {
+  FpDI._();
 
   /// Reference to the underlying [GetIt] container.
   static GetIt get instance => sl;

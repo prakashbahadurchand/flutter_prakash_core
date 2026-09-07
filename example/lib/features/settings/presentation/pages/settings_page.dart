@@ -29,7 +29,7 @@ class _SettingsView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('App Settings'), centerTitle: true),
-      body: PrakashEffectListener.fromCubit(
+      body: FpEffectListener.fromCubit(
         cubit: cubit,
         child: ListView(
           padding: const EdgeInsets.all(20),

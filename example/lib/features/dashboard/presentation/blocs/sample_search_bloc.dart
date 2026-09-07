@@ -43,7 +43,7 @@ class SampleSearchBloc extends Bloc<SearchEvent, SearchState> {
   SampleSearchBloc() : super(const SearchState()) {
     on<SearchQueryChangedEvent>(
       _onQueryChanged,
-      transformer: PrakashEventTransformers.debounce(
+      transformer: FpEventTransformers.debounce(
         const Duration(milliseconds: 300),
       ),
     );

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'prakash_effects.dart';
+import 'fp_effects.dart';
 import '../../network/result.dart';
 import 'ui_state.dart';
 
@@ -18,7 +18,7 @@ import 'ui_state.dart';
 ///   SearchBloc() : super(const SearchState()) {
 ///     on<SearchQueryChanged>(
 ///       _onQueryChanged,
-///       transformer: PrakashEventTransformers.debounce(
+///       transformer: FpEventTransformers.debounce(
 ///         const Duration(milliseconds: 300),
 ///       ),
 ///     );
@@ -40,11 +40,11 @@ import 'ui_state.dart';
 abstract class BaseBloc<E, S> extends Bloc<E, S> {
   BaseBloc(super.initialState);
 
-  final StreamController<PrakashEffect> _effectController =
-      StreamController<PrakashEffect>.broadcast();
+  final StreamController<FpEffect> _effectController =
+      StreamController<FpEffect>.broadcast();
 
-  /// Stream of one-shot side-effects consumed by [PrakashEffectListener].
-  Stream<PrakashEffect> get effectStream => _effectController.stream;
+  /// Stream of one-shot side-effects consumed by [FpEffectListener].
+  Stream<FpEffect> get effectStream => _effectController.stream;
 
   /// Lifecycle-safe emit for Bloc event handlers.
   void safeEmit(S newState, Emitter<S> emit) {
@@ -53,8 +53,8 @@ abstract class BaseBloc<E, S> extends Bloc<E, S> {
     }
   }
 
-  /// Fires a one-shot [PrakashEffect] to the UI layer.
-  void emitEffect(PrakashEffect effect) {
+  /// Fires a one-shot [FpEffect] to the UI layer.
+  void emitEffect(FpEffect effect) {
     if (!_effectController.isClosed) {
       _effectController.add(effect);
     }

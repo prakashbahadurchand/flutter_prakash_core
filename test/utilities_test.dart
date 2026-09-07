@@ -96,37 +96,37 @@ void main() {
     });
   });
 
-  group('PrakashDI Dependency Injection Container', () {
+  group('FpDI Dependency Injection Container', () {
     tearDown(() async {
-      await PrakashDI.reset();
+      await FpDI.reset();
     });
 
     test(
-      'PrakashDI registers and injects singletons, factories and instances',
+      'FpDI registers and injects singletons, factories and instances',
       () async {
-        expect(PrakashDI.isRegistered<ServiceA>(), isFalse);
+        expect(FpDI.isRegistered<ServiceA>(), isFalse);
 
         // Lazy singleton
-        PrakashDI.registerLazySingleton<ServiceA>(() => ServiceA('Lazy'));
-        expect(PrakashDI.isRegistered<ServiceA>(), isTrue);
+        FpDI.registerLazySingleton<ServiceA>(() => ServiceA('Lazy'));
+        expect(FpDI.isRegistered<ServiceA>(), isTrue);
         expect(inject<ServiceA>().name, equals('Lazy'));
 
-        await PrakashDI.reset();
-        expect(PrakashDI.isRegistered<ServiceA>(), isFalse);
+        await FpDI.reset();
+        expect(FpDI.isRegistered<ServiceA>(), isFalse);
 
         // Factory
         var count = 0;
-        PrakashDI.registerFactory<ServiceA>(
+        FpDI.registerFactory<ServiceA>(
           () => ServiceA('Factory ${++count}'),
         );
         expect(inject<ServiceA>().name, equals('Factory 1'));
         expect(inject<ServiceA>().name, equals('Factory 2'));
 
-        await PrakashDI.reset();
+        await FpDI.reset();
 
         // Ready singleton instance
         final instance = ServiceA('Singleton');
-        PrakashDI.registerSingleton<ServiceA>(instance);
+        FpDI.registerSingleton<ServiceA>(instance);
         expect(inject<ServiceA>(), same(instance));
       },
     );

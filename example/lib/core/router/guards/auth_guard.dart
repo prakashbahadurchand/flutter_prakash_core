@@ -3,8 +3,8 @@ import 'package:flutter_prakash_core_example/core/di/injection.dart';
 import 'package:flutter_prakash_core_example/core/router/app_router.dart';
 import 'package:flutter_prakash_core_example/features/auth/data/repositories/auth_repository.dart';
 
-/// Example authentication route guard demonstrating [PrakashRouteGuard].
-class ExampleAuthGuard extends PrakashRouteGuard {
+/// Example authentication route guard demonstrating [FpRouteGuard].
+class ExampleAuthGuard extends FpRouteGuard {
   final bool isAuthenticated;
 
   const ExampleAuthGuard({this.isAuthenticated = true});
@@ -24,8 +24,8 @@ class ExampleAuthGuard extends PrakashRouteGuard {
   }
 
   @override
-  void onUnauthorized(NavigationResolver resolver) {
+  void onUnauthorized(NavigationResolver resolver, StackRouter router) {
     // Redirect unauthorized users to Login screen
-    resolver.redirect(const LoginRoute());
+    resolver.redirectUntil(const LoginRoute());
   }
 }

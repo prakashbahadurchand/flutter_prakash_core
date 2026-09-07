@@ -1,8 +1,8 @@
 ## 1.0.10
 
-* **BLoC State Management Engine**: Integrated zero-boilerplate `BaseBloc`, `BaseCubit`, `BaseUiCubit`, `BaseFormCubit` (with Formz), and `BasePagingCubit`.
-* **Single-Shot Side-Effects Channel**: Added `UiEffect` stream channel and `PrakashEffectListener` for handling Toasts, Navigation, and Dialogs.
-* **Formz Validator Suite**: Pre-built `PrakashEmailInput`, `PrakashPasswordInput`, `PrakashPhoneInput`, `PrakashUrlInput`, `PrakashConfirmPasswordInput`, and `PrakashMinLengthInput`.
+* **BLoC State Management Engine**: Integrated zero-boilerplate `BaseBloc`, `BaseCubit`, `BaseUiCubit`, `BaseFormCubit` (with reactive forms), and `BasePagingCubit`.
+* **Single-Shot Side-Effects Channel**: Added `FpEffect` stream channel and `FpEffectListener` for handling Toasts, Navigation, and Dialogs.
+* **Reactive Form & Validator Suite**: Declarative `Field<T>`, chained fluent `Validators`, and reactive UI components (`ReactiveTextField`, `ReactivePinCodeField`, etc.).
 * **Supabase Suite**: Added `SupabaseEngine` supporting `supabase_flutter` v2.8+ Auth, Realtime DB, Postgrest CRUD, and Storage.
 * **Firebase Suite**: Added unified `FirebaseEngine` manager initializing Auth, Firestore, Messaging, Crashlytics, Remote Config, Analytics, and Performance.
 * **Hot App Restart Engine**: Added `AppRestartWrapper` enabling key-based hot app resets and cache re-initialization.

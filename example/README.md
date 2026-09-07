@@ -14,8 +14,8 @@ A production-grade, enterprise sample application demonstrating the complete cap
   * `BaseUiCubit` & `UiState` lifecycle (`initial`, `loading`, `success`, `failure`).
   * `BaseFormCubit` & `Field<T>` with declarative chained `Validators`.
   * `BasePagingCubit` for infinite scrolling lists with pull-to-refresh & optimistic item deletion.
-  * `PrakashEventTransformers.debounce` for 300ms real-time search inputs.
-  * `PrakashEffectListener` for single-shot UI side-effects (toasts, navigation).
+  * `FpEventTransformers.debounce` for 300ms real-time search inputs.
+  * `FpEffectListener` for single-shot UI side-effects (toasts, navigation).
 * 🔐 **Full Authentication Suite** (`features/auth/`):
   * **Login**: Email & password validation, remember me, and social buttons.
   * **Register**: Full name, email, password strength, match verification, terms consent.

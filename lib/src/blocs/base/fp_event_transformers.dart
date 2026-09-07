@@ -9,15 +9,15 @@ import 'package:rxdart/rxdart.dart';
 ///   SearchBloc() : super(const SearchState()) {
 ///     on<SearchQueryChanged>(
 ///       _onQueryChanged,
-///       transformer: PrakashEventTransformers.debounce(
+///       transformer: FpEventTransformers.debounce(
 ///         const Duration(milliseconds: 300),
 ///       ),
 ///     );
 ///   }
 /// }
 /// ```
-class PrakashEventTransformers {
-  PrakashEventTransformers._();
+class FpEventTransformers {
+  FpEventTransformers._();
 
   /// Debounce transformer — waits [duration] of silence before processing the event.
   /// Useful for search fields to avoid rapid-fire API calls.

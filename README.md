@@ -33,7 +33,7 @@
 
 * 🎯 **Clean Architecture & SOLID Enforced**: Strictly concrete Data Sources and Repositories with zero unnecessary abstractions or domain pollution.
 * ⚡ **Complete BLoC State Management**: `BaseCubit`, `BaseBloc`, `BaseUiCubit`, `BasePagingCubit`, and `EnterpriseBlocObserver`.
-* 🪄 **One-Shot UI Side-Effects Stream**: Dispatches Toasts, Navigations, and Dialogs cleanly without polluting state trees via `PrakashEffectListener`.
+* 🪄 **One-Shot UI Side-Effects Stream**: Dispatches Toasts, Navigations, and Dialogs cleanly without polluting state trees via `FpEffectListener`.
 * 📝 **Declarative Reactive Forms**: Type-safe validation chains (`Field<T>`, `Validators`, `ReactiveTextField`, `ReactivePinCodeField`, `ReactiveDropdown`, `ReactiveCheckbox`, `ReactiveSwitch`, `ReactiveFormButton`).
 * 🛡️ **Type-Safe Sealed `Result<T>`**: Full failure/exception encapsulation for seamless asynchronous network and storage handling.
 * 🎛️ **Built-in DevTools Floating Dock**: Live inspection of HTTP traffic, GraphQL calls, `SharedPreferences`, logs, app storage, and custom overrides.
@@ -80,7 +80,7 @@ lib/
       ├── loggers/     🪵 Ansi Color Loggers (REST, GraphQL, Supabase, Flutter)
       ├── network/     🌐 Result<T>, Failure, NetworkException
       ├── plugins/     🔌 Native Method Channels & Platform Interface
-      ├── routing/     🗺️ PrakashRouter & Route Guards
+      ├── routing/     🗺️ FpRouter & Route Guards
       ├── theme/       🎨 AppThemeBuilder, AppColors, AppSpacing, AppRadii
       ├── typedefs/    🏷️ Common Functional & Callback Type Aliases
       ├── utilities/   🧰 Debouncer, In-App Review, In-App Update, ColorUtils
@@ -123,11 +123,11 @@ BlocBuilder<UserProfileCubit, UiState<UserProfile>>(
 );
 ```
 
-#### 🚀 Single-Shot UI Effects (`PrakashEffectListener`)
+#### 🚀 Single-Shot UI Effects (`FpEffectListener`)
 Dispatches one-time events (toasts, navigation routes, alerts) without polluting the state stream:
 
 ```dart
-PrakashEffectListener.fromCubit(
+FpEffectListener.fromCubit(
   cubit: context.read<LoginCubit>(),
   onEffect: (context, effect) {
     if (effect is NavigateEffect) {

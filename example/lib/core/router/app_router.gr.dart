@@ -93,6 +93,16 @@ class EmailVerificationRouteArgs {
   String toString() {
     return 'EmailVerificationRouteArgs{key: $key, email: $email}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! EmailVerificationRouteArgs) return false;
+    return key == other.key && email == other.email;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ email.hashCode;
 }
 
 /// generated route for
@@ -173,6 +183,25 @@ class FilePreviewRouteArgs {
   String toString() {
     return 'FilePreviewRouteArgs{key: $key, filePath: $filePath, fileType: $fileType, sourceType: $sourceType, title: $title}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! FilePreviewRouteArgs) return false;
+    return key == other.key &&
+        filePath == other.filePath &&
+        fileType == other.fileType &&
+        sourceType == other.sourceType &&
+        title == other.title;
+  }
+
+  @override
+  int get hashCode =>
+      key.hashCode ^
+      filePath.hashCode ^
+      fileType.hashCode ^
+      sourceType.hashCode ^
+      title.hashCode;
 }
 
 /// generated route for
@@ -237,6 +266,18 @@ class InAppWebViewRouteArgs {
   String toString() {
     return 'InAppWebViewRouteArgs{key: $key, initialUrl: $initialUrl, title: $title}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! InAppWebViewRouteArgs) return false;
+    return key == other.key &&
+        initialUrl == other.initialUrl &&
+        title == other.title;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ initialUrl.hashCode ^ title.hashCode;
 }
 
 /// generated route for
@@ -341,6 +382,16 @@ class ResetPasswordRouteArgs {
   String toString() {
     return 'ResetPasswordRouteArgs{key: $key, email: $email, otp: $otp}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ResetPasswordRouteArgs) return false;
+    return key == other.key && email == other.email && otp == other.otp;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ email.hashCode ^ otp.hashCode;
 }
 
 /// generated route for

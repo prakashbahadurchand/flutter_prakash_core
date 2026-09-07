@@ -31,7 +31,7 @@ class DashboardView extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<DashboardCubit>();
 
-    return PrakashEffectListener.fromCubit(
+    return FpEffectListener.fromCubit(
       cubit: cubit,
       child: Scaffold(
         appBar: AppBar(

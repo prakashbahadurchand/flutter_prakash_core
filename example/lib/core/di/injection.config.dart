@@ -1,5 +1,5 @@
-// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// dart format width=80
 
 // **************************************************************************
 // InjectableConfigGenerator
@@ -9,6 +9,7 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+
 import 'package:dio/dio.dart' as _i361;
 import 'package:flutter_prakash_ads/flutter_prakash_ads.dart' as _i499;
 import 'package:flutter_prakash_core/flutter_prakash_core.dart' as _i87;
@@ -27,7 +28,7 @@ import '../../features/auth/data/datasources/auth_local_data_source.dart'
     as _i852;
 import '../../features/auth/data/datasources/auth_remote_data_source.dart'
     as _i107;
-import '../../features/auth/data/repositories/auth_repository.dart' as _i573;
+import '../../features/auth/data/repositories/auth_repository.dart' as _i574;
 import '../../features/auth/presentation/blocs/auth_cubit.dart' as _i67;
 import '../../features/auth/presentation/blocs/change_password/change_password_cubit.dart'
     as _i65;
@@ -43,7 +44,7 @@ import '../../features/auth/presentation/blocs/reset_password/reset_password_cub
 import '../../features/common/data/datasources/common_local_data_source.dart'
     as _i137;
 import '../../features/common/data/repositories/common_repository.dart'
-    as _i168;
+    as _i169;
 import '../../features/common/presentation/blocs/feedback_cubit.dart' as _i521;
 import '../../features/common/presentation/blocs/legal_cubit.dart' as _i627;
 import '../../features/dashboard/data/datasources/dashboard_local_data_source.dart'
@@ -59,7 +60,7 @@ import '../../features/dashboard/presentation/blocs/sample_fetch_cubit.dart'
 import '../../features/dashboard/presentation/blocs/sample_form_cubit.dart'
     as _i702;
 import '../../features/dashboard/presentation/blocs/sample_paging_cubit.dart'
-    as _i402;
+    as _i403;
 import '../../features/dashboard/presentation/blocs/sample_search_bloc.dart'
     as _i617;
 import '../../features/onboarding/data/datasources/onboarding_local_data_source.dart'
@@ -116,23 +117,22 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i107.AuthRemoteDataSource>(
       () => const _i107.AuthRemoteDataSource(),
     );
+    gh.lazySingleton<_i137.CommonLocalDataSource>(
+      () => const _i137.CommonLocalDataSource(),
+    );
     gh.lazySingleton<_i838.DashboardLocalDataSource>(
       () => const _i838.DashboardLocalDataSource(),
     );
     gh.lazySingleton<_i258.DashboardRemoteDataSource>(
       () => _i258.DashboardRemoteDataSource(),
     );
-    gh.lazySingleton<_i137.CommonLocalDataSource>(
-      () => const _i137.CommonLocalDataSource(),
+    gh.lazySingleton<_i952.AppEnv>(() => _i576.DevEnv(), registerFor: {_dev});
+    gh.lazySingleton<_i952.AppEnv>(() => _i560.ProdEnv(), registerFor: {_prod});
+    gh.lazySingleton<_i852.AuthLocalDataSource>(
+      () => _i852.AuthLocalDataSource(gh<_i460.SharedPreferences>()),
     );
-    gh.lazySingleton<_i87.ThemeCubit>(
-      () => registerModule.themeCubit(gh<_i460.SharedPreferences>()),
-    );
-    gh.lazySingleton<_i87.LocaleCubit>(
-      () => registerModule.localeCubit(gh<_i460.SharedPreferences>()),
-    );
-    gh.lazySingleton<_i168.AdsCubit>(
-      () => _i168.AdsCubit(adsService: gh<_i499.AdsService>()),
+    gh.lazySingleton<_i870.OnboardingLocalDataSource>(
+      () => _i870.OnboardingLocalDataSource(gh<_i460.SharedPreferences>()),
     );
     gh.lazySingleton<_i599.SettingsLocalDataSource>(
       () => _i599.SettingsLocalDataSource(gh<_i460.SharedPreferences>()),
@@ -140,11 +140,14 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i240.SplashLocalDataSource>(
       () => _i240.SplashLocalDataSource(gh<_i460.SharedPreferences>()),
     );
-    gh.lazySingleton<_i852.AuthLocalDataSource>(
-      () => _i852.AuthLocalDataSource(gh<_i460.SharedPreferences>()),
+    gh.lazySingleton<_i168.AdsCubit>(
+      () => _i168.AdsCubit(adsService: gh<_i499.AdsService>()),
     );
-    gh.lazySingleton<_i870.OnboardingLocalDataSource>(
-      () => _i870.OnboardingLocalDataSource(gh<_i460.SharedPreferences>()),
+    gh.lazySingleton<_i450.SettingsRepository>(
+      () => _i450.SettingsRepository(gh<_i599.SettingsLocalDataSource>()),
+    );
+    gh.lazySingleton<_i169.CommonRepository>(
+      () => _i169.CommonRepository(gh<_i137.CommonLocalDataSource>()),
     );
     gh.lazySingleton<_i75.DashboardRepository>(
       () => _i75.DashboardRepository(
@@ -152,77 +155,75 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i258.DashboardRemoteDataSource>(),
       ),
     );
-    gh.lazySingleton<_i952.AppEnv>(() => _i576.DevEnv(), registerFor: {_dev});
-    gh.lazySingleton<_i120.SplashRepository>(
-      () => _i120.SplashRepository(gh<_i240.SplashLocalDataSource>()),
+    gh.lazySingleton<_i87.ThemeCubit>(
+      () => registerModule.themeCubit(gh<_i460.SharedPreferences>()),
     );
-    gh.lazySingleton<_i450.SettingsRepository>(
-      () => _i450.SettingsRepository(gh<_i599.SettingsLocalDataSource>()),
+    gh.lazySingleton<_i87.LocaleCubit>(
+      () => registerModule.localeCubit(gh<_i460.SharedPreferences>()),
     );
     gh.factory<_i573.SettingsCubit>(
       () => _i573.SettingsCubit(gh<_i450.SettingsRepository>())..init(),
     );
-    gh.lazySingleton<_i952.AppEnv>(() => _i560.ProdEnv(), registerFor: {_prod});
-    gh.lazySingleton<_i573.AuthRepository>(
-      () => _i573.AuthRepository(
+    gh.lazySingleton<_i574.AuthRepository>(
+      () => _i574.AuthRepository(
         gh<_i852.AuthLocalDataSource>(),
         gh<_i107.AuthRemoteDataSource>(),
       ),
     );
-    gh.lazySingleton<_i168.CommonRepository>(
-      () => _i168.CommonRepository(gh<_i137.CommonLocalDataSource>()),
+    gh.lazySingleton<_i284.OnboardingRepository>(
+      () => _i284.OnboardingRepository(gh<_i870.OnboardingLocalDataSource>()),
     );
-    gh.lazySingleton<_i361.Dio>(() => registerModule.dio(gh<_i658.AppEnv>()));
+    gh.factory<_i402.SampleFetchCubit>(
+      () => _i402.SampleFetchCubit(gh<_i75.DashboardRepository>())..init(),
+    );
+    gh.factory<_i702.SampleFormCubit>(
+      () => _i702.SampleFormCubit(gh<_i75.DashboardRepository>()),
+    );
+    gh.factory<_i403.SamplePagingCubit>(
+      () => _i403.SamplePagingCubit(gh<_i75.DashboardRepository>()),
+    );
     gh.factory<_i726.DashboardCubit>(
       () => _i726.DashboardCubit(
         gh<_i75.DashboardRepository>(),
         gh<_i450.SettingsRepository>(),
       )..init(),
     );
-    gh.lazySingleton<_i284.OnboardingRepository>(
-      () => _i284.OnboardingRepository(gh<_i870.OnboardingLocalDataSource>()),
+    gh.lazySingleton<_i361.Dio>(() => registerModule.dio(gh<_i658.AppEnv>()));
+    gh.lazySingleton<_i120.SplashRepository>(
+      () => _i120.SplashRepository(gh<_i240.SplashLocalDataSource>()),
     );
-    gh.factory<_i702.SampleFormCubit>(
-      () => _i702.SampleFormCubit(gh<_i75.DashboardRepository>()),
-    );
-    gh.factory<_i402.SampleFetchCubit>(
-      () => _i402.SampleFetchCubit(gh<_i75.DashboardRepository>())..init(),
-    );
-    gh.factory<_i402.SamplePagingCubit>(
-      () => _i402.SamplePagingCubit(gh<_i75.DashboardRepository>()),
-    );
-    gh.factory<_i700.ResetPasswordCubit>(
-      () => _i700.ResetPasswordCubit(gh<_i573.AuthRepository>()),
-    );
-    gh.factory<_i257.ForgotPasswordCubit>(
-      () => _i257.ForgotPasswordCubit(gh<_i573.AuthRepository>()),
-    );
-    gh.factory<_i65.ChangePasswordCubit>(
-      () => _i65.ChangePasswordCubit(gh<_i573.AuthRepository>()),
-    );
-    gh.factory<_i459.RegisterCubit>(
-      () => _i459.RegisterCubit(gh<_i573.AuthRepository>()),
-    );
-    gh.factory<_i301.EmailVerificationCubit>(
-      () => _i301.EmailVerificationCubit(gh<_i573.AuthRepository>()),
-    );
-    gh.factory<_i389.LoginCubit>(
-      () => _i389.LoginCubit(gh<_i573.AuthRepository>()),
-    );
-    gh.factory<_i610.OnboardingCubit>(
-      () => _i610.OnboardingCubit(gh<_i284.OnboardingRepository>())..init(),
+    gh.lazySingleton<_i67.AuthCubit>(
+      () => _i67.AuthCubit(gh<_i574.AuthRepository>())..init(),
     );
     gh.factory<_i856.SplashCubit>(
       () => _i856.SplashCubit(gh<_i120.SplashRepository>()),
     );
-    gh.lazySingleton<_i67.AuthCubit>(
-      () => _i67.AuthCubit(gh<_i573.AuthRepository>())..init(),
-    );
     gh.factory<_i521.FeedbackCubit>(
-      () => _i521.FeedbackCubit(gh<_i168.CommonRepository>()),
+      () => _i521.FeedbackCubit(gh<_i169.CommonRepository>()),
     );
     gh.factory<_i627.LegalCubit>(
-      () => _i627.LegalCubit(gh<_i168.CommonRepository>()),
+      () => _i627.LegalCubit(gh<_i169.CommonRepository>()),
+    );
+    gh.factory<_i610.OnboardingCubit>(
+      () => _i610.OnboardingCubit(gh<_i284.OnboardingRepository>())..init(),
+    );
+    gh.factory<_i65.ChangePasswordCubit>(
+      () => _i65.ChangePasswordCubit(gh<_i574.AuthRepository>()),
+    );
+    gh.factory<_i301.EmailVerificationCubit>(
+      () => _i301.EmailVerificationCubit(gh<_i574.AuthRepository>()),
+    );
+    gh.factory<_i257.ForgotPasswordCubit>(
+      () => _i257.ForgotPasswordCubit(gh<_i574.AuthRepository>()),
+    );
+    gh.factory<_i389.LoginCubit>(
+      () => _i389.LoginCubit(gh<_i574.AuthRepository>()),
+    );
+    gh.factory<_i459.RegisterCubit>(
+      () => _i459.RegisterCubit(gh<_i574.AuthRepository>()),
+    );
+    gh.factory<_i700.ResetPasswordCubit>(
+      () => _i700.ResetPasswordCubit(gh<_i574.AuthRepository>()),
     );
     return this;
   }

@@ -16,7 +16,7 @@ typedef JsonMap = Map<String, dynamic>;
 typedef JsonList = List<Map<String, dynamic>>;
 
 /// Type alias for raw JSON values (primitive types, List, Map, or null).
-typedef PrakashJsonValue = dynamic;
+typedef FpJsonValue = dynamic;
 
 /// Decoder function signature to transform a [JsonMap] into a domain/data entity [T].
 typedef JsonDecoder<T> = T Function(JsonMap json);

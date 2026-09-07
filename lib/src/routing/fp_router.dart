@@ -5,14 +5,14 @@ import '../loggers/flutter_logger.dart';
 /// Base abstract route guard for `AutoRoute`.
 ///
 /// Simplifies implementing authentication guards, role guards, or feature-flag route guards.
-abstract class PrakashRouteGuard extends AutoRouteGuard {
-  const PrakashRouteGuard();
+abstract class FpRouteGuard extends AutoRouteGuard {
+  const FpRouteGuard();
 
   /// Abstract method to perform authorization logic synchronously or asynchronously.
   Future<bool> canNavigate(NavigationResolver resolver);
 
   /// Callback executed when access is denied. Override to redirect to login/unauthorized screen.
-  void onUnauthorized(NavigationResolver resolver) {
+  void onUnauthorized(NavigationResolver resolver, StackRouter router) {
     resolver.next(false);
   }
 
@@ -24,13 +24,13 @@ abstract class PrakashRouteGuard extends AutoRouteGuard {
       resolver.next(true);
     } else {
       FlutterLogger.w('Navigation denied for route: ${resolver.route.name}');
-      onUnauthorized(resolver);
+      onUnauthorized(resolver, router);
     }
   }
 }
 
 /// Global route navigation observer for tracking active screens and logging navigation events.
-class PrakashRouteObserver extends AutoRouteObserver {
+class FpRouteObserver extends AutoRouteObserver {
   @override
   void didPush(Route route, Route? previousRoute) {
     super.didPush(route, previousRoute);

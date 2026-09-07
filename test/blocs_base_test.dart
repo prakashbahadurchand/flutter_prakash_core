@@ -44,7 +44,7 @@ class SearchBloc extends BaseBloc<SearchEvent, List<String>> {
       (event, emit) async {
         safeEmit([...state, event.query], emit);
       },
-      transformer: PrakashEventTransformers.debounce(
+      transformer: FpEventTransformers.debounce(
         const Duration(milliseconds: 50),
       ),
     );
@@ -58,10 +58,10 @@ class SampleAppEvent extends AppEvent<String> {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  group('BaseCubit & PrakashEffects', () {
+  group('BaseCubit & FpEffects', () {
     test('BaseCubit handles safeEmit and emits side-effects', () async {
       final cubit = TestCountCubit();
-      final effects = <PrakashEffect>[];
+      final effects = <FpEffect>[];
       final sub = cubit.effectStream.listen(effects.add);
 
       expect(cubit.state, equals(0));
@@ -132,7 +132,7 @@ void main() {
     });
   });
 
-  group('PrakashEventTransformers & BaseBloc', () {
+  group('FpEventTransformers & BaseBloc', () {
     test('Debounce transformer groups rapid events', () async {
       final bloc = SearchBloc();
 
