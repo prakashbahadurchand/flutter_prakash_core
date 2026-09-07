@@ -164,24 +164,10 @@ class _DashboardSecondTabViewState extends State<DashboardSecondTabView>
               },
             ),
             const SizedBox(height: 20),
-            BlocSelector<SampleFormCubit, SampleFormState, bool>(
-              bloc: _formCubit,
-              selector: (state) => state.status.isLoading,
-              builder: (context, isLoading) {
-                return ElevatedButton(
-                  onPressed: isLoading ? null : _formCubit.submit,
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                  ),
-                  child: isLoading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Text('Submit Form'),
-                );
-              },
+            ReactiveFormButton<SampleFormCubit, SampleFormState>(
+              label: 'Submit Form',
+              onPressed: _formCubit.submit,
+              requireValid: false,
             ),
           ],
         ),
@@ -190,52 +176,21 @@ class _DashboardSecondTabViewState extends State<DashboardSecondTabView>
   }
 
   Widget _buildPagingDemo() {
-    return BlocBuilder<SamplePagingCubit, BasePagingState<SampleUser>>(
-      bloc: _pagingCubit,
-      builder: (context, state) {
-        if (state.items.isEmpty && state.status.isLoading) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        if (state.items.isEmpty) {
-          return Center(
-            child: ElevatedButton.icon(
-              onPressed: () => _pagingCubit.loadNextPage(),
-              icon: const Icon(Icons.download_rounded),
-              label: const Text('Load Users'),
+    return PagingListView<SamplePagingCubit, SampleUser>(
+      cubit: _pagingCubit,
+      padding: const EdgeInsets.all(16),
+      itemBuilder: (context, user, index) {
+        return Card(
+          margin: const EdgeInsets.only(bottom: 8),
+          child: ListTile(
+            leading: CircleAvatar(child: Text('${index + 1}')),
+            title: Text(user.name),
+            subtitle: Text(user.email),
+            trailing: IconButton(
+              icon: const Icon(Icons.delete_outline, color: Colors.red),
+              onPressed: () => _pagingCubit.removeItem((u) => u.id == user.id),
             ),
-          );
-        }
-
-        return ListView.builder(
-          padding: const EdgeInsets.all(16),
-          itemCount: state.items.length + (state.isLastPage ? 0 : 1),
-          itemBuilder: (context, index) {
-            if (index == state.items.length) {
-              _pagingCubit.loadNextPage();
-              return const Center(
-                child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            }
-
-            final user = state.items[index];
-            return Card(
-              margin: const EdgeInsets.only(bottom: 8),
-              child: ListTile(
-                leading: CircleAvatar(child: Text('${index + 1}')),
-                title: Text(user.name),
-                subtitle: Text(user.email),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete_outline, color: Colors.red),
-                  onPressed: () =>
-                      _pagingCubit.removeItem((u) => u.id == user.id),
-                ),
-              ),
-            );
-          },
+          ),
         );
       },
     );

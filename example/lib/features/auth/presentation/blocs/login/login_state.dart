@@ -17,20 +17,11 @@ abstract class LoginState with _$LoginState, FormMixin implements FormState {
   }) = _LoginState;
 
   factory LoginState.initial() => LoginState(
-    email: Field(
-      labelText: 'Email Address',
-      value: '',
-      validators: Validators.required().email(),
-    ),
-    password: Field(
-      labelText: 'Password',
-      value: '',
-      validators: Validators.required().minLength(6),
-    ),
-    rememberMe: const Field(
+    email: Fields.email(labelText: 'Email Address'),
+    password: Fields.password(minLength: 6),
+    rememberMe: Fields.boolean(
+      initialValue: false,
       labelText: 'Remember this device',
-      value: false,
-      validators: [],
     ),
     isPasswordObscured: true,
   );

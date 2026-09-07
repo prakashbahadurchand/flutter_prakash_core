@@ -7,34 +7,41 @@ import '../form_cubit.dart';
 /// form submission on tap.
 class ReactiveFormButton<C extends FormCubit<S>, S extends FormState>
     extends StatelessWidget {
-  final String label;
+  final String? label;
+  final Widget? child;
   final IconData? icon;
   final VoidCallback? onPressed;
   final ButtonStyle? style;
+  final bool requireValid;
 
   const ReactiveFormButton({
     super.key,
-    required this.label,
+    this.label,
+    this.child,
     this.icon,
     this.onPressed,
     this.style,
-  });
+    this.requireValid = false,
+  }) : assert(label != null || child != null, 'Either label or child must be provided.');
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<C, S>(
       builder: (context, state) {
         final isLoading = state.status.isLoading;
+        final isSubmittable = !isLoading && (!requireValid || state.isFormValid);
 
-        final submitAction = isLoading
-            ? null
-            : () {
+        final submitAction = isSubmittable
+            ? () {
                 if (onPressed != null) {
                   onPressed!();
                 } else {
                   context.read<C>().submit();
                 }
-              };
+              }
+            : null;
+
+        final effectiveChild = child ?? Text(label ?? '');
 
         if (icon != null) {
           return FilledButton.icon(
@@ -50,7 +57,7 @@ class ReactiveFormButton<C extends FormCubit<S>, S extends FormState>
                     ),
                   )
                 : Icon(icon, size: 20),
-            label: Text(label),
+            label: effectiveChild,
           );
         }
 
@@ -66,7 +73,7 @@ class ReactiveFormButton<C extends FormCubit<S>, S extends FormState>
                     color: Colors.white,
                   ),
                 )
-              : Text(label),
+              : effectiveChild,
         );
       },
     );

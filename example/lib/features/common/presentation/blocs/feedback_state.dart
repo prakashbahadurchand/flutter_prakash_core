@@ -17,16 +17,15 @@ abstract class FeedbackState
   }) = _FeedbackState;
 
   factory FeedbackState.initial() => FeedbackState(
-    email: Field(
+    email: Fields.email(
       labelText: 'Email Address (Optional)',
       hintText: 'Enter your email for follow-up...',
-      value: '',
+      isRequired: false,
     ),
-    feedback: Field(
+    feedback: Fields.text(
       labelText: 'Feedback / Report',
       hintText: 'Describe your feedback or issue...',
-      value: '',
-      validators: Validators.required().minLength(10),
+      minLength: 10,
     ),
   );
 

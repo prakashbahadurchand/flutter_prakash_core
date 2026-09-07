@@ -73,7 +73,6 @@ import 'package:flutter_prakash_core/fp_core.dart';
 ```
 lib/
  └── src/
-      ├── admob/       💰 AdMob Services, Banners, Native Widgets, Offline Ad Pool
       ├── base/        🏛️ Base Repository, Base DataSource, Model, Storage
       ├── blocs/       ⚡ Base BLoC/Cubit, Paging, Theme, Locale, AppEvent
       ├── devtools/    🛠️ DevTools Dialog, Floating Dock, Network/Storage Inspectors
@@ -81,7 +80,7 @@ lib/
       ├── extensions/  🪄 Context, String, Int, DateTime, Collection extensions
       ├── fake_data/   🧪 Comprehensive Mock & Placeholder Generator (`Fake`)
       ├── firebase/    🔥 Crashlytics, Analytics, Cloud Messaging, Distribution
-      ├── form/        📝 Reactive Form Engine, Field<T>, Validators, Widgets
+      ├── form/        📝 Reactive Form Engine, Fields Suite, Validators, Widgets
       ├── loggers/     🪵 Ansi Color Loggers (REST, GraphQL, Supabase, Flutter)
       ├── network/     🌐 Result<T>, Failure, NetworkException
       ├── plugins/     🔌 Native Method Channels & Platform Interface

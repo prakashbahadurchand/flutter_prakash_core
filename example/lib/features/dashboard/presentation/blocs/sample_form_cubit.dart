@@ -18,21 +18,9 @@ abstract class SampleFormState
   }) = _SampleFormState;
 
   factory SampleFormState.initial() => SampleFormState(
-    fullName: Field(
-      value: '',
-      labelText: 'Full Name',
-      validators: Validators.required().minLength(2),
-    ),
-    email: Field(
-      value: '',
-      labelText: 'Email',
-      validators: Validators.required().email(),
-    ),
-    password: Field(
-      value: '',
-      labelText: 'Password',
-      validators: Validators.required().minLength(6),
-    ),
+    fullName: Fields.name(labelText: 'Full Name', minLength: 2),
+    email: Fields.email(labelText: 'Email'),
+    password: Fields.password(minLength: 6),
   );
 
   @override

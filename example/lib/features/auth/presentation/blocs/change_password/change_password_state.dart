@@ -21,21 +21,9 @@ abstract class ChangePasswordState
   }) = _ChangePasswordState;
 
   factory ChangePasswordState.initial() => ChangePasswordState(
-    currentPassword: Field(
-      labelText: 'Current Password',
-      value: '',
-      validators: Validators.required(),
-    ),
-    newPassword: Field(
-      labelText: 'New Password',
-      value: '',
-      validators: Validators.required().minLength(6),
-    ),
-    confirmPassword: Field(
-      labelText: 'Confirm New Password',
-      value: '',
-      validators: Validators.required(),
-    ),
+    currentPassword: Fields.password(labelText: 'Current Password', minLength: 1),
+    newPassword: Fields.password(labelText: 'New Password', minLength: 6),
+    confirmPassword: Fields.password(labelText: 'Confirm New Password', minLength: 1),
     isCurrentPasswordObscured: true,
     isNewPasswordObscured: true,
     isConfirmPasswordObscured: true,

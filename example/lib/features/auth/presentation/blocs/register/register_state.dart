@@ -22,30 +22,13 @@ abstract class RegisterState
   }) = _RegisterState;
 
   factory RegisterState.initial() => RegisterState(
-    fullName: Field(
-      labelText: 'Full Name',
-      value: '',
-      validators: Validators.required().minLength(2),
-    ),
-    email: Field(
-      labelText: 'Email Address',
-      value: '',
-      validators: Validators.required().email(),
-    ),
-    password: Field(
-      labelText: 'Password',
-      value: '',
-      validators: Validators.required().minLength(6),
-    ),
-    confirmPassword: Field(
-      labelText: 'Confirm Password',
-      value: '',
-      validators: Validators.required(),
-    ),
-    agreeToTerms: const Field(
+    fullName: Fields.name(labelText: 'Full Name', minLength: 2),
+    email: Fields.email(labelText: 'Email Address'),
+    password: Fields.password(minLength: 6),
+    confirmPassword: Fields.text(labelText: 'Confirm Password', isRequired: true),
+    agreeToTerms: Fields.boolean(
+      initialValue: false,
       labelText: 'Agree to Terms and Privacy Policy',
-      value: false,
-      validators: [],
     ),
     isPasswordObscured: true,
     isConfirmPasswordObscured: true,

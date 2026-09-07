@@ -59,6 +59,14 @@ class DashboardThirdTabView extends StatelessWidget {
               onPressed: () => LoadingOverlay.show(autoHideInSeconds: 2),
             ),
             ActionChip(
+              avatar: const Icon(Icons.devices_rounded, size: 18),
+              label: const Text('Native Platform Version'),
+              onPressed: () async {
+                final version = await FpCorePlugin.getPlatformVersion();
+                Toast.info('Host OS: ${version ?? "Unknown"}');
+              },
+            ),
+            ActionChip(
               avatar: const Icon(Icons.terminal_rounded, size: 18),
               label: const Text('Test Logger'),
               onPressed: () {

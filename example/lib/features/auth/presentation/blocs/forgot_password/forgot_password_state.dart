@@ -16,11 +16,7 @@ abstract class ForgotPasswordState
   }) = _ForgotPasswordState;
 
   factory ForgotPasswordState.initial() => ForgotPasswordState(
-    email: Field(
-      labelText: 'Email Address',
-      value: '',
-      validators: Validators.required().email(),
-    ),
+    email: Fields.email(labelText: 'Email Address'),
   );
 
   @override
