@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 ///
 /// Usage Example:
 /// ```dart
-/// import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+/// import 'package:flutter_prakash_core/fp_core.dart';
 ///
 /// // 1. Mock User Data & Profiles
 /// final name = Fake.fullName;

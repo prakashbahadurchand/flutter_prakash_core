@@ -64,9 +64,15 @@ void main() {
       expect(c1, isA<Color>());
     });
 
-    test('generateShadeVariant adjusts color factor properly', () {
-      const base = Colors.blue;
-      final shade = generateShadeVariant(base, 0.5);
+    test('FpColorUtils static methods produce stable non-null colors', () {
+      final c1 = FpColorUtils.generateColorFromString('Test User');
+      final c2 = FpColorUtils.generateColorFromString('Test User');
+      final full = FpColorUtils.generateColorFromStringFull('Softix Info');
+      final shade = FpColorUtils.generateShadeVariant(Colors.blue, 0.5);
+
+      expect(c1, equals(c2));
+      expect(c1, isA<Color>());
+      expect(full, isA<Color>());
       expect(shade, isA<Color>());
     });
   });

@@ -1,4 +1,4 @@
-import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core/fp_core.dart';
 import 'package:flutter_prakash_core_example/features/dashboard/data/datasources/dashboard_local_data_source.dart';
 import 'package:flutter_prakash_core_example/features/dashboard/data/datasources/dashboard_remote_data_source.dart';
 import 'package:flutter_prakash_core_example/features/dashboard/data/models/dashboard_feed_item_model.dart';

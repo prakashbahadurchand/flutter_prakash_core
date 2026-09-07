@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_prakash_ads/flutter_prakash_ads.dart';
-import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core/fp_core.dart';
 import 'package:flutter_prakash_core_example/config/config.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';

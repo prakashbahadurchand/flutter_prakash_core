@@ -5,7 +5,7 @@ import 'package:flutter_prakash_core/src/plugins/flutter_prakash_core_method_cha
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  final platform = MethodChannelFlutterPrakashCore();
+  final platform = MethodChannelFpCore();
   const channel = MethodChannel('flutter_prakash_core');
 
   setUp(() {

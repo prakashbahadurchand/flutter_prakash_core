@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_prakash_ads/flutter_prakash_ads.dart';
-import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core/fp_core.dart';
 import 'package:flutter_prakash_core_example/config/config.dart';
 import 'package:flutter_prakash_core_example/core/core.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';

@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core/fp_core.dart';
 import 'package:flutter_prakash_core_example/features/auth/data/models/forgot_password_request_model.dart';
 import 'package:flutter_prakash_core_example/features/auth/data/repositories/auth_repository.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/blocs/email_verification/email_verification_state.dart';

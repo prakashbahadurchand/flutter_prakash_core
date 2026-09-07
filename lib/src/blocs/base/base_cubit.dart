@@ -21,13 +21,14 @@ import 'fp_effects.dart';
 ///   }
 /// }
 /// ```
-abstract class BaseCubit<S> extends Cubit<S> {
+abstract class BaseCubit<S> extends Cubit<S> implements FpEffectEmitter {
   BaseCubit(super.initialState);
 
   final StreamController<FpEffect> _effectController =
       StreamController<FpEffect>.broadcast();
 
   /// Stream of one-shot side-effects consumed by [FpEffectListener].
+  @override
   Stream<FpEffect> get effectStream => _effectController.stream;
 
   /// Lifecycle-safe emit — prevents [StateError] when cubit is already closed.

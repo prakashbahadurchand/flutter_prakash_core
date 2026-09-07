@@ -1,4 +1,4 @@
-import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core/fp_core.dart';
 import 'package:flutter_prakash_core_example/features/auth/data/datasources/auth_local_data_source.dart';
 import 'package:flutter_prakash_core_example/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:flutter_prakash_core_example/features/auth/data/models/auth_user_model.dart';

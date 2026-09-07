@@ -59,6 +59,11 @@ Run pub get:
 flutter pub get
 ```
 
+Import into your application:
+```dart
+import 'package:flutter_prakash_core/fp_core.dart';
+```
+
 ---
 
 ## 🏛️ Architecture & Project Structure
@@ -170,18 +175,8 @@ class LoginFormState extends FormCubitState {
     Field<String>? email,
     Field<String>? password,
     super.status = FormStatus.initial,
-  })  : email = email ??
-            Field(
-              labelText: 'Email Address',
-              value: '',
-              validators: Validators.required().email(),
-            ),
-        password = password ??
-            Field(
-              labelText: 'Password',
-              value: '',
-              validators: Validators.required().minLength(6),
-            );
+  })  : email = email ?? Fields.email(),
+        password = password ?? Fields.password(minLength: 6);
 
   @override
   List<Field<dynamic>> get fields => [email, password];

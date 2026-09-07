@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core/fp_core.dart';
 import 'package:flutter_prakash_core_example/core/di/injection.dart';
 import 'package:flutter_prakash_core_example/features/common/presentation/blocs/feedback_cubit.dart';
 import 'package:flutter_prakash_core_example/features/common/presentation/blocs/feedback_state.dart';

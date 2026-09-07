@@ -1,4 +1,4 @@
-import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core/fp_core.dart';
 import 'package:flutter_prakash_core_example/features/onboarding/data/repositories/onboarding_repository.dart';
 import 'package:flutter_prakash_core_example/features/onboarding/presentation/blocs/onboarding_state.dart';
 

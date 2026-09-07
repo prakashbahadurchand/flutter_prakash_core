@@ -12,7 +12,7 @@ import XCTest
 class RunnerTests: XCTestCase {
 
   func testGetPlatformVersion() {
-    let plugin = FlutterPrakashCorePlugin()
+    let plugin = FpCorePlugin()
 
     let call = FlutterMethodCall(methodName: "getPlatformVersion", arguments: [])
 

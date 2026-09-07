@@ -16,7 +16,7 @@ enum AppFlavor { dev, prod }
 /// ### Example Usage:
 /// ```dart
 /// import 'package:flutter/material.dart';
-/// import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+/// import 'package:flutter_prakash_core/fp_core.dart';
 ///
 /// void main() {
 ///   runApp(const MyApp());

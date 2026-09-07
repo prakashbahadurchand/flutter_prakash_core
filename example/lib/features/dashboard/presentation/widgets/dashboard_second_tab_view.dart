@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core/fp_core.dart';
 import 'package:flutter_prakash_core_example/core/di/injection.dart';
 import 'package:flutter_prakash_core_example/features/dashboard/data/models/sample_user_model.dart';
 import 'package:flutter_prakash_core_example/features/dashboard/presentation/blocs/sample_fetch_cubit.dart';

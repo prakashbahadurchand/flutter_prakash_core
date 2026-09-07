@@ -42,11 +42,17 @@ class ShowDialogEffect extends FpEffect {
   String toString() => 'ShowDialogEffect($title: $message)';
 }
 
+/// Interface for components (such as [BaseCubit] and [BaseBloc]) that emit one-shot [FpEffect] instances.
+abstract interface class FpEffectEmitter {
+  /// Stream of one-shot side-effects consumed by [FpEffectListener].
+  Stream<FpEffect> get effectStream;
+}
+
 /// Callback signature for handling [FpEffect] instances.
 typedef EffectHandler =
     void Function(BuildContext context, FpEffect effect);
 
-/// A widget that listens to the `effectStream` of a [BaseCubit] and fires
+/// A widget that listens to the `effectStream` of a [BaseCubit] or [BaseBloc] and fires
 /// one-shot side-effects (toasts, navigation, dialogs) without polluting BLoC state.
 ///
 /// ### Usage:
@@ -70,8 +76,8 @@ typedef EffectHandler =
 /// )
 /// ```
 class FpEffectListener extends StatefulWidget {
-  /// The cubit whose `effectStream` to listen to.
-  /// Must expose a `Stream<FpEffect> get effectStream`.
+  /// The cubit or bloc whose `effectStream` to listen to.
+  /// Can be any [FpEffectEmitter] or dynamic object exposing a `Stream<FpEffect> get effectStream`.
   final dynamic cubit;
 
   /// Custom effect handler. If null, uses default toast handling.
@@ -128,9 +134,10 @@ class _FpEffectListenerState extends State<FpEffectListener> {
   void _subscribe() {
     final cubit = widget.cubit;
     if (cubit != null) {
-      // Access effectStream dynamically — BaseCubit/BaseBloc exposes it
       try {
-        final Stream<FpEffect>? stream = (cubit as dynamic).effectStream;
+        final Stream<FpEffect>? stream = cubit is FpEffectEmitter
+            ? cubit.effectStream
+            : (cubit as dynamic).effectStream as Stream<FpEffect>?;
         if (stream != null) {
           _subscription = stream.listen(_handleEffect);
         }

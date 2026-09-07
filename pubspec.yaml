@@ -110,7 +110,7 @@ flutter:
     platforms:
       android:
         package: com.prakashbahadurchand.flutter_prakash_core
-        pluginClass: FlutterPrakashCorePlugin
+        pluginClass: FpCorePlugin
       ios:
-        pluginClass: FlutterPrakashCorePlugin
+        pluginClass: FpCorePlugin
   uses-material-design: true

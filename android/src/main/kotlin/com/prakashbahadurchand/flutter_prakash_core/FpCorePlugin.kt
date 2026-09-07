@@ -9,8 +9,8 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 
-/** FlutterPrakashCorePlugin — extensible native bridge. */
-class FlutterPrakashCorePlugin :
+/** FpCorePlugin — extensible native bridge. */
+class FpCorePlugin :
     FlutterPlugin,
     MethodCallHandler {
     private lateinit var channel: MethodChannel

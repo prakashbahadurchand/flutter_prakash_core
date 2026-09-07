@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_prakash_core/flutter_prakash_core.dart' hide test;
+import 'package:flutter_prakash_core/fp_core.dart' hide test;
 import 'package:flutter_prakash_core_example/features/settings/data/datasources/settings_local_data_source.dart';
 import 'package:flutter_prakash_core_example/features/settings/data/repositories/settings_repository.dart';
 import 'package:flutter_prakash_core_example/features/settings/presentation/blocs/settings_cubit.dart';

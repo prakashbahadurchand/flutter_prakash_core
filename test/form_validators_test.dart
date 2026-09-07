@@ -383,4 +383,91 @@ void main() {
       expect(failure == const BlocStatus.failure('Different'), isFalse);
     });
   });
+
+  group('Field Convenience Factories', () {
+    test('Field.email validates correctly', () {
+      final emailField = Fields.email();
+      expect(emailField.labelText, equals('Email'));
+      expect(emailField.isValid, isFalse); // Empty is invalid due to required
+
+      final dirtyValid = emailField('dev@test.com');
+      expect(dirtyValid.isValid, isTrue);
+      expect(dirtyValid.isDirty, isTrue);
+
+      final invalidEmail = emailField('not-an-email');
+      expect(invalidEmail.isValid, isFalse);
+    });
+
+    test('Field.password validates minLength and strong criteria', () {
+      final passField = Fields.password(minLength: 6);
+      expect(passField('123').isValid, isFalse);
+      expect(passField('123456').isValid, isTrue);
+
+      final strongPass = Fields.password(strong: true);
+      expect(strongPass('simple').isValid, isFalse);
+      expect(strongPass('StrongP@ss1').isValid, isTrue);
+    });
+
+    test('Field.phone validates standard phone input', () {
+      final phone = Fields.phone();
+      expect(phone.isValid, isFalse);
+      expect(phone('9841234567').isValid, isTrue);
+    });
+  });
+
+  group('Fields Preset Suite', () {
+    test('Fields.email & Fields.password & Fields.confirmPassword', () {
+      final email = Fields.email();
+      expect(email('alex@company.com').isValid, isTrue);
+      expect(email('invalid').isValid, isFalse);
+
+      final pass = Fields.password(minLength: 8);
+      expect(pass('short').isValid, isFalse);
+      expect(pass('password123').isValid, isTrue);
+
+      final confirm = Fields.confirmPassword(
+        passwordAccessor: () => 'password123',
+      );
+      expect(confirm('wrong').isValid, isFalse);
+      expect(confirm('password123').isValid, isTrue);
+    });
+
+    test('Fields.name & Fields.url & Fields.otp & Fields.terms', () {
+      final name = Fields.name();
+      expect(name('J').isValid, isFalse); // minLength 2
+      expect(name('John Doe').isValid, isTrue);
+
+      final url = Fields.url();
+      expect(url('https://flutter.dev').isValid, isTrue);
+      expect(url('invalid-url').isValid, isFalse);
+
+      final otp = Fields.otp(length: 6);
+      expect(otp('12345').isValid, isFalse);
+      expect(otp('123456').isValid, isTrue);
+      expect(otp('abcdef').isValid, isFalse); // Non-integer
+
+      final terms = Fields.terms();
+      expect(terms(false).isValid, isFalse);
+      expect(terms(true).isValid, isTrue);
+    });
+
+    test('Fields.number & Fields.creditCard & Fields.cvv & Fields.zipCode', () {
+      final amount = Fields.number(min: 10, max: 100);
+      expect(amount(5).isValid, isFalse);
+      expect(amount(50).isValid, isTrue);
+      expect(amount(150).isValid, isFalse);
+
+      final card = Fields.creditCard();
+      expect(card('4111111111111111').isValid, isTrue);
+      expect(card('123').isValid, isFalse);
+
+      final cvv = Fields.cvv();
+      expect(cvv('123').isValid, isTrue);
+      expect(cvv('12').isValid, isFalse);
+
+      final zip = Fields.zipCode();
+      expect(zip('90210').isValid, isTrue);
+      expect(zip('1').isValid, isFalse);
+    });
+  });
 }

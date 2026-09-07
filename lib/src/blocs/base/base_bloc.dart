@@ -37,13 +37,14 @@ import 'ui_state.dart';
 ///   }
 /// }
 /// ```
-abstract class BaseBloc<E, S> extends Bloc<E, S> {
+abstract class BaseBloc<E, S> extends Bloc<E, S> implements FpEffectEmitter {
   BaseBloc(super.initialState);
 
   final StreamController<FpEffect> _effectController =
       StreamController<FpEffect>.broadcast();
 
   /// Stream of one-shot side-effects consumed by [FpEffectListener].
+  @override
   Stream<FpEffect> get effectStream => _effectController.stream;
 
   /// Lifecycle-safe emit for Bloc event handlers.

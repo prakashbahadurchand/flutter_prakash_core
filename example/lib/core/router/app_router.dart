@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_prakash_core/flutter_prakash_core.dart'
+import 'package:flutter_prakash_core/fp_core.dart'
     hide FilePreviewPage, InAppWebViewPage;
 import 'package:flutter_prakash_core_example/core/router/guards/auth_guard.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/pages/change_password_page.dart';

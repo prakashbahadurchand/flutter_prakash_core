@@ -1,4 +1,4 @@
-import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core/fp_core.dart';
 import 'package:flutter_prakash_core_example/features/common/data/datasources/common_local_data_source.dart';
 import 'package:flutter_prakash_core_example/features/common/data/models/feedback_request_model.dart';
 import 'package:flutter_prakash_core_example/features/common/data/models/legal_document_model.dart';

@@ -1,4 +1,4 @@
-import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core/fp_core.dart';
 import 'package:flutter_prakash_core_example/features/settings/data/models/user_preferences_model.dart';
 import 'package:flutter_prakash_core_example/features/settings/data/repositories/settings_repository.dart';
 import 'package:flutter_prakash_core_example/features/settings/presentation/blocs/settings_state.dart';

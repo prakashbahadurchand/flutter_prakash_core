@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_prakash_core/flutter_prakash_core.dart';
+import 'package:flutter_prakash_core/fp_core.dart';
 import 'package:flutter_prakash_core_example/config/themes/app_colors.dart';
 
 class AppTheme {
