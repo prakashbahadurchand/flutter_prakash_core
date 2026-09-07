@@ -26,13 +26,13 @@ dependencies:
 
   # Dependency Injection
   get_it: ^9.2.1
-  injectable: ^2.7.1+4
+  injectable: ^3.0.0
 
   # Routing
-  auto_route: ^9.3.0
+  auto_route: ^11.1.0
 
   # Immutable Models
-  freezed_annotation: ^2.4.4
+  freezed_annotation: ^3.0.0
   json_annotation: ^4.9.0
 
   # Networking
@@ -105,9 +105,9 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^6.0.0
   build_runner: ^2.4.14
-  auto_route_generator: ^9.3.1
-  injectable_generator: ^2.7.0
-  freezed: ^2.5.8
+  auto_route_generator: ^10.6.0
+  injectable_generator: ^3.1.3
+  freezed: ^3.0.0
   json_serializable: ^6.8.0
   envied_generator: ^1.1.1
   flutter_launcher_icons: ^0.14.4
