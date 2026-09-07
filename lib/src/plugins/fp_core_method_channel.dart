@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
-import 'flutter_prakash_core_platform_interface.dart';
+import 'fp_core_platform_interface.dart';
 
 /// An implementation of [FpCorePlatform] that uses method channels.
 class MethodChannelFpCore extends FpCorePlatform {

@@ -1,4 +1,4 @@
-import 'flutter_prakash_core_platform_interface.dart';
+import 'fp_core_platform_interface.dart';
 
 /// Top-level interface for native plugin operations in Flutter Prakash Core (FP).
 class FpCorePlugin {

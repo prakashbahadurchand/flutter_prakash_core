@@ -1,6 +1,6 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-import 'flutter_prakash_core_method_channel.dart';
+import 'fp_core_method_channel.dart';
 
 abstract class FpCorePlatform extends PlatformInterface {
   /// Constructs a FpCorePlatform.
