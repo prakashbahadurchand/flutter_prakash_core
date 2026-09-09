@@ -935,10 +935,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_prakash_ads
-      sha256: e7c028a5ae028ffaac22adeec84fd78d1d77ed65a2899c25d29c2bcad278def1
+      sha256: "6950a55f09b944d5f2c4d0a194af0316a4d2ccb2288049172eb2bc14ca47395f"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.2"
+    version: "0.0.5"
   flutter_prakash_core:
     dependency: "direct main"
     description:
