@@ -46,3 +46,5 @@ example/ios/Podfile.lock
 example/ios/Flutter/Generated.xcconfig
 example/ios/Flutter/flutter_export_environment.sh
 example/ios/Flutter/ephemeral/
+example/.env.dev
+example/.env.prod
