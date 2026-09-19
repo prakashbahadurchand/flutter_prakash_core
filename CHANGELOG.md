@@ -1,3 +1,10 @@
+## 1.0.11
+
+* **Dependency Updates**: Upgraded packages across the core and example suite (`equatable` to `^3.0.0`, `file_picker` to `^13.1.0`, `home_widget` to `^0.10.0`, `skeletonizer` to `^3.0.0`).
+* **Exports & Accessibility**: Exported `src` library and `pretty_dio_logger` through top-level entry point.
+* **Example Enhancements**: Configured dependency overrides and upgraded dependencies for seamless interoperability.
+* **Maintenance**: Excluded environment and local config files in `.pubignore`.
+
 ## 1.0.10
 
 * **BLoC State Management Engine**: Integrated zero-boilerplate `BaseBloc`, `BaseCubit`, `BaseUiCubit`, `BaseFormCubit` (with reactive forms), and `BasePagingCubit`.
