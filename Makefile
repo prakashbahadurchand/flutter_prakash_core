@@ -1,4 +1,4 @@
-.PHONY: analyze format clean tag tag-% push-tags run-dev run-prod
+.PHONY: analyze format clean tag tag-% push-tags run-dev run-prod push-dev-to-main-force
 
 # Default rule
 all: analyze format
@@ -61,3 +61,8 @@ tag:
 	if command -v gh >/dev/null 2>&1; then \
 		gh release create $(TAG) --title "$(TAG)" --notes "$$MSG_VAL" || true; \
 	fi
+
+# Force push local dev branch to remote main branch
+push-dev-to-main-force:
+	@echo "Force-pushing local dev branch to remote main..."
+	git push origin dev:main --force
