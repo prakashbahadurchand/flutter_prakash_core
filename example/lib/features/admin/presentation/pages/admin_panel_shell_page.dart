@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_prakash_core/fp_core.dart';
+import 'package:flutter_prakash_core_example/core/di/injection.dart';
 import 'package:flutter_prakash_core_example/core/router/app_router.dart';
-import '../../../../core/di/injection.dart';
 
 @RoutePage()
 class AdminPanelShellPage extends StatelessWidget {
@@ -11,57 +11,117 @@ class AdminPanelShellPage extends StatelessWidget {
   Widget build(BuildContext context) {
     const navItems = <AdminNavItem>[
       AdminNavItem(
+        id: 'overview',
         label: 'Overview',
         icon: Icons.grid_view_outlined,
         selectedIcon: Icons.grid_view_rounded,
         route: AdminOverviewRoute(),
+        roles: ['admin', 'manager'],
       ),
       AdminNavItem(
+        id: 'analytics',
         label: 'Analytics',
         icon: Icons.analytics_outlined,
         selectedIcon: Icons.analytics,
         badgeText: 'Live',
         badgeColor: Colors.green,
         route: AdminAnalyticsRoute(),
+        roles: ['admin'],
       ),
       AdminNavItem(
+        id: 'orders',
         label: 'Orders',
         icon: Icons.shopping_bag_outlined,
         selectedIcon: Icons.shopping_bag,
         badgeText: '12',
         route: AdminOrdersRoute(),
+        roles: ['admin', 'manager'],
       ),
       AdminNavItem(
+        id: 'settings',
         label: 'Settings',
         icon: Icons.settings_outlined,
         selectedIcon: Icons.settings,
         route: AdminSettingsRoute(),
+        roles: ['admin'],
       ),
     ];
 
     return AutoTabsRouter(
-      routes: navItems.map((item) => item.route).toList(),
+      routes: navItems.map((item) => item.route!).toList(),
       builder: (context, child) {
         final tabsRouter = AutoTabsRouter.of(context);
         final theme = Theme.of(context);
 
         return AdminPanelScaffold(
           selectedIndex: tabsRouter.activeIndex,
-          onDestinationSelected: (index) => tabsRouter.setActiveIndex(index),
+          onDestinationSelected: tabsRouter.setActiveIndex,
           items: navItems,
-          brandHeader: const Row(
+          currentUserRoles: const ['admin'],
+          themeConfig: const AdminThemeConfig.defaultConfig(),
+          brandHeader: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.admin_panel_settings, size: 28, color: Colors.indigo),
-              SizedBox(width: 8),
-              Text(
-                'Enterprise',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.primaryContainer,
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                ),
+                child: Icon(
+                  Icons.admin_panel_settings,
+                  size: 22,
+                  color: theme.colorScheme.primary,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Prakash Core',
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    'Enterprise Admin',
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                      fontSize: 10,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
+          sidebarFooter: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surfaceContainerLow,
+              borderRadius: const BorderRadius.all(Radius.circular(8)),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.verified_user_outlined,
+                  size: 16,
+                  color: theme.colorScheme.primary,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'v1.0.11 Production',
+                    style: theme.textTheme.bodySmall?.copyWith(fontSize: 11),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ),
           headerActions: [
-            // Theme Toggle Button
+            // Theme Mode Toggle
             BlocBuilder<ThemeCubit, ThemeMode>(
               bloc: getIt<ThemeCubit>(),
               builder: (context, mode) {
@@ -78,20 +138,27 @@ class AdminPanelShellPage extends StatelessWidget {
               },
             ),
 
-            // Notifications Icon
+            // Notifications Icon with live counter
             IconButton(
               icon: const Badge(
                 label: Text('3'),
                 child: Icon(Icons.notifications_outlined),
               ),
               tooltip: 'Notifications',
-              onPressed: () {},
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('3 new notifications'),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              },
             ),
           ],
           userProfileHeader: PopupMenuButton<String>(
             offset: const Offset(0, 48),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(12)),
             ),
             tooltip: 'Account Settings',
             child: Padding(
@@ -127,13 +194,17 @@ class AdminPanelShellPage extends StatelessWidget {
             onSelected: (value) {
               switch (value) {
                 case 'profile':
-                  // Navigate to profile
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Viewing Profile')),
+                  );
                   break;
                 case 'settings':
-                  tabsRouter.setActiveIndex(3); // Navigate to Settings tab
+                  tabsRouter.setActiveIndex(3);
                   break;
                 case 'logout':
-                  // Perform logout
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Logging out...')),
+                  );
                   break;
               }
             },
@@ -185,7 +256,7 @@ class AdminPanelShellPage extends StatelessWidget {
                       size: 20,
                       color: theme.colorScheme.error,
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12),
                     Text(
                       'Logout',
                       style: TextStyle(color: theme.colorScheme.error),

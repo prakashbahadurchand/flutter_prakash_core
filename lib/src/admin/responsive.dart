@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+export 'responsive_grid.dart';
+
 /// Screen Size Breakpoints for Enterprise Applications
 class ResponsiveBreakpoints {
   static const double watch = 300;
@@ -136,42 +138,6 @@ class ResponsiveBuilder extends StatelessWidget {
         }
         return mobile(context);
       },
-    );
-  }
-}
-
-/// A auto-adapting GridView wrapper ideal for Admin Dashboard KPI/Metric cards
-class ResponsiveGrid extends StatelessWidget {
-  final List<Widget> children;
-  final double crossAxisSpacing;
-  final double mainAxisSpacing;
-  final double childAspectRatio;
-  final int? overrideColumns;
-
-  const ResponsiveGrid({
-    super.key,
-    required this.children,
-    this.crossAxisSpacing = 16.0,
-    this.mainAxisSpacing = 16.0,
-    this.childAspectRatio = 1.4,
-    this.overrideColumns,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final int columns = overrideColumns ?? context.autoGridColumns;
-
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: children.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: columns,
-        crossAxisSpacing: crossAxisSpacing,
-        mainAxisSpacing: mainAxisSpacing,
-        childAspectRatio: childAspectRatio,
-      ),
-      itemBuilder: (context, index) => children[index],
     );
   }
 }

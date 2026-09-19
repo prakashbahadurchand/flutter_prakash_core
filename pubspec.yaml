@@ -1,6 +1,6 @@
 name: flutter_prakash_core
 description: "Enterprise-grade Flutter core package & hybrid plugin framework with Clean Architecture, BLoC state management, reactive forms, DevTools, and monetization."
-version: 1.0.11
+version: 1.0.12
 homepage: https://github.com/prakashbahadurchand/flutter_prakash_core
 repository: https://github.com/prakashbahadurchand/flutter_prakash_core
 issue_tracker: https://github.com/prakashbahadurchand/flutter_prakash_core/issues

@@ -1,3 +1,18 @@
+## 1.0.12
+
+* **Enterprise Admin Dashboard Framework**:
+  * **Adaptive Layout Scaffold**: Added modular `AdminPanelScaffold` featuring collapsible desktop navigation rails, nested submenus, persistent top headers, user profile dropdowns, and mobile drawers.
+  * **Domain Types & RBAC Navigation**: Added `AdminNavItem` supporting unique IDs, routes, role-based access control (RBAC), live badges, dividers, and hierarchical child menus.
+  * **Theme & Style Defaults**: Added `AdminThemeConfig` with production-ready defaults (`AdminThemeConfig.defaultConfig()`) and `AdminTheme` InheritedWidget.
+  * **Responsive Grid System**: Added `ResponsiveGridRow` and `ResponsiveGridCol` 12-column responsive layout engine and auto-adapting `ResponsiveGrid`.
+  * **Enterprise KPI Metric Cards**: Added `MetricCard` with multi-variant styling, trend trajectories, inverted sentiment support, status badges, and skeleton shimmer loading.
+  * **Standardized Page Headers**: Added `PageHeader` with interactive dynamic breadcrumbs, subtitles, and responsive action bar wrapping.
+  * **Enterprise Tabular Wrapper**: Added `DataTableCard` with live search, filter slots, refresh controls, export actions, loading overlays, empty and error state builders.
+* **Toast & Notification Engine**: Enhanced responsive viewport bounds, margins, and dismissal physics in `ToastOverlay`.
+* **Example & Web Experience**:
+  * Added custom enterprise web loader in `example/web/index.html` with animated progress bar and smooth frame-detection exit.
+  * Complete showcase of `AdminPanelShellPage` and `AdminOverviewPage` with interactive mock business data and `ViewEditDeleteButton`.
+
 ## 1.0.11
 
 * **Dependency Updates**: Upgraded packages across the core and example suite (`equatable` to `^3.0.0`, `file_picker` to `^13.1.0`, `home_widget` to `^0.10.0`, `skeletonizer` to `^3.0.0`).

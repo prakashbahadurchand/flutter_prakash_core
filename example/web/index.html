@@ -1,46 +1,334 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
   <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Enterprise-Grade Flutter Admin Panel & Dashboard Framework">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="flutter_prakash_core_example">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Prakash Core Admin">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>flutter_prakash_core_example</title>
+  <title>Prakash Core • Enterprise Admin</title>
   <link rel="manifest" href="manifest.json">
+
+  <style>
+    /* Reset & Base Setup */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #0b0f19;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Fullscreen Modern Loader Container */
+    #app-loader {
+      position: fixed;
+      inset: 0;
+      z-index: 999999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 50% 35%, #182234 0%, #0b0f19 75%);
+      transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: opacity, transform;
+    }
+
+    #app-loader.fade-out {
+      opacity: 0;
+      transform: scale(1.02);
+      pointer-events: none;
+    }
+
+    .loader-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      max-width: 360px;
+      width: 90%;
+    }
+
+    /* Ambient Glow & Logo Badge */
+    .logo-container {
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    .ambient-glow {
+      position: absolute;
+      inset: -16px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.45) 0%, rgba(139, 92, 246, 0) 70%);
+      filter: blur(12px);
+      animation: pulse-glow 3s ease-in-out infinite alternate;
+    }
+
+    .logo-badge {
+      position: relative;
+      width: 68px;
+      height: 68px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #4338ca 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.5), 0 8px 10px -6px rgba(99, 102, 241, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .logo-badge svg {
+      width: 36px;
+      height: 36px;
+      fill: #ffffff;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
+    }
+
+    /* Brand Typography */
+    .brand-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #f8fafc;
+      letter-spacing: -0.4px;
+      margin-bottom: 4px;
+    }
+
+    .brand-subtitle {
+      font-size: 13px;
+      font-weight: 500;
+      color: #94a3b8;
+      margin-bottom: 32px;
+      letter-spacing: 0.2px;
+    }
+
+    /* Enterprise Progress Bar Track & Fill */
+    .progress-wrapper {
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 9999px;
+      height: 6px;
+      padding: 1px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+      border-radius: 9999px;
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .progress-bar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%);
+      animation: shimmer 1.8s infinite;
+    }
+
+    /* Meta Info & Status Indicators */
+    .progress-info {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 12px;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .status-text {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: #6366f1;
+      animation: blink 1.2s infinite ease-in-out;
+    }
+
+    .percentage-text {
+      font-variant-numeric: tabular-nums;
+      color: #cbd5e1;
+      font-weight: 600;
+    }
+
+    /* Animations */
+    @keyframes pulse-glow {
+      0% {
+        transform: scale(0.95);
+        opacity: 0.35;
+      }
+      100% {
+        transform: scale(1.15);
+        opacity: 0.75;
+      }
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-5px);
+      }
+    }
+
+    @keyframes shimmer {
+      0% {
+        transform: translateX(-100%);
+      }
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+    @keyframes blink {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.3;
+      }
+    }
+  </style>
 </head>
 <body>
-  <!--
-    You can customize the "flutter_bootstrap.js" script.
-    This is useful to provide a custom configuration to the Flutter loader
-    or to give the user feedback during the initialization process.
+  <!-- Custom Eye-Catching Enterprise Web Loader -->
+  <div id="app-loader">
+    <div class="loader-content">
+      <div class="logo-container">
+        <div class="ambient-glow"></div>
+        <div class="logo-badge">
+          <!-- Shield & Grid Icon -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+          </svg>
+        </div>
+      </div>
 
-    For more details:
-    * https://docs.flutter.dev/platform-integration/web/initialization
-  -->
+      <h1 class="brand-title">Prakash Core</h1>
+      <p class="brand-subtitle">Enterprise Admin Dashboard</p>
+
+      <div class="progress-wrapper">
+        <div id="progress-bar" class="progress-bar"></div>
+      </div>
+
+      <div class="progress-info">
+        <span class="status-text">
+          <span class="status-dot"></span>
+          <span id="status-label">Initializing platform...</span>
+        </span>
+        <span id="percentage-label" class="percentage-text">0%</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const progressBar = document.getElementById('progress-bar');
+      const percentageLabel = document.getElementById('percentage-label');
+      const statusLabel = document.getElementById('status-label');
+      const appLoader = document.getElementById('app-loader');
+
+      let currentProgress = 0;
+      let isReady = false;
+
+      // Milestone stages for progressive simulated feedback
+      const milestones = [
+        { target: 25, status: 'Initializing core engine...', delay: 150 },
+        { target: 55, status: 'Loading enterprise modules...', delay: 350 },
+        { target: 80, status: 'Configuring navigation & state...', delay: 600 },
+        { target: 92, status: 'Rendering visual layout...', delay: 900 }
+      ];
+
+      function updateProgress(value, status) {
+        currentProgress = Math.min(Math.max(currentProgress, value), 100);
+        if (progressBar) progressBar.style.width = currentProgress + '%';
+        if (percentageLabel) percentageLabel.textContent = Math.round(currentProgress) + '%';
+        if (status && statusLabel) statusLabel.textContent = status;
+      }
+
+      // Progressively advance through stages
+      milestones.forEach(function (step) {
+        setTimeout(function () {
+          if (!isReady) {
+            updateProgress(step.target, step.status);
+          }
+        }, step.delay);
+      });
+
+      // Cleanup & dismiss loader when Flutter is mounted and ready
+      function dismissLoader() {
+        if (isReady) return;
+        isReady = true;
+
+        updateProgress(100, 'Ready');
+
+        setTimeout(function () {
+          if (appLoader) {
+            appLoader.classList.add('fade-out');
+            setTimeout(function () {
+              if (appLoader && appLoader.parentNode) {
+                appLoader.parentNode.removeChild(appLoader);
+              }
+            }, 550);
+          }
+        }, 200);
+      }
+
+      // Listen for Flutter's first paint/frame event
+      window.addEventListener('flutter-first-frame', dismissLoader);
+
+      // Fallback: Observe DOM for Flutter canvas/view insertion
+      const observer = new MutationObserver(function (mutations, obs) {
+        const flutterView = document.querySelector('flutter-view') || document.querySelector('flt-glass-pane');
+        if (flutterView) {
+          obs.disconnect();
+          dismissLoader();
+        }
+      });
+
+      observer.observe(document.body, { childList: true, subtree: true });
+
+      // Maximum safety timeout: dismiss after 7 seconds if no signal
+      setTimeout(dismissLoader, 7000);
+    })();
+  </script>
+
+  <!-- Flutter Web Bootstrap -->
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
