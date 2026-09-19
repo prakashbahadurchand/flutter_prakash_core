@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_prakash_core/fp_core.dart'
     hide FilePreviewPage, InAppWebViewPage;
 import 'package:flutter_prakash_core_example/core/router/guards/auth_guard.dart';
+import 'package:flutter_prakash_core_example/features/admin/presentation/pages/admin_analytics_page.dart';
+import 'package:flutter_prakash_core_example/features/admin/presentation/pages/admin_orders_page.dart';
+import 'package:flutter_prakash_core_example/features/admin/presentation/pages/admin_overview_page.dart';
+import 'package:flutter_prakash_core_example/features/admin/presentation/pages/admin_panel_shell_page.dart';
+import 'package:flutter_prakash_core_example/features/admin/presentation/pages/admin_settings_page.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/pages/change_password_page.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/pages/email_verification_page.dart';
 import 'package:flutter_prakash_core_example/features/auth/presentation/pages/forgot_password_page.dart';
@@ -44,5 +49,19 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: InAppWebViewRoute.page),
     AutoRoute(page: PrivacyPolicyRoute.page),
     AutoRoute(page: TermsAndConditionsRoute.page),
+    AutoRoute(
+      page: AdminPanelShellRoute.page,
+      path: '/',
+      children: [
+        AutoRoute(
+          page: AdminOverviewRoute.page,
+          initial: true,
+          path: 'overview',
+        ),
+        AutoRoute(page: AdminAnalyticsRoute.page, path: 'analytics'),
+        AutoRoute(page: AdminOrdersRoute.page, path: 'orders'),
+        AutoRoute(page: AdminSettingsRoute.page, path: 'settings'),
+      ],
+    ),
   ];
 }

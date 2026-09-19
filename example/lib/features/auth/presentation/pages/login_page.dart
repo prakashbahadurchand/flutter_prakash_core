@@ -184,6 +184,16 @@ class _LoginForm extends StatelessWidget {
                       context.router.push(const RegisterRoute());
                     },
                   ),
+
+                  // Admin Panel Navigation
+                  const SizedBox(height: 20),
+                  TextButton.icon(
+                    onPressed: () {
+                      context.router.push(const AdminPanelShellRoute());
+                    },
+                    icon: const Icon(Icons.admin_panel_settings),
+                    label: const Text('Go to Admin Panel Dashboard'),
+                  ),
                 ],
               ),
             ),

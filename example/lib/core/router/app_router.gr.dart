@@ -27,6 +27,86 @@ class AdMobShowcaseRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [AdminAnalyticsPage]
+class AdminAnalyticsRoute extends PageRouteInfo<void> {
+  const AdminAnalyticsRoute({List<PageRouteInfo>? children})
+    : super(AdminAnalyticsRoute.name, initialChildren: children);
+
+  static const String name = 'AdminAnalyticsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AdminAnalyticsPage();
+    },
+  );
+}
+
+/// generated route for
+/// [AdminOrdersPage]
+class AdminOrdersRoute extends PageRouteInfo<void> {
+  const AdminOrdersRoute({List<PageRouteInfo>? children})
+    : super(AdminOrdersRoute.name, initialChildren: children);
+
+  static const String name = 'AdminOrdersRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AdminOrdersPage();
+    },
+  );
+}
+
+/// generated route for
+/// [AdminOverviewPage]
+class AdminOverviewRoute extends PageRouteInfo<void> {
+  const AdminOverviewRoute({List<PageRouteInfo>? children})
+    : super(AdminOverviewRoute.name, initialChildren: children);
+
+  static const String name = 'AdminOverviewRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AdminOverviewPage();
+    },
+  );
+}
+
+/// generated route for
+/// [AdminPanelShellPage]
+class AdminPanelShellRoute extends PageRouteInfo<void> {
+  const AdminPanelShellRoute({List<PageRouteInfo>? children})
+    : super(AdminPanelShellRoute.name, initialChildren: children);
+
+  static const String name = 'AdminPanelShellRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AdminPanelShellPage();
+    },
+  );
+}
+
+/// generated route for
+/// [AdminSettingsPage]
+class AdminSettingsRoute extends PageRouteInfo<void> {
+  const AdminSettingsRoute({List<PageRouteInfo>? children})
+    : super(AdminSettingsRoute.name, initialChildren: children);
+
+  static const String name = 'AdminSettingsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AdminSettingsPage();
+    },
+  );
+}
+
+/// generated route for
 /// [ChangePasswordPage]
 class ChangePasswordRoute extends PageRouteInfo<void> {
   const ChangePasswordRoute({List<PageRouteInfo>? children})
